@@ -24,7 +24,7 @@ $export_tags->{message} = [
 ];
 delete $export_tags->{device};
 ZMQ::Constants::register_set(
-    '3.1.2' => (
+    '3.1.1' => (
         tags => $export_tags,
     )
 );
