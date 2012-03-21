@@ -222,7 +222,7 @@ When you see the crash, get a backtrace:
 This is an early release. Proceed with caution, please report
 (or better yet: fix) bugs you encounter.
 
-This module has been tested againt B<zeromq 2.1.4>. Semantics of this
+This module has been tested againt B<zeromq 2.1.11>. Semantics of this
 module rely heavily on the underlying zeromq version. Make sure
 you know which version of zeromq you're working with.
 
