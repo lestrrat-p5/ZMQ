@@ -14,6 +14,7 @@ my %not_in_v3 = map { ($_ => 1) } qw(
     ZMQ_SWAP
     ZMQ_RECOVERY_IVL_MSEC
     ZMQ_NOBLOCK
+    ZMQ_FAIL_UNROUTABLE
 );
 my $export_tags = Storable::dclone(\%ZMQ::Constants::EXPORT_TAGS);
 $export_tags->{socket} = [ 
