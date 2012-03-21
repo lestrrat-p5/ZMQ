@@ -12,7 +12,6 @@ foreach my $set (@ZMQ::Constants::CONSTANT_SETS) {
     }
 }
 
-
 foreach my $noexist ( qw(
     ZMQ_MAXMSGSIZE
     ZMQ_SNDHWM
@@ -22,6 +21,7 @@ foreach my $noexist ( qw(
     ZMQ_SNDTIMEO
     ZMQ_IPV4ONLY
     ZMQ_LAST_ENDPOINT
+    ZMQ_FAIL_UNROUTABLE
 )) {
     ok ! __PACKAGE__->can($noexist), "$noexist should not exist in v2.1.11";
 }

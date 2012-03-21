@@ -6,6 +6,7 @@ use Carp ();
 my %constants;
 BEGIN {
     %constants  = (
+        # socket types
         ZMQ_PAIR                => 0,
         ZMQ_PUB                 => 1,
         ZMQ_SUB                 => 2,
@@ -13,16 +14,33 @@ BEGIN {
         ZMQ_REP                 => 4,
         ZMQ_DEALER              => 5,
         ZMQ_ROUTER              => 6,
+        ZMQ_XREQ                => 5, # only on v2.x
+        ZMQ_XREP                => 6, # only on v2.x
         ZMQ_PULL                => 7,
         ZMQ_PUSH                => 8,
+        ZMQ_UPSTREAM            => 7, # only on v2.x
+        ZMQ_DOWNSTREAM          => 8, # only on v2.x
         ZMQ_XPUB                => 9,
         ZMQ_XSUB                => 10,
+
+        # message
+        ZMQ_MSG_MORE            => 1,   # only on v2.x
+        ZMQ_MAX_VSM_SIZE        => 30,  # only on v2.x
+        ZMQ_DELIMITER           => 31,  # only on v2.x
+        ZMQ_VSM                 => 32,  # only on v2.x
+        ZMQ_MSG_SHARED          => 128, # only on v2.x
+        ZMQ_MSG_MASK            => 129, # only on v2.x
+
+
+        ZMQ_HWM                 => 1, # only on v2.x
+        ZMQ_SWAP                => 3, # only on v2.x
         ZMQ_AFFINITY            => 4,
         ZMQ_IDENTITY            => 5,
         ZMQ_SUBSCRIBE           => 6,
         ZMQ_UNSUBSCRIBE         => 7,
         ZMQ_RATE                => 8,
         ZMQ_RECOVERY_IVL        => 9,
+        ZMQ_MCAST_LOOP          => 10,
         ZMQ_SNDBUF              => 11,
         ZMQ_RCVBUF              => 12,
         ZMQ_RCVMORE             => 13,
@@ -32,6 +50,7 @@ BEGIN {
         ZMQ_LINGER              => 17,
         ZMQ_RECONNECT_IVL       => 18,
         ZMQ_BACKLOG             => 19,
+        ZMQ_RECOVERY_IVL_MSEC   => 20,
         ZMQ_RECONNECT_IVL_MAX   => 21,
         ZMQ_MAXMSGSIZE          => 22,
         ZMQ_SNDHWM              => 23,
@@ -41,7 +60,10 @@ BEGIN {
         ZMQ_SNDTIMEO            => 28,
         ZMQ_IPV4ONLY            => 31,
         ZMQ_LAST_ENDPOINT       => 32,
+        ZMQ_FAIL_UNROUTABLE     => 33,
+
         ZMQ_MORE                => 1,
+        ZMQ_NOBLOCK             => 1,
         ZMQ_DONTWAIT            => 1,
         ZMQ_SNDMORE             => 2,
         ZMQ_POLLIN              => 1,
@@ -75,6 +97,7 @@ our %EXPORT_TAGS = (
         ZMQ_UNSUBSCRIBE
         ZMQ_RATE
         ZMQ_RECOVERY_IVL
+        ZMQ_RECOVERY_IVL_MSEC
         ZMQ_SNDBUF
         ZMQ_RCVBUF
         ZMQ_RCVMORE
@@ -93,11 +116,21 @@ our %EXPORT_TAGS = (
         ZMQ_SNDTIMEO
         ZMQ_IPV4ONLY
         ZMQ_LAST_ENDPOINT
+        ZMQ_FAIL_UNROUTABLE
         ZMQ_DONTWAIT
         ZMQ_SNDMORE
+        ZMQ_HWM
+        ZMQ_SWAP
+        ZMQ_NOBLOCK
     ) ],
     message => [ qw(
         ZMQ_MORE
+        ZMQ_MSG_MORE
+        ZMQ_MAX_VSM_SIZE
+        ZMQ_DELIMITER
+        ZMQ_VSM
+        ZMQ_MSG_SHARED
+        ZMQ_MSG_MASK
     ) ],
     poller => [ qw(
         ZMQ_POLLIN
@@ -145,8 +178,11 @@ sub import {
             push @args, $arg;
         }
     }
-
-    $version ||= $DEFAULT_VERSION;
+    if (! $version ) {
+        $class->export_to_level( 1, $class, @args );
+        return;
+    }
+        
     my $klass = $version;
     $klass =~ s/\./_/g;
     $klass = "ZMQ::Constants::V$klass";
@@ -209,7 +245,7 @@ ZMQ::Constants - Constants for ZMQ
 
 =head1 SYNOPSIS
 
-    use ZMQ::Constants ':all'; # pulls in constants from $DEFAULT_VERSION
+    use ZMQ::Constants ':all'; # pulls in all constants for all versions
     use ZMQ::Constants ':v3.1.1', ':all'; # pulls in constants for 3.1.1
     use ZMQ::Constants ':v3.1.2', ':all'; # pulls in constants for 3.1.2
 
