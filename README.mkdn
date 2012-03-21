@@ -1,0 +1,15 @@
+# README
+
+This repository contains various modules for the libzmq Perl binding
+
+### ZMQ-Constants
+
+Lists the constants used in libzmq
+
+### ZMQ-CZMQ
+
+Binding to the high-level C API library czmq (http://czmq.zeromq.org)
+
+### ZMQ-LibZMQ3
+
+Binding to the libzmq (3.x) library
