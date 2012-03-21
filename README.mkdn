@@ -10,6 +10,10 @@ Lists the constants used in libzmq
 
 Binding to the high-level C API library czmq (http://czmq.zeromq.org)
 
+### ZMQ-LibZMQ2
+
+Binding to the libzmq (2.x) library
+
 ### ZMQ-LibZMQ3
 
 Binding to the libzmq (3.x) library
