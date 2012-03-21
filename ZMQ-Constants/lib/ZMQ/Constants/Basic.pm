@@ -112,13 +112,11 @@ $EXPORT_TAGS{all} = [ @EXPORT_OK ];
 
 sub export_zmq_symbols {
     my $class = shift;
-#    local @ZMQ::Constants::Basic::EXPORT_OK   = @EXPORT_OK;
-#    local %ZMQ::Constants::Basic::EXPORT_TAGS = %EXPORT_TAGS;
 
     # levels
     # ZMQ::Constants::import
     # ZMQ::Constants::eval
-    # ZMQ::Constants::V3_1_1
+    # ZMQ::Constants::V*****
     $class->export_to_level(3, $class, @_);
 }
 
