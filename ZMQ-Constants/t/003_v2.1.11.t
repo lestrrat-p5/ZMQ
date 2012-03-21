@@ -5,6 +5,14 @@ BEGIN {
     use_ok "ZMQ::Constants", ":v2.1.11", ":all";
 }
 
+foreach my $set (@ZMQ::Constants::CONSTANT_SETS) {
+    if ( $set->match( '2.1.11' ) ) {
+        my @list = $set->get_export_oks();
+        can_ok __PACKAGE__, @list;
+    }
+}
+
+
 foreach my $noexist ( qw(
     ZMQ_MAXMSGSIZE
     ZMQ_SNDHWM
@@ -30,7 +38,14 @@ foreach my $exist ( qw(
     ZMQ_RECOVERY_IVL_MSEC
     ZMQ_NOBLOCK
 ) ) {
-    ok __PACKAGE__->can($exist), "$exist should exist in v2.1.11";
+    my $code = __PACKAGE__->can($exist),;
+    ok $code, "$exist should exist in v2.1.11";
+    eval {
+        $code->();
+    };
+    ok !$@, "$exist is callable";
 }
+
+
 
 done_testing;
