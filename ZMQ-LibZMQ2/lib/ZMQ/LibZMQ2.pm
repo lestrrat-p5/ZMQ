@@ -209,7 +209,7 @@ you cannot share sockets.
 
 =head1 FUNCTIONS
 
-=head2 value = zmq_getsockopt( socket, option )
+=head2 $value = zmq_getsockopt( $socket, $option )
 
 Gets the value of the specified option.
 
@@ -224,8 +224,11 @@ In this case you can either use ZMQ::Constants, or you can use one of the utilit
 
 =item Using ZMQ::Constants
 
+ZMQ::LibZMQ2 internally refers to ZMQ::Constants to learn about the type of a
+socket option. You can easily add new constants to this map:
+
     use ZMQ::Constants;
-    ZMQ::Constants::add_sockopt_map( "int" => ZMQ_NEW_SHINY_OPTION );
+    ZMQ::Constants::add_sockopt_type( "int" => ZMQ_NEW_SHINY_OPTION );
 
 =item Using utilities in ZMQ::LibZMQ2
 
@@ -237,6 +240,12 @@ In this case you can either use ZMQ::Constants, or you can use one of the utilit
     $string = zmq_getsockopt_string( $socket, ZMQ_NEW_SHINY_OPTION );
 
 =back
+
+=head2 $status = zmq_setsockopt( $socket, $option, $value )
+
+Sets the value of the specified option. Returns the status.
+
+See C<zmq_getsockopt()> if you have problems with ZMQ::LibZMQ2 not knowing the type of the option.
 
 =head2 zmq_version()
 
