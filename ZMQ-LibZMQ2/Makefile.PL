@@ -37,6 +37,7 @@ assertlibs
     libpath => [ grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS} ]
 ;
 
+auto_set_repository;
 repository 'http://github.com/lestrrat/p5-ZMQ';
 requires 'Task::Weaken';
 requires 'ZMQ::Constants', '1.00';
