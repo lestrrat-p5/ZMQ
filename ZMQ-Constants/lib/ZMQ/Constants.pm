@@ -297,7 +297,7 @@ __END__
 
 =head1 NAME
 
-ZMQ::Constants - Constants for ZMQ
+ZMQ::Constants - Constants for libzmq
 
 =head1 SYNOPSIS
 
@@ -318,11 +318,24 @@ This module is now separate from ZMQ main code, and lists the constants
 statically. You can also specify which set of constants to pull in depending
 on the zmq version.
 
+If don't care to be strict about which constants to import into your code, then don't bother with the ':vX.X.X' notation, just use like a normal module:
+
+    use ZMQ::Constants qw(:all);     # pulls all known constants...
+                                     # note: may contain extra constants
+                                     # if we have clashes in the future
+    
+    use ZMQ::Constants qw(ZMQ_PUSH); # import just ZMQ_PUSH
+
+
 =head1 SUPPORTED VERSIONS
 
 =over 4
 
+=item libzmq 2.1.11
+
 =item libzmq 3.1.1
+
+No ZMQ device related stuff
 
 =item libzmq 3.1.2
 
@@ -331,5 +344,27 @@ Reintroduces ZMQ device related constants, and adds ZMQ_FAIL_UNROUTABLE
 =back
 
 If you would like to add more sets, please send in a pullreq
+
+=head1 SEE ALSO
+
+L<ZMQ::LibZMQ2>, L<ZMQ::LibZMQ3>, L<ZMQ::CZMQ>, L<ZMQ>
+
+L<http://zeromq.org>
+
+L<http://github.com/lestrrat/p5-ZMQ>
+
+=head1 AUTHOR
+
+Daisuke Maki C<< <daisuke@endeworks.jp> >>
+
+=head1 COPYRIGHT AND LICENSE
+
+The ZeroMQ module is
+
+Copyright (C) 2010 by Daisuke Maki
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.0 or,
+at your option, any later version of Perl 5 you may have available.
 
 =cut
