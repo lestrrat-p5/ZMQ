@@ -147,7 +147,7 @@ $EXPORT_TAGS{all} = [ @EXPORT_OK ];
 
 our $VERSION = '1.00';
 
-our $DEFAULT_VERSION = '3.1.1';
+our $DEFAULT_VERSION = '2.1.11';
 
 our %SOCKOPT_MAP;
 sub set_sockopt_type {
