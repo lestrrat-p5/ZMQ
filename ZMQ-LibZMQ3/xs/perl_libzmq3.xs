@@ -20,6 +20,124 @@ PerlLibzmq3_set_bang(pTHX_ int err) {
     sv_setpv(errsv, zmq_strerror(err));
 }
 
+static
+SV *
+PerlLibzmq3_zmq_getsockopt_int(PerlLibzmq3_Socket *sock, int option) {
+    size_t len;
+    int    status;
+    I32    i32;
+    SV     *sv;
+
+    len = sizeof(i32);
+    status = zmq_getsockopt(sock->socket, option, &i32, &len);
+    if(status == 0) {
+        sv = newSViv(i32);
+    } else {
+        SET_BANG;
+    }
+    return sv;
+}
+
+static
+SV *
+PerlLibzmq3_zmq_getsockopt_int64(PerlLibzmq3_Socket *sock, int option) {
+    size_t  len;
+    int     status;
+    int64_t i64;
+    SV      *sv;
+
+    len = sizeof(i64);
+    status = zmq_getsockopt(sock->socket, option, &i64, &len);
+    if(status == 0) {
+        sv = newSViv(i64);
+    } else {
+        SET_BANG;
+    }
+    return sv;
+}
+
+static
+SV *
+PerlLibzmq3_zmq_getsockopt_uint64(PerlLibzmq3_Socket *sock, int option) {
+    size_t len;
+    int    status;
+    uint64_t u64;
+    SV *sv;
+
+    len = sizeof(u64);
+    status = zmq_getsockopt(sock->socket, option, &u64, &len);
+    if(status == 0) {
+        sv = newSVuv(u64);
+    } else {
+        SET_BANG;
+    }
+    return sv;
+}
+
+static
+SV *
+PerlLibzmq3_zmq_getsockopt_string(PerlLibzmq3_Socket *sock, int option, size_t len) {
+    int    status;
+    char   *string;
+    SV     *sv;
+
+    Newxz(string, len, char);
+    status = zmq_getsockopt(sock->socket, option, &string, &len);
+    if(status == 0) {
+        sv = newSVpvn(string, len);
+    } else {
+        SET_BANG;
+    }
+    Safefree(string);
+
+    return sv;
+}
+
+
+STATIC_INLINE
+int
+PerlLibzmq3_zmq_setsockopt_int( PerlLibzmq3_Socket *sock, int option, int val) {
+    int status;
+    status = zmq_setsockopt(sock->socket, option, &val, sizeof(int));
+    if (status != 0) {
+        SET_BANG;
+    }
+    return status;
+}
+
+STATIC_INLINE
+int
+PerlLibzmq3_zmq_setsockopt_int64( PerlLibzmq3_Socket *sock, int option, int64_t val) {
+    int status;
+    status = zmq_setsockopt(sock->socket, option, &val, sizeof(int64_t));
+    if (status != 0) {
+        SET_BANG;
+    }
+    return status;
+}
+
+static
+int
+PerlLibzmq3_zmq_setsockopt_uint64(PerlLibzmq3_Socket *sock, int option, uint64_t val) {
+    int status;
+    status = zmq_setsockopt(sock->socket, option, &val, sizeof(uint64_t));
+    if (status != 0) {
+        SET_BANG;
+    }
+    return status;
+}
+    
+static
+int
+PerlLibzmq3_zmq_setsockopt_string(PerlLibzmq3_Socket *sock, int option, const char *ptr, size_t len) {
+    int status;
+    status = zmq_setsockopt(sock->socket, option, ptr, len);
+    if (status != 0) {
+        SET_BANG;
+    }
+    return status;
+}
+
 STATIC_INLINE int
 PerlLibzmq3_Message_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param) {
     PerlLibzmq3_Message *const src = (PerlLibzmq3_Message *) mg->mg_ptr;
@@ -601,131 +719,56 @@ PerlLibzmq3_zmq_sendmsg(socket, message, flags = 0)
     OUTPUT:
         RETVAL
 
-#define SOCKOPT_BUFSIZ 1024
 SV *
-PerlLibzmq3_zmq_getsockopt(sock, option)
+PerlLibzmq3_zmq_getsockopt_int(sock, option)
         PerlLibzmq3_Socket *sock;
         int option;
-    PREINIT:
-        char     buf[SOCKOPT_BUFSIZ];
-        int      i;
-        uint64_t u64;
-        int64_t  i64;
-        uint32_t i32;
-        size_t   len;
-        int      status = -1;
-    CODE:
-        switch(option){
-            case ZMQ_BACKLOG:
-            case ZMQ_FD:
-            case ZMQ_LINGER:
-            case ZMQ_RECOVERY_IVL:
-            case ZMQ_RECONNECT_IVL:
-            case ZMQ_RECONNECT_IVL_MAX:
-            case ZMQ_RCVMORE:
-            case ZMQ_TYPE:
-            case ZMQ_RCVHWM:
-            case ZMQ_SNDHWM:
-                len = sizeof(i);
-                status = zmq_getsockopt(sock->socket, option, &i, &len);
-                if(status == 0)
-                    RETVAL = newSViv(i);
-                break;
 
-            case ZMQ_RATE:
-                len = sizeof(i64);
-                status = zmq_getsockopt(sock->socket, option, &i64, &len);
-                if(status == 0)
-                    RETVAL = newSViv(i64);
-                break;
+SV *
+PerlLibzmq3_zmq_getsockopt_int64(sock, option)
+        PerlLibzmq3_Socket *sock;
+        int option;
 
-            case ZMQ_AFFINITY:
-            case ZMQ_SNDBUF:
-            case ZMQ_RCVBUF:
-                len = sizeof(u64);
-                status = zmq_getsockopt(sock->socket, option, &u64, &len);
-                if(status == 0)
-                    RETVAL = newSVuv(u64);
-                break;
+SV *
+PerlLibzmq3_zmq_getsockopt_uint64(sock, option)
+        PerlLibzmq3_Socket *sock;
+        int option;
 
-            case ZMQ_EVENTS:
-                len = sizeof(i32);
-                status = zmq_getsockopt(sock->socket, option, &i32, &len);
-                if(status == 0)
-                    RETVAL = newSViv(i32);
-                break;
-
-            case ZMQ_IDENTITY:
-                len = SOCKOPT_BUFSIZ;
-                status = zmq_getsockopt(sock->socket, option, &buf, &len);
-                if(status == 0)
-                    RETVAL = newSVpvn(buf, len);
-                break;
-
-            default:
-                len = SOCKOPT_BUFSIZ;
-                warn("Unknown sockopt type %d, assuming string.  Send patch", option);
-                status = zmq_setsockopt(sock->socket, option, buf, len);
-                if(status == 0)
-                    RETVAL = newSVpvn(buf, len);
-                break;
-        }
-        if (status != 0) {
-            SET_BANG;
-        }
-    OUTPUT:
-        RETVAL
+SV *
+PerlLibzmq3_zmq_getsockopt_string(sock, option, len = 1024)
+        PerlLibzmq3_Socket *sock;
+        int option;
+        size_t len;
 
 int
-PerlLibzmq3_zmq_setsockopt(sock, option, value)
+PerlLibzmq3_zmq_setsockopt_int(sock, option, val)
+        PerlLibzmq3_Socket *sock;
+        int option;
+        int val;
+
+int
+PerlLibzmq3_zmq_setsockopt_int64(sock, option, val)
+        PerlLibzmq3_Socket *sock;
+        int option;
+        int64_t val;
+
+int
+PerlLibzmq3_zmq_setsockopt_uint64(sock, option, val)
+        PerlLibzmq3_Socket *sock;
+        int option;
+        uint64_t val;
+
+int
+PerlLibzmq3_zmq_setsockopt_string(sock, option, value)
         PerlLibzmq3_Socket *sock;
         int option;
         SV *value;
     PREINIT:
-        STRLEN len;
-        const char *ptr;
-        uint64_t u64;
-        int64_t  i64;
-        int i;
+        size_t len;
+        const char *string;
     CODE:
-        switch(option){
-            case ZMQ_IDENTITY:
-            case ZMQ_SUBSCRIBE:
-            case ZMQ_UNSUBSCRIBE:
-                ptr = SvPV(value, len);
-                RETVAL = zmq_setsockopt(sock->socket, option, ptr, len);
-                break;
-
-            case ZMQ_RATE:
-                i64 = SvIV(value);
-                RETVAL = zmq_setsockopt(sock->socket, option, &i64, sizeof(int64_t));
-                break;
-
-            case ZMQ_AFFINITY:
-            case ZMQ_SNDBUF:
-            case ZMQ_RCVBUF:
-                u64 = SvUV(value);
-                RETVAL = zmq_setsockopt(sock->socket, option, &u64, sizeof(uint64_t));
-                break;
-
-            case ZMQ_RECOVERY_IVL:
-            case ZMQ_RECONNECT_IVL:
-            case ZMQ_RECONNECT_IVL_MAX:
-            case ZMQ_LINGER:
-            case ZMQ_SNDHWM:
-            case ZMQ_RCVHWM:
-                i = SvIV(value);
-                RETVAL = zmq_setsockopt(sock->socket, option, &i, sizeof(i));
-                break;
-
-            default:
-                warn("Unknown sockopt type %d, assuming string.  Send patch", option);
-                ptr = SvPV(value, len);
-                RETVAL = zmq_setsockopt(sock->socket, option, ptr, len);
-        }
-        if (RETVAL == 0) {
-            SET_BANG;
-        }
+        string = SvPV( value, len );
+        RETVAL = PerlLibzmq3_zmq_setsockopt_string(sock, option, string, len);
     OUTPUT:
         RETVAL
 

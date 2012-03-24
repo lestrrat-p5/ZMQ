@@ -135,6 +135,10 @@ sub write_typemap {
         die "Could not open $file for writing: $!";
 
     my (@decl, @input, @output);
+
+    push @decl, "uint64_t T_UV";
+    push @decl, "int64_t T_IV";
+
     foreach my $perl_type (@perl_types) {
         my $c_type = $perl_type;
         $c_type =~ s/::/_/g;
