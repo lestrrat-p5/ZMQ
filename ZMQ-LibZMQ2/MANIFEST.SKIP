@@ -53,7 +53,7 @@
 ^xs/mg-xs.inc$
 ^xs/const-xs.inc$
 ^xs/typemap$
-^xs/perl_zeromq.c$
+^xs/perl_libzmq2.c$
 ^build\b
 ^build.pl$
 ^install\b
