@@ -60,6 +60,7 @@ assertlibs
 
 repository 'http://github.com/lestrrat/ZMQ-Perl';
 requires 'Task::Weaken';
+requires 'ZMQ::Constants';
 test_requires 'Test::More', '0.98';
 test_requires 'Test::TCP' => '1.08';
 test_requires 'Test::Requires';
