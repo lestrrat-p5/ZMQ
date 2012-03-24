@@ -149,6 +149,62 @@ our $VERSION = '1.00';
 
 our $DEFAULT_VERSION = '3.1.1';
 
+our %SOCKOPT_MAP;
+sub set_sockopt_type {
+    my $type = shift;
+    foreach my $opt ( @_ ) {
+        $SOCKOPT_MAP{ $opt } = $type;
+    }
+}
+sub get_sockopt_type { $SOCKOPT_MAP{ $_[0] } }
+
+set_sockopt_type(
+    "int" => (
+        ZMQ_TYPE,
+        ZMQ_RCVMORE,
+        ZMQ_SNDHWM,
+        ZMQ_RCVHWM,
+        ZMQ_RATE,
+        ZMQ_RECOVERY_IVL,
+        ZMQ_SNDBUF,
+        ZMQ_RCVBUF,
+        ZMQ_LINGER,
+        ZMQ_RECONNECT_IVL,
+        ZMQ_RECONNECT_IVL_MAX,
+        ZMQ_MULTICAST_HOPS,
+        ZMQ_RCVTIMEO,
+        ZMQ_SNDTIMEO,
+        ZMQ_IPV4ONLY,
+        ZMQ_FD, # SOCKET on Windows... yikes, how do we handle this?
+        ZMQ_EVENTS,
+        ZMQ_BACKLOG,
+    )
+);
+
+set_sockopt_type(
+    "uint64" => (
+        ZMQ_AFFINITY,
+        ZMQ_HWM,
+    )
+);
+
+set_sockopt_type(
+    "int64" => (
+        ZMQ_MAXMSGSIZE,
+        ZMQ_RECOVERY_IVL_MSEC,
+        ZMQ_SWAP,
+    )
+);
+
+set_sockopt_type(
+    "string" => (
+        ZMQ_SUBSCRIBE,
+        ZMQ_UNSUBSCRIBE,
+        ZMQ_LAST_ENDPOINT,
+        ZMQ_IDENTITY,
+    )
+);
+
 our @CONSTANT_SETS;
 
 sub add_constant {
