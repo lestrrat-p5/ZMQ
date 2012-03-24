@@ -10,6 +10,10 @@ Lists the constants used in libzmq
 
 Binding to the high-level C API library czmq (http://czmq.zeromq.org)
 
+### ZMQ
+
+Perl-ish libzmq wrapper. Use ZMQ::LibZMQ2 and ZMQ::LibZMQ3 for direct one-to-one mapping for zmq functions
+
 ### ZMQ-LibZMQ2
 
 Binding to the libzmq (2.x) library
