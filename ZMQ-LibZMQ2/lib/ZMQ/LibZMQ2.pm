@@ -2,6 +2,7 @@ package ZMQ::LibZMQ2;
 use strict;
 use base qw(Exporter);
 use XSLoader;
+use ZMQ::Constants ();
 
 BEGIN {
     our $VERSION = '0.20';
@@ -34,6 +35,26 @@ our @EXPORT = qw(
 
     zmq_device
 );
+
+sub zmq_getsockopt {
+    my ($sock, $option) = @_;
+    my $type = ZMQ::Constants::get_sockopt_type($option);
+    if (! $type) {
+        Carp::croak("zmq_getsockopt: Could not find the data type for option $option");
+    }
+    no strict 'refs';
+    goto &{"zmq_getsockopt_$type"}
+}
+
+sub zmq_setsockopt {
+    my ($sock, $option) = @_;
+    my $type = ZMQ::Constants::get_sockopt_type($option);
+    if (! $type) {
+        Carp::croak("zmq_setsockopt: Could not find the data type for option $option");
+    }
+    no strict 'refs';
+    goto &{"zmq_setsockopt_$type"}
+}
 
 1;
 
@@ -187,6 +208,35 @@ For multi-thread environemnts, you can share the same context object. However
 you cannot share sockets.
 
 =head1 FUNCTIONS
+
+=head2 value = zmq_getsockopt( socket, option )
+
+Gets the value of the specified option.
+
+If the particular version of ZMQ::LibZMQ2 does not implement the named socket option, an exception will be thrown:
+
+    /* barfs, because we don't know what type this new option is */
+    zmq_getsockopt( $socket, ZMQ_NEW_SHINY_OPTION );
+    
+In this case you can either use ZMQ::Constants, or you can use one of the utility functions that ZMQ::LibZMQ2 provides.
+
+=over 4
+
+=item Using ZMQ::Constants
+
+    use ZMQ::Constants;
+    ZMQ::Constants::add_sockopt_map( "int" => ZMQ_NEW_SHINY_OPTION );
+
+=item Using utilities in ZMQ::LibZMQ2
+
+    /* say you know that the value is an int, int64, uint64, or char *
+       by reading the zmq docs */
+    $int    = zmq_getsockopt_int( $socket, ZMQ_NEW_SHINY_OPTION );
+    $int64  = zmq_getsockopt_int64( $socket, ZMQ_NEW_SHINY_OPTION );
+    $uint64 = zmq_getsockopt_uint64( $socket, ZMQ_NEW_SHINY_OPTION );
+    $string = zmq_getsockopt_string( $socket, ZMQ_NEW_SHINY_OPTION );
+
+=back
 
 =head2 zmq_version()
 

@@ -37,7 +37,6 @@ EOM
         ZMQ::LibZMQ2::Context
         ZMQ::LibZMQ2::Socket
         ZMQ::LibZMQ2::Message
-        ZMQ::LibZMQ2::PollItem
     );
     foreach my $perl_type (@perl_types) {
         my $c_type = $perl_type;
@@ -135,6 +134,9 @@ sub write_typemap {
         die "Could not open $file for writing: $!";
 
     my (@decl, @input, @output);
+    push @decl, "uint64_t T_UV";
+    push @decl, "int64_t T_IV";
+
     foreach my $perl_type (@perl_types) {
         my $c_type = $perl_type;
         $c_type =~ s/::/_/g;
