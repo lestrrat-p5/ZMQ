@@ -38,7 +38,6 @@ assertlibs
 ;
 
 auto_set_repository;
-repository 'http://github.com/lestrrat/p5-ZMQ';
 requires 'Task::Weaken';
 requires 'ZMQ::Constants', '1.00';
 test_requires 'Test::More', '0.98';
