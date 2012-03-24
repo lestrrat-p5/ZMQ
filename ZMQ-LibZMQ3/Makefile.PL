@@ -35,7 +35,7 @@ if (-f $ENV{ZMQ_H}) {
 
     if ( $version{MAJOR} * 10000 + $version{MINOR} * 100 + $version{PATCH} < 30100) {
         print <<EOM;
-*** WHAT THERE! ***
+*** WHAO THERE! ***
 
 We have detected that you have libzmq version lower than 3.1.x.
 ZMQ.pm only works with libzmq versions >= 3.1.0
@@ -58,7 +58,7 @@ assertlibs
     libpath => [ grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS} ]
 ;
 
-repository 'http://github.com/lestrrat/ZMQ-Perl';
+auto_set_repository;
 requires 'Task::Weaken';
 requires 'ZMQ::Constants';
 test_requires 'Test::More', '0.98';
