@@ -327,7 +327,7 @@ BOOT:
 int
 zmq_errno()
 
-char *
+const char *
 zmq_strerror(num)
         int num;
 
@@ -883,6 +883,25 @@ PerlLibzmq3_zmq_poll( list, timeout = 0 )
         Safefree(pollitems);
         Safefree(callbacks);
         PerlLibzmq3_trace( "END zmq_poll" );
+    OUTPUT:
+        RETVAL
+
+int
+PerlLibzmq3_zmq_device( device, insocket, outsocket )
+        int device;
+        PerlLibzmq3_Socket *insocket;
+        PerlLibzmq3_Socket *outsocket;
+    CODE:
+#ifdef zmq_device
+        RETVAL = zmq_device( device, insocket->socket, outsocket->socket );
+#else
+        PERL_UNUSED_VAR(device);
+        {
+            int major, minor, patch;
+            zmq_version(&major, &minor, &patch);
+            croak("zmq_device is not available in this version of libzmq (%d.%d.%d)", major, minor, patch );
+        }
+#endif
     OUTPUT:
         RETVAL
 
