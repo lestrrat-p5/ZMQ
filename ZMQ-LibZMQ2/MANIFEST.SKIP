@@ -54,6 +54,8 @@
 ^xs/const-xs.inc$
 ^xs/typemap$
 ^xs/perl_libzmq2.c$
+^xshelper.h$
+^ppport.h$
 ^build\b
 ^build.pl$
 ^install\b
