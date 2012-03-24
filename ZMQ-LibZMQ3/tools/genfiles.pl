@@ -37,7 +37,6 @@ EOM
         ZMQ::LibZMQ3::Context
         ZMQ::LibZMQ3::Socket
         ZMQ::LibZMQ3::Message
-        ZMQ::LibZMQ3::PollItem
     );
     foreach my $perl_type (@perl_types) {
         my $c_type = $perl_type;
