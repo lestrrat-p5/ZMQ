@@ -18,6 +18,7 @@ PerlLibzmq3_set_bang(pTHX_ int err) {
     PerlLibzmq3_trace(" + Set ERRSV ($!) to %d", err);
     sv_setiv(errsv, err);
     sv_setpv(errsv, zmq_strerror(err));
+    errno = err;
 }
 
 static
@@ -700,15 +701,12 @@ PerlLibzmq3_zmq_send(socket, message, size = -1, flags = 0)
         RETVAL
 
 int
-PerlLibzmq3_zmq_sendmsg(socket, message, flags = 0)
+PerlLibzmq3__zmq_sendmsg(socket, message, flags = 0)
         PerlLibzmq3_Socket *socket;
         PerlLibzmq3_Message *message;
         int flags;
     CODE:
         PerlLibzmq3_trace( "START zmq_sendmsg" );
-        if (message == NULL)
-            croak("ZMQ::LibZMQ3::zmq_sendmsg() NULL message passed");
-
         RETVAL = zmq_sendmsg(socket->socket, message, flags);
         PerlLibzmq3_trace( " + zmq_sendmsg returned with rv '%d'", RETVAL );
         if ( RETVAL == -1 ) {

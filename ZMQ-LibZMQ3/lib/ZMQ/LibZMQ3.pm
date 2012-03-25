@@ -38,6 +38,21 @@ our @EXPORT = qw(
     zmq_device
 );
 
+sub zmq_sendmsg {
+    my $sock = shift;
+    my $msg  = shift;
+    if (!ref $msg) {
+        my $wrap = zmq_msg_init_data($msg);
+        if (! $wrap) {
+            return ();
+        }
+        $msg = $wrap;
+    }
+
+    @_ = ($sock, $msg, @_);
+    goto \&_zmq_sendmsg;
+}
+
 sub zmq_getsockopt {
     my ($sock, $option) = @_;
     my $type = ZMQ::Constants::get_sockopt_type($option);
