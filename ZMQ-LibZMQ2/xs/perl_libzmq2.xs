@@ -18,6 +18,7 @@ PerlLibzmq2_set_bang(pTHX_ int err) {
     PerlIO_printf(PerlIO_stderr(), "Seting errno to %d", err);
     PerlLibzmq2_trace("Seting errno to %d", err);
     sv_setiv(errsv, err);
+    sv_setpv(errsv, zmq_strerror(err));
     errno = err;
 }
 
@@ -327,6 +328,14 @@ BOOT:
         PerlLibzmq2_trace( "Booting Perl ZMQ::LibZMQ2" );
     }
 
+int
+zmq_errno()
+
+const char *
+zmq_strerror(num)
+        int num;
+
+
 void
 PerlLibzmq2_zmq_version()
     PREINIT:
@@ -361,6 +370,7 @@ PerlLibzmq2_zmq_init( nthreads = 5 )
         cxt = zmq_init( nthreads );
         if (cxt == NULL) {
             SET_BANG;
+            RETVAL = NULL;
         } else {
 #ifdef USE_ITHREADS
             PerlLibzmq2_trace( " + threads enabled, aTHX %p", aTHX );
@@ -387,18 +397,22 @@ PerlLibzmq2_zmq_term( context )
 #else
         RETVAL = zmq_term( context );
 #endif
-        if (RETVAL == 0) {
-            /* Cancel the SV's mg attr so to not call zmq_term automatically */
-            MAGIC *mg =
-                PerlLibzmq2_Context_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq2_Context_vtbl );
-            mg->mg_ptr = NULL;
-        }
+        if ( RETVAL != 0 ) {
+            SET_BANG;
+        } else {
+            {
+                /* Cancel the SV's mg attr so to not call zmq_term automatically */
+                MAGIC *mg =
+                    PerlLibzmq2_Context_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq2_Context_vtbl );
+                mg->mg_ptr = NULL;
+            }
 
-        /* mark the original SV's _closed flag as true */
-        {
-            SV *svr = SvRV(ST(0));
-            if (hv_stores( (HV *) svr, "_closed", &PL_sv_yes ) == NULL) {
-                croak("PANIC: Failed to store closed flag on blessed reference");
+            /* mark the original SV's _closed flag as true */
+            {
+                SV *svr = SvRV(ST(0));
+                if (hv_stores( (HV *) svr, "_closed", &PL_sv_yes ) == NULL) {
+                    croak("PANIC: Failed to store closed flag on blessed reference");
+                }
             }
         }
     OUTPUT:

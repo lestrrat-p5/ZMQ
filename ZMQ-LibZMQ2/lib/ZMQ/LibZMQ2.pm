@@ -235,6 +235,14 @@ Where applicable, $! should be updated to match the value set by libzmq, so you 
         die "zmq_init() failed with $!";
     }
 
+=head2 $errno = zmq_errno()
+
+Returns the value of errno variable for the calling thread. You normally should not need to use this function. See the man page for zmq_errno() provided by libzmq.
+
+=head2 $string = zmq_strerror( $errno )
+
+Returns the string representation of C<$errno>. Use this to stringify errors that libzmq provides.
+
 =head2 $cxt = zmq_init( $threads )
 
 Creates a new context object. C<$threads> argument is optional.
