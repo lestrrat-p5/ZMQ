@@ -1,5 +1,15 @@
 Changes
 =======
 
+1.00_02 - Mar 26 2012
+    - Beef up the docs extensively.
+    - Make sure to set $! upo failure
+    - Add author tests
+    - Change zmq_sendmsg to a pure perl method.
+    - Make sure to emulate libzmq2 errors for stuff like trying to act upon
+      closed cxt, sockets, and messages, since we don't call the C level
+      functions when we detect that they have been closed from the Perl level.
+
+
 1.00_01 - Mar 24 2012
     - Initial release.
