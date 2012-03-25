@@ -352,20 +352,26 @@ PerlLibzmq2_Context *
 PerlLibzmq2_zmq_init( nthreads = 5 )
         int nthreads;
     PREINIT:
+        void *cxt;
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ2::Context", 20 ));
     CODE:
         PerlLibzmq2_trace( "START zmq_init" );
+        cxt = zmq_init( nthreads );
+        if (cxt == NULL) {
+            SET_BANG;
+        } else {
 #ifdef USE_ITHREADS
-        PerlLibzmq2_trace( " + threads enabled, aTHX %p", aTHX );
-        Newxz( RETVAL, 1, PerlLibzmq2_Context );
-        RETVAL->interp = aTHX;
-        RETVAL->ctxt   = zmq_init( nthreads );
-        PerlLibzmq2_trace( " + created context wrapper %p", RETVAL );
-        PerlLibzmq2_trace( " + zmq context %p", RETVAL->ctxt );
+            PerlLibzmq2_trace( " + threads enabled, aTHX %p", aTHX );
+            Newxz( RETVAL, 1, PerlLibzmq2_Context );
+            RETVAL->interp = aTHX;
+            RETVAL->ctxt   = cxt;
+            PerlLibzmq2_trace( " + created context wrapper %p", RETVAL );
+            PerlLibzmq2_trace( " + zmq context %p", RETVAL->ctxt );
 #else
-        PerlLibzmq2_trace( " + non-threaded context");
-        RETVAL = zmq_init( nthreads );
+            PerlLibzmq2_trace( " + non-threaded context");
+            RETVAL = cxt;
 #endif
+        }
         PerlLibzmq2_trace( "END zmq_init");
     OUTPUT:
         RETVAL

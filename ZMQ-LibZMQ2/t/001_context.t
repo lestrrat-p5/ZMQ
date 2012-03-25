@@ -22,4 +22,10 @@ subtest 'sane creation/destroy' => sub {
     }, undef, "double zmq_term should not die";
 };
 
+subtest 'error cae' => sub {
+    my $cxt = zmq_init(-1);
+    ok ! $cxt, "context allocation failed";
+    ok $!, "\$! is set";
+};
+
 done_testing;

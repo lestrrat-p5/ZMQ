@@ -209,6 +209,13 @@ you cannot share sockets.
 
 =head1 FUNCTIONS
 
+=head2 $cxt = zmq_init( $threads )
+
+Creates a new context object. C<$threads> argument is optional.
+Context objects can be reused across threads.
+
+Returns undef upon error, and sets $!.
+
 =head2 $value = zmq_getsockopt( $socket, $option )
 
 Gets the value of the specified option.
