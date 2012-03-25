@@ -231,6 +231,13 @@ Context objects can be reused across threads.
 
 Returns undef upon error, and sets $!.
 
+=head2 $rv = zmq_term( $cxt )
+
+Terminates the context. Be careful, as it might hang if you have pending socket
+operations. 
+
+Returns a non-zero status upon failure, and sets $!.
+
 =head2 $socket = zmq_socket( $cxt, $socket_type )
 
 Creates a new socket object. C<$socket_types> are constants declared in ZMQ::Constants. Sockets cannot be reused across threads.
