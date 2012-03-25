@@ -69,6 +69,13 @@ zctx_set_linger( ctx, linger )
         PerlCZMQ_zctx *ctx;
         int            linger;
 
+int
+zctx_interrupted()
+    CODE:
+        RETVAL = zctx_interrupted;
+    OUTPUT:
+        RETVAL
+
 PerlCZMQ_zsocket *
 zsocket_new( ctx, type )
         PerlCZMQ_zctx *ctx;
@@ -104,6 +111,10 @@ zsocket_destroy( ctx, socket )
                 mg->mg_ptr = NULL;
             }
         }
+
+char *
+zsocket_type_str( socket )
+        PerlCZMQ_zsocket_raw *socket;
 
 int
 _zsocket_bind( socket, address )
