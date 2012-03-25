@@ -32,8 +32,8 @@ subtest 'simple creation and destroy' => sub {
     is exception {
         my $context = zmq_init();
         my $socket  = zmq_socket( $context, ZMQ_REP );
-        zmq_close( $socket );
-        zmq_close( $socket );
+        is zmq_close( $socket ), 0, "should properly close";
+        isnt zmq_close( $socket ), 0, "should fail to close";
     }, undef, "double zmq_close should not die";
 };
 
