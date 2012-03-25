@@ -275,6 +275,20 @@ Sets the value of the specified option. Returns the status.
 
 See C<zmq_getsockopt()> if you have problems with ZMQ::LibZMQ2 not knowing the type of the option.
 
+=head2 $rv = zmq_send($sock, $message, $flags)
+
+Sends C<$message> via C<$sock>. Argument C<$flags> may be omitted.
+
+If C<$message> is a non-ref, creates a new ZMQ::LibZMQ2::Message object via C<zmq_msg_init_data()>, and uses that to pass to the underlying C layer..
+
+Returns a non-zero status upon failure, and sets $!.
+
+=head2 $message = zmq_recv($sock, $flags)
+
+Receives a new message from C<$sock>. Argument C<$flags> may be omitted.
+
+Return undef upon failure, and sets $!.
+
 =head2 zmq_version()
 
 Returns the version of the underlying zeromq library that is being linked.

@@ -640,6 +640,7 @@ PerlLibzmq2_zmq_recv(socket, flags = 0)
         if (rv != 0) {
             SET_BANG;
             PerlLibzmq2_trace(" + zmq_recv got bad status, closing temporary message");
+            zmq_msg_close(&msg);
         } else {
             Newxz(RETVAL, 1, PerlLibzmq2_Message);
             rv = zmq_msg_init(RETVAL);
@@ -647,6 +648,7 @@ PerlLibzmq2_zmq_recv(socket, flags = 0)
                 SET_BANG;
                 PerlLibzmq2_trace(" + zmq_msg_init (copy) failed with %d", rv );
                 Safefree(RETVAL);
+                zmq_msg_close(&msg);
                 XSRETURN_EMPTY;
             }
 
@@ -655,11 +657,11 @@ PerlLibzmq2_zmq_recv(socket, flags = 0)
                 SET_BANG;
                 PerlLibzmq2_trace(" + zmq_msg_copy failed with %d", rv );
                 Safefree(RETVAL);
+                zmq_msg_close(&msg);
                 XSRETURN_EMPTY;
             }
             PerlLibzmq2_trace(" + zmq_recv created message %p", RETVAL );
         }
-        zmq_msg_close(&msg);
         PerlLibzmq2_trace( "END zmq_recv" );
     OUTPUT:
         RETVAL
