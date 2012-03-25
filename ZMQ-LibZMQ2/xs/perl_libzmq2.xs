@@ -598,7 +598,7 @@ PerlLibzmq2_zmq_connect(socket, addr)
         PerlLibzmq2_trace( " + socket %p", socket );
         RETVAL = zmq_connect( socket->socket, addr );
         if (RETVAL != 0) {
-            croak( "%s", zmq_strerror( zmq_errno() ) );
+            SET_BANG;
         }
         PerlLibzmq2_trace( "END zmq_connect" );
     OUTPUT:
@@ -609,11 +609,13 @@ PerlLibzmq2_zmq_bind(socket, addr)
         PerlLibzmq2_Socket *socket;
         char *addr;
     CODE:
-        PerlLibzmq2_trace( "zmq_bind: socket %p", socket );
+        PerlLibzmq2_trace( "START zmq_bind" );
+        PerlLibzmq2_trace( " + socket %p", socket );
         RETVAL = zmq_bind( socket->socket, addr );
         if (RETVAL != 0) {
-            croak( "%s", zmq_strerror( zmq_errno() ) );
+            SET_BANG;
         }
+        PerlLibzmq2_trace( "END zmq_bind" );
     OUTPUT:
         RETVAL
 

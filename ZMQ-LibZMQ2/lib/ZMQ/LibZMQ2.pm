@@ -237,6 +237,18 @@ Creates a new socket object. C<$socket_types> are constants declared in ZMQ::Con
 
 Returns undef upon error, and sets $!.
 
+=head2 $rv = zmq_bind( $sock, $address )
+
+Binds the socket to listen to specified C<$address>.
+
+Returns a non-zero status upon failure, and sets $!
+
+=head2 $rv = zmq_connect( $sock, $address )
+
+Connects the socket to specified C<$address>.
+
+Returns a non-zero status upon failure, and sets $!
+
 =head2 $value = zmq_getsockopt( $socket, $option )
 
 Gets the value of the specified option.

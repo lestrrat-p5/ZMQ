@@ -13,23 +13,21 @@ subtest 'connect before server socket is bound (should fail)' => sub {
 
     # too early, server socket not created:
     my $client = zmq_socket($cxt, ZMQ_PAIR);
-    eval { zmq_connect($client, "inproc://myPrivateSocket"); };
-    ok($@ && "$@" =~ /Connection refused/);
+    local $ENV{LC_ALL} = 'C';
+    my $status = zmq_connect($client, "inproc://myPrivateSocket");
+    isnt $status, 0, "zmq_connect should fail";
+    like $!, qr/Connection refused/;
 };
 
 subtest 'basic inproc communication' => sub {
     my $cxt = zmq_init;
     my $sock = zmq_socket($cxt, ZMQ_PAIR); # Receiver
-    eval {
-        zmq_bind($sock, "inproc://myPrivateSocket");
-    };
-    ok !$@, "bind to inproc socket";
+    my $status = zmq_bind($sock, "inproc://myPrivateSocket");
+    is $status, 0, "bind to inproc socket";
 
     my $client = zmq_socket($cxt, ZMQ_PAIR); # sender
-    eval {
-        zmq_connect($client, "inproc://myPrivateSocket");
-    };
-    ok !$@, "connect to inproc socket";
+    $status = zmq_connect($client, "inproc://myPrivateSocket");
+    is $status, 0, "connect to inproc socket";
 
     ok(!defined(zmq_recv($sock, ZMQ_NOBLOCK())), "recv before sending anything should return nothing");
     ok(zmq_send($client, zmq_msg_init_data("Talk to me") ) == 0);
@@ -70,8 +68,10 @@ subtest 'basic inproc communication' => sub {
 subtest 'invalid bind' => sub {
     my $cxt = zmq_init(0); # must be 0 theads for in-process bind
     my $sock = zmq_socket($cxt, ZMQ_REP); # server like reply socket
-    eval {zmq_bind($sock, "bulls***");};
-    ok($@ && "$@" =~ /Invalid argument/);
+    local $ENV{LC_ALL} = 'C';
+    my $status = zmq_bind($sock, "bulls***");
+    isnt $status, 0, "bind failed";
+    like $!, qr/Invalid argument/;
 };
 
 done_testing;
