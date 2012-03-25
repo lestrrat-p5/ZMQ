@@ -314,6 +314,26 @@ Receives a new message from C<$sock>. Argument C<$flags> may be omitted.
 
 Return undef upon failure, and sets $!.
 
+=head2 $rv = zmq_poll( \@pollitems, $timeout )
+
+C<@pollitems> are list of hash references containing the following elements:
+
+=over 4
+
+=item fd or socket
+
+One of either C<fd> or C<socket> key must exist. C<fd> should contain a UNIX file descriptor. C<socket> should contain a C<ZMQ::LibZMQ2::Socket> socket object.
+
+=item events
+
+A bit mask containing C<ZMQ_POLLOUT>, C<ZMQ_POLLIN>, C<ZMQ_POLLERR> or combination there of.
+
+=item callback
+
+A subroutine reference, which will be called without arguments when the socket or descriptor is available.
+
+=back
+
 =head2 zmq_version()
 
 Returns the version of the underlying zeromq library that is being linked.

@@ -817,6 +817,10 @@ PerlLibzmq2_zmq_poll( list, timeout = 0 )
 
         /* now call zmq_poll */
         RETVAL = zmq_poll( pollitems, list_len, timeout );
+        if (RETVAL < 0) {
+            SET_BANG;
+        }
+
         for ( i = 0; i < list_len; i++ ) {
             if (pollitems[i].revents & pollitems[i].events) {
                 dSP;
