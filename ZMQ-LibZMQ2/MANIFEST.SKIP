@@ -1,4 +1,5 @@
 # Avoid archives of this distribution
+\bZMQ-LibZMQ2-\d+\.\d+(?:_\d+)?/
 \bZMQ-LibZMQ2-\d+\.\d+(?:_\d+)?\.tar\.gz$
 
 # Avoid version control files.
