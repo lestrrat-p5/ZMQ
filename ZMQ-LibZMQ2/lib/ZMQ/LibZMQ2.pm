@@ -249,6 +249,12 @@ Connects the socket to specified C<$address>.
 
 Returns a non-zero status upon failure, and sets $!
 
+=head2 $rv = zmq_close( $sock )
+
+Closes the socket explicitly.
+
+Returns a non-zero status upon failure, and sets $!.
+
 =head2 $value = zmq_getsockopt( $socket, $option )
 
 Gets the value of the specified option.

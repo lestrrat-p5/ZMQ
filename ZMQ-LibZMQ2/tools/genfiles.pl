@@ -143,6 +143,11 @@ sub write_typemap {
         $c_type =~ s/^ZMQ_LibZMQ2/PerlLibzmq2/;
         my $typemap_type = 'T_' . uc $c_type;
 
+        my $closed_error = 
+            $c_type =~ /Socket/ ? "ENOTSOCK" :
+            "EFAULT"
+        ;
+
         push @decl, "$c_type* $typemap_type";
         push @input, <<EOM;
 $typemap_type
@@ -169,6 +174,7 @@ $typemap_type
             closed = hv_fetchs( (HV *) svr, \\"_closed\\", 0 );
             if (closed != NULL && SvTRUE(*closed)) {
                 /* if it's already closed, just return */
+                PerlLibzmq2_set_bang( aTHX_ $closed_error );
                 XSRETURN_EMPTY;
             }
         }

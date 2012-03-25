@@ -5,6 +5,7 @@ use Carp ();
 
 my %constants;
 BEGIN {
+    my $zmq_hausnumero = 156384712;
     %constants  = (
         # socket types
         ZMQ_PAIR                => 0,
@@ -72,6 +73,26 @@ BEGIN {
         ZMQ_STREAMER            => 1,
         ZMQ_FORWARDER           => 2,
         ZMQ_QUEUE               => 3,
+
+        ZMQ_HAUSNUMERO          => $zmq_hausnumero,
+
+        # "On Windows platform some of the standard POSIX errnos are not 
+        # defined" says zmq.h
+        ENOTSUP                 => $zmq_hausnumero + 1,
+        EPROTONOSUPPORT         => $zmq_hausnumero + 2,
+        ENOBUFS                 => $zmq_hausnumero + 3,
+        ENETDOWN                => $zmq_hausnumero + 4,
+        EADDRINUSE              => $zmq_hausnumero + 5,
+        EADDRNOTAVAIL           => $zmq_hausnumero + 6,
+        ECONNREFUSED            => $zmq_hausnumero + 7,
+        EINPROGRESS             => $zmq_hausnumero + 8,
+        ENOTSOCK                => $zmq_hausnumero + 9,
+
+        # "Native 0MQ error codes." as defined in zmq.h
+        EFSM                    => $zmq_hausnumero + 51,
+        ENOCOMPATPROTO          => $zmq_hausnumero + 52,
+        ETERM                   => $zmq_hausnumero + 53,
+        EMTHREAD                => $zmq_hausnumero + 54,
     );
 }
 
@@ -142,6 +163,22 @@ our %EXPORT_TAGS = (
         ZMQ_FORWARDER
         ZMQ_QUEUE
     ) ],
+    errors => [ qw(
+        ZMQ_HAUSNUMERO
+        ENOTSUP
+        EPROTONOSUPPORT
+        ENOBUFS
+        ENETDOWN
+        EADDRINUSE
+        EADDRNOTAVAIL
+        ECONNREFUSED
+        EINPROGRESS
+        ENOTSOCK
+        EFSM
+        ENOCOMPATPROTO
+        ETERM
+        EMTHREAD
+    ) ]
 );
 $EXPORT_TAGS{all} = [ @EXPORT_OK ];
 
