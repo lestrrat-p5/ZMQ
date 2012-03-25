@@ -285,12 +285,16 @@ socket option. You can easily add new constants to this map:
 
 =item Using utilities in ZMQ::LibZMQ2
 
+You need to know which socket options are integers, which are strings, etc, to manipulate the socket options. Choose the right one from the following helpers that ZMQ::LibZMQ2 provides (they are not part of the libzmq interface)
+
     /* say you know that the value is an int, int64, uint64, or char *
        by reading the zmq docs */
     $int    = zmq_getsockopt_int( $socket, ZMQ_NEW_SHINY_OPTION );
     $int64  = zmq_getsockopt_int64( $socket, ZMQ_NEW_SHINY_OPTION );
     $uint64 = zmq_getsockopt_uint64( $socket, ZMQ_NEW_SHINY_OPTION );
     $string = zmq_getsockopt_string( $socket, ZMQ_NEW_SHINY_OPTION );
+
+Corresponding C<zmq_setsockopt_*> functions should also exist.
 
 =back
 
