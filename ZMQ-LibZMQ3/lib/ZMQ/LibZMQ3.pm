@@ -226,6 +226,63 @@ you cannot share sockets.
 
 =head1 FUNCTIONS
 
+ZMQ::LibZMQ3 attempts to stick to the libzmq interface as much as possible. Unless there is a structure is what the Perl binding expects, no function should throw an exception.
+
+Return values should resemble that of libzmq, except for when new data is allocated and returned to the user - That includes things like C<zmq_init()>, C<zmq_socket()>, C<zmq_msg_data()>, etc.
+
+Where applicable, $! should be updated to match the value set by libzmq, so you should be able to do:
+
+    my $cxt = zmq_init();
+    if (! $cxt) {
+        die "zmq_init() failed with $!";
+    }
+
+=head2 $errno = zmq_errno()
+
+Returns the value of errno variable for the calling thread. You normally should not need to use this function. See the man page for zmq_errno() provided by libzmq.
+
+=head2 $string = zmq_strerror( $errno )
+
+Returns the string representation of C<$errno>. Use this to stringify errors that libzmq provides.
+
+=head2 $cxt = zmq_init( $threads )
+
+Creates a new context object. C<$threads> argument is optional.
+Context objects can be reused across threads.
+
+Returns undef upon error, and sets $!.
+
+=head2 $rv = zmq_term( $cxt )
+
+Terminates the context. Be careful, as it might hang if you have pending socket
+operations. 
+
+Returns a non-zero status upon failure, and sets $!.
+
+=head2 $socket = zmq_socket( $cxt, $socket_type )
+
+Creates a new socket object. C<$socket_types> are constants declared in ZMQ::Constants. Sockets cannot be reused across threads.
+
+Returns undef upon error, and sets $!.
+
+=head2 $rv = zmq_bind( $sock, $address )
+
+Binds the socket to listen to specified C<$address>.
+
+Returns a non-zero status upon failure, and sets $!
+
+=head2 $rv = zmq_connect( $sock, $address )
+
+Connects the socket to specified C<$address>.
+
+Returns a non-zero status upon failure, and sets $!
+
+=head2 $rv = zmq_close( $sock )
+
+Closes the socket explicitly.
+
+Returns a non-zero status upon failure, and sets $!.
+
 =head2 $value = zmq_getsockopt( $socket, $option )
 
 Gets the value of the specified option.
@@ -264,6 +321,103 @@ Sets the value of the specified option. Returns the status.
 
 See C<zmq_getsockopt()> if you have problems with ZMQ::LibZMQ3 not knowing the type of the option.
 
+=head2 $bytes = zmq_send($sock, $buffer, $size, $flags)
+
+Queues C<$size> bytes from C<$buffer> to be sent from the socket. Argument C<$flags> may be omitted. If C<$size> is -1, then the size of the buffer calcualted via C<SvPV()> will be used.
+
+Returns the number of bytes sent on success (which should be exact C<$size>)
+
+Returns -1 upon failure, and sets $!.
+
+=head2 $rv = zmq_sendmsg($sock, $message, $flags)
+
+Queues C<$message> to be sent via C<$sock>. Argument C<$flags> may be omitted.
+
+If C<$message> is a non-ref, creates a new ZMQ::LibZMQ2::Message object via C<zmq_msg_init_data()>, and uses that to pass to the underlying C layer..
+
+Returns the number of bytes sent on success (which should be exact C<$size>)
+
+Returns -1 upon failure, and sets $!.
+
+=head2 $rv = zmq_recv($sock, $buffer, $len, $flags)
+
+Receives a new message from C<$sock>, and store the message payload in C<$buffer>, up to C<$len> bytes. Argument C<$flags> may be omitted.
+
+Returns the number of bytes in the I<original> message, which may exceed C<$len> (if you have C<$rv> > C<$len>, then the message was truncated).
+
+Returns -1 upon failure, and sets $!.
+
+=head2 $message = zmq_recvmsg($sock, $flags)
+
+Receives a new message from C<$sock>. Argument C<$flags> may be omitted.
+Returns the message object.
+
+Returns undef upon failure, and sets $!.
+
+=head2 $msg = zmq_msg_init()
+
+Creates a new message object.
+
+Returns undef upon failure, and sets $!.
+
+=head2 $msg = zmq_msg_init_data($string)
+
+Creates a new message object, and sets the message payload to the string in C<$string>.
+
+Returns undef upon failure, and sets $!.
+
+=head2 $msg = zmq_msg_init_size($size)
+
+Creates a new message object, allocating C<$size> bytes. This call isn't so useful from within Perl
+
+Returns undef upon failure, and sets $!.
+
+=head2 $string = zmq_msg_data( $msg )
+
+Returns the payload contained in C<$msg>
+
+=head2 $size = zmq_msg_size( $msg )
+
+Returns the size of payload contained in C<$msg>
+
+=head2 zmq_msg_copy( $dst, $src )
+
+Copies contents of C<$src> to C<$dst>.
+
+Returns a non-zero status upon failure, and sets $!.
+
+=head2 zmq_msg_move( $dst, $src )
+
+Moves contents of C<$src> to C<$dst>
+
+Returns a non-zero status upon failure, and sets $!.
+
+=head2 $rv = zmq_msg_close( $msg )
+
+Closes, cleans up the message.
+
+Returns a non-zero status upon failure, and sets $!.
+
+=head2 $rv = zmq_poll( \@pollitems, $timeout )
+
+C<@pollitems> are list of hash references containing the following elements:
+
+=over 4
+
+=item fd or socket
+
+One of either C<fd> or C<socket> key must exist. C<fd> should contain a UNIX file descriptor. C<socket> should contain a C<ZMQ::LibZMQ2::Socket> socket object.
+
+=item events
+
+A bit mask containing C<ZMQ_POLLOUT>, C<ZMQ_POLLIN>, C<ZMQ_POLLERR> or combination there of.
+
+=item callback
+
+A subroutine reference, which will be called without arguments when the socket or descriptor is available.
+
+=back
+
 =head2 zmq_version()
 
 Returns the version of the underlying zeromq library that is being linked.
@@ -274,6 +428,30 @@ returns a 3-element list of the version numbers:
     my ($major, $minor, $patch) = ZMQ::LibZMQ3::zmq_version();
 
 =head2 zmq_device($type, $sock1, $sock2)
+
+Creates a new "device". See C<zmq_device> for details. zmq_device() will only return if/when the current context is closed. Therefore, the return value is always -1, and errno is always ETERM
+
+This function does not work on some versions, as certain early versions of libzmq3.x do not implement it.
+
+=head1 FUNCTIONS PROVIDED BY ZMQ::LIBZMQ2
+
+These functions are provided by ZMQ::LibZMQ2 to make some operations easier in the Perl binding. They are not part of the official libzmq interface.
+
+=head2 $value = zmq_getsockopt_int( $sock, $option )
+
+=head2 $value = zmq_getsockopt_int64( $sock, $option )
+
+=head2 $value = zmq_getsockopt_string( $sock, $option )
+
+=head2 $value = zmq_getsockopt_uint64( $sock, $option )
+
+=head2 $rv = zmq_setsockopt_int( $sock, $option, $value );
+
+=head2 $rv = zmq_setsockopt_int64( $sock, $option, $value );
+
+=head2 $rv = zmq_setsockopt_string( $sock, $option, $value );
+
+=head2 $rv = zmq_setsockopt_uint64( $sock, $option, $value );
 
 =head1 DEBUGGING XS
 

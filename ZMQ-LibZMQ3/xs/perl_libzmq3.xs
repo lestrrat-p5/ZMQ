@@ -360,19 +360,26 @@ PerlLibzmq3_zmq_init( nthreads = 5 )
         int nthreads;
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Context", 20 ));
+        void *cxt;
     CODE:
         PerlLibzmq3_trace( "START zmq_init" );
+        cxt = zmq_init( nthreads );
+        if (cxt == NULL) {
+            SET_BANG;
+            RETVAL = NULL;
+        } else {
 #ifdef USE_ITHREADS
-        PerlLibzmq3_trace( " + threads enabled, aTHX %p", aTHX );
-        Newxz( RETVAL, 1, PerlLibzmq3_Context );
-        RETVAL->interp = aTHX;
-        RETVAL->ctxt   = zmq_init( nthreads );
-        PerlLibzmq3_trace( " + created context wrapper %p", RETVAL );
-        PerlLibzmq3_trace( " + zmq context %p", RETVAL->ctxt );
+            PerlLibzmq3_trace( " + threads enabled, aTHX %p", aTHX );
+            Newxz( RETVAL, 1, PerlLibzmq3_Context );
+            RETVAL->interp = aTHX;
+            RETVAL->ctxt   = cxt;
+            PerlLibzmq3_trace( " + created context wrapper %p", RETVAL );
+            PerlLibzmq3_trace( " + zmq context %p", RETVAL->ctxt );
 #else
-        PerlLibzmq3_trace( " + non-threaded context");
-        RETVAL = zmq_init( nthreads );
+            PerlLibzmq3_trace( " + non-threaded context");
+            RETVAL = cxt;
 #endif
+        }
         PerlLibzmq3_trace( "END zmq_init");
     OUTPUT:
         RETVAL
@@ -386,18 +393,22 @@ PerlLibzmq3_zmq_term( context )
 #else
         RETVAL = zmq_term( context );
 #endif
-        if (RETVAL == 0) {
-            /* Cancel the SV's mg attr so to not call zmq_term automatically */
-            MAGIC *mg =
-                PerlLibzmq3_Context_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq3_Context_vtbl );
-            mg->mg_ptr = NULL;
-        }
+        if (RETVAL != 0) {
+            SET_BANG;
+        } else {
+            {
+                /* Cancel the SV's mg attr so to not call zmq_term automatically */
+                MAGIC *mg =
+                    PerlLibzmq3_Context_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq3_Context_vtbl );
+                mg->mg_ptr = NULL;
+            }
 
-        /* mark the original SV's _closed flag as true */
-        {
-            SV *svr = SvRV(ST(0));
-            if (hv_stores( (HV *) svr, "_closed", &PL_sv_yes ) == NULL) {
-                croak("PANIC: Failed to store closed flag on blessed reference");
+            /* mark the original SV's _closed flag as true */
+            {
+                SV *svr = SvRV(ST(0));
+                if (hv_stores( (HV *) svr, "_closed", &PL_sv_yes ) == NULL) {
+                    croak("PANIC: Failed to store closed flag on blessed reference");
+                }
             }
         }
     OUTPUT:
@@ -495,6 +506,10 @@ PerlLibzmq3_zmq_msg_close(message)
         PerlLibzmq3_trace("START zmq_msg_close");
         RETVAL = zmq_msg_close(message);
         Safefree(message);
+        if (RETVAL != 0) {
+            SET_BANG;
+        }
+
         {
             MAGIC *mg =
                  PerlLibzmq3_Message_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq3_Message_vtbl );
@@ -517,6 +532,9 @@ PerlLibzmq3_zmq_msg_move(dest, src)
         PerlLibzmq3_Message *src;
     CODE:
         RETVAL = zmq_msg_move( dest, src );
+        if (RETVAL != 0) {
+            SET_BANG;
+        }
     OUTPUT:
         RETVAL
 
@@ -526,6 +544,9 @@ PerlLibzmq3_zmq_msg_copy (dest, src);
         PerlLibzmq3_Message *src;
     CODE:
         RETVAL = zmq_msg_copy( dest, src );
+        if (RETVAL != 0) {
+            SET_BANG;
+        }
     OUTPUT:
         RETVAL
 
@@ -535,21 +556,26 @@ PerlLibzmq3_zmq_socket (ctxt, type)
         IV type;
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Socket", 19 ));
+        void *sock = NULL;
     CODE:
         PerlLibzmq3_trace( "START zmq_socket" );
-        Newxz( RETVAL, 1, PerlLibzmq3_Socket );
-        RETVAL->assoc_ctxt = NULL;
-        RETVAL->socket = NULL;
 #ifdef USE_ITHREADS
         PerlLibzmq3_trace( " + context wrapper %p, zmq context %p", ctxt, ctxt->ctxt );
-        RETVAL->socket = zmq_socket( ctxt->ctxt, type );
+        sock = zmq_socket( ctxt->ctxt, type );
 #else
         PerlLibzmq3_trace( " + zmq context %p", ctxt );
-        RETVAL->socket = zmq_socket( ctxt, type );
+        sock = zmq_socket( ctxt, type );
 #endif
-        RETVAL->assoc_ctxt = ST(0);
-        SvREFCNT_inc(RETVAL->assoc_ctxt);
-        PerlLibzmq3_trace( " + created socket %p", RETVAL );
+        if (sock == NULL) {
+            RETVAL = NULL;
+            SET_BANG;
+        } else {
+            Newxz( RETVAL, 1, PerlLibzmq3_Socket );
+            RETVAL->assoc_ctxt = ST(0);
+            RETVAL->socket = sock;
+            SvREFCNT_inc(RETVAL->assoc_ctxt);
+            PerlLibzmq3_trace( " + created socket %p", RETVAL );
+        }
         PerlLibzmq3_trace( "END zmq_socket" );
     OUTPUT:
         RETVAL
@@ -626,6 +652,7 @@ PerlLibzmq3_zmq_recv(socket, buf_sv, len, flags = 0)
         PerlLibzmq3_trace(" + zmq_recv returned with rv '%d'", RETVAL);
         if ( RETVAL == -1 ) {
             SET_BANG;
+            Safefree(buf);
         } else {
             sv_setpvn( buf_sv, buf, len );
         }
@@ -646,23 +673,38 @@ PerlLibzmq3_zmq_recvmsg(socket, flags = 0)
         RETVAL = NULL;
         rv = zmq_msg_init(&msg);
         if (rv != 0) {
-            PerlLibzmq3_trace("zmq_msg_init failed (%d)", rv);
             SET_BANG;
-            XSRETURN_UNDEF;
+            PerlLibzmq3_trace("zmq_msg_init failed (%d)", rv);
+            XSRETURN_EMPTY;
         }
         rv = zmq_recvmsg(socket->socket, &msg, flags);
         PerlLibzmq3_trace(" + zmq_recvmsg with flags %d", flags);
         PerlLibzmq3_trace(" + zmq_recvmsg returned with rv '%d'", rv);
-        if (rv < 0) {
+        if (rv == -1) {
             SET_BANG;
-            zmq_msg_close(&msg);
             PerlLibzmq3_trace(" + zmq_recvmsg got bad status, closing temporary message");
+            zmq_msg_close(&msg);
         } else {
             PerlLibzmq3_trace(" + message data (%s)", (char *) zmq_msg_data(&msg) );
             PerlLibzmq3_trace(" + message size (%d)", (int) zmq_msg_size(&msg) );
             Newxz(RETVAL, 1, PerlLibzmq3_Message);
-            zmq_msg_init(RETVAL);
-            zmq_msg_copy( RETVAL, &msg );
+            rv = zmq_msg_init(RETVAL);
+            if (rv != 0) {
+                SET_BANG;
+                PerlLibzmq3_trace(" + zmq_msg_init (copy) failed with %d", rv );
+                Safefree(RETVAL);
+                zmq_msg_close(&msg);
+                XSRETURN_EMPTY;
+            }
+
+            rv = zmq_msg_copy( RETVAL, &msg );
+            if (rv != 0) {
+                SET_BANG;
+                PerlLibzmq3_trace(" + zmq_msg_copy failed with %d", rv );
+                Safefree(RETVAL);
+                zmq_msg_close(&msg);
+                XSRETURN_EMPTY;
+            }
             PerlLibzmq3_trace(" + zmq_recvmsg created message %p", RETVAL );
             zmq_msg_close(&msg);
         }
