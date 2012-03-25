@@ -30,6 +30,7 @@ gen_includes:
 
 EOM
 
+auto_set_repository;
 requires 'ZMQ::Constants';
 
 WriteAll;
