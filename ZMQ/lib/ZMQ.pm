@@ -63,6 +63,50 @@ ZMQ is a Perl-ish wrapper for libzmq. It uses ZMQ::LibZMQ2 or ZMQ::LibZMQ3 (ZMQ:
 
 If you want a one-to-one direct mapping to libzmq, then you should be using ZMQ::LibZMQ2, ZMQ::LibZMQ3 directly
 
+ZMQ will automatically choose the backend (either ZMQ::LibZMQ2 or ZMQ::LibZMQ3) to use. This can be explicitly specified by setting C<PERL_ZMQ_BACKEND> environment variable.
+
+By default ZMQ::LibZMQ2 will be used as the backend. This may change in future
+versions, so make sure to explicitly set your backend if you don't want it to
+change:
+
+    BEGIN {
+        $ENV{ PERL_ZMQ_BACKEND } = 'ZMQ::LibZMQ2';
+    }
+    use ZMQ;
+
+=head1 FUNCTIONS
+
+=head2 ZMQ::call( $funcname, @args )
+
+Calls C<$funcname> via whichever backend loaded by ZMQ.pm. For example if
+ZMQ::LibZMQ2 is loaded:
+
+    use ZMQ;
+
+    my $version = ZMQ::call( "zmq_version" ); # calls ZMQ::LibZMQ2::zmq_version
+
+If C<@args> is passed, they are passed directly to the target function.
+
+=head1 SEE ALSO
+
+L<http://zeromq.org>
+
+L<http://github.com/lestrrat/p5-ZMQ>
+
+=head1 AUTHOR
+
+Daisuke Maki C<< <daisuke@endeworks.jp> >>
+
+=head1 COPYRIGHT AND LICENSE
+
+The ZMQ module is
+
+Copyright (C) 2012 by Daisuke Maki
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.0 or,
+at your option, any later version of Perl 5 you may have available.
+
 =cut
 
 
