@@ -1,14 +1,16 @@
 use strict;
 use Test::More;
 use Test::TCP;
-
-use_ok "ZMQ::CZMQ";
+BEGIN {
+    use_ok "ZMQ::Constants", ":all";
+    use_ok "ZMQ::CZMQ";
+}
 
 subtest 'basic' => sub {
     my $ctx = zctx_new();
     ok $ctx, "new context";
 
-    my $socket = zsocket_new( $ctx, 1 );
+    my $socket = zsocket_new( $ctx, ZMQ_PAIR );
     ok $socket, "new socket";
     isa_ok $socket, "ZMQ::CZMQ::zsocket";
     
@@ -19,8 +21,8 @@ subtest 'basic' => sub {
 subtest 'inproc bind and connect' => sub {
     my $addr = "inproc://zstr.test";
     my $ctx = zctx_new();
-    my $reader = zsocket_new( $ctx, 0 );
-    my $writer = zsocket_new( $ctx, 0 );
+    my $reader = zsocket_new( $ctx, ZMQ_PAIR );
+    my $writer = zsocket_new( $ctx, ZMQ_PAIR );
 
     my $rv;
     $rv = zsocket_bind( $reader, $addr );

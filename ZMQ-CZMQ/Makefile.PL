@@ -30,6 +30,8 @@ gen_includes:
 
 EOM
 
+requires 'ZMQ::Constants';
+
 WriteAll;
 
 system $^X, "-i", "-pe", 's/pure_all :: config pm_to_blib subdirs linkext/pure_all :: zmqinfo gen_includes config pm_to_blib subdirs linkext/', 'Makefile';
