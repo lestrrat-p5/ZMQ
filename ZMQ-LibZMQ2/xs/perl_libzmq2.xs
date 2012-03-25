@@ -15,8 +15,10 @@
 STATIC_INLINE void
 PerlLibzmq2_set_bang(pTHX_ int err) {
     SV *errsv = get_sv("!", GV_ADD);
-    PerlLibzmq2_trace("Set ERRSV ($!) to %d", err);
+    PerlIO_printf(PerlIO_stderr(), "Seting errno to %d", err);
+    PerlLibzmq2_trace("Seting errno to %d", err);
     sv_setiv(errsv, err);
+    errno = err;
 }
 
 static
