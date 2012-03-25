@@ -456,6 +456,7 @@ PerlLibzmq2_zmq_msg_init_data( data, size = -1)
         if ( rc != 0 ) {
             SET_BANG;
             zmq_msg_close( RETVAL );
+            Safefree( RETVAL );
             RETVAL = NULL;
         }
         else {
@@ -488,6 +489,10 @@ PerlLibzmq2_zmq_msg_close(message)
         PerlLibzmq2_trace("START zmq_msg_close");
         RETVAL = zmq_msg_close(message);
         Safefree(message);
+        if ( RETVAL != 0 ) {
+            SET_BANG;
+        }
+
         {
             MAGIC *mg =
                  PerlLibzmq2_Message_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq2_Message_vtbl );
@@ -510,6 +515,9 @@ PerlLibzmq2_zmq_msg_move(dest, src)
         PerlLibzmq2_Message *src;
     CODE:
         RETVAL = zmq_msg_move( dest, src );
+        if (RETVAL != 0) {
+            SET_BANG;
+        }
     OUTPUT:
         RETVAL
 
@@ -519,6 +527,9 @@ PerlLibzmq2_zmq_msg_copy (dest, src);
         PerlLibzmq2_Message *src;
     CODE:
         RETVAL = zmq_msg_copy( dest, src );
+        if (RETVAL != 0) {
+            SET_BANG;
+        }
     OUTPUT:
         RETVAL
 
@@ -617,59 +628,58 @@ PerlLibzmq2_zmq_recv(socket, flags = 0)
     CODE:
         PerlLibzmq2_trace( "START zmq_recv" );
         RETVAL = NULL;
-        zmq_msg_init(&msg);
+        rv = zmq_msg_init(&msg);
+        if (rv != 0) {
+            SET_BANG;
+            PerlLibzmq2_trace(" + zmq_msg_init failed with %d", rv );
+            XSRETURN_EMPTY;
+        }
         rv = zmq_recv(socket->socket, &msg, flags);
         PerlLibzmq2_trace(" + zmq recv with flags %d", flags);
         PerlLibzmq2_trace(" + zmq_recv returned with rv '%d'", rv);
         if (rv != 0) {
             SET_BANG;
-            zmq_msg_close(&msg);
             PerlLibzmq2_trace(" + zmq_recv got bad status, closing temporary message");
         } else {
             Newxz(RETVAL, 1, PerlLibzmq2_Message);
-            zmq_msg_init(RETVAL);
-            zmq_msg_copy( RETVAL, &msg );
-            zmq_msg_close(&msg);
+            rv = zmq_msg_init(RETVAL);
+            if (rv != 0) {
+                SET_BANG;
+                PerlLibzmq2_trace(" + zmq_msg_init (copy) failed with %d", rv );
+                Safefree(RETVAL);
+                XSRETURN_EMPTY;
+            }
+
+            rv = zmq_msg_copy( RETVAL, &msg );
+            if (rv != 0) {
+                SET_BANG;
+                PerlLibzmq2_trace(" + zmq_msg_copy failed with %d", rv );
+                Safefree(RETVAL);
+                XSRETURN_EMPTY;
+            }
             PerlLibzmq2_trace(" + zmq_recv created message %p", RETVAL );
         }
+        zmq_msg_close(&msg);
         PerlLibzmq2_trace( "END zmq_recv" );
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq2_zmq_send(socket, message, flags = 0)
+PerlLibzmq2__zmq_send(socket, message, flags = 0)
         PerlLibzmq2_Socket *socket;
-        SV *message;
+        PerlLibzmq2_Message *message;
         int flags;
-    PREINIT:
-        PerlLibzmq2_Message *msg = NULL;
     CODE:
-        if (! SvOK(message))
-            croak("ZMQ::LibZMQ2::Socket::send() NULL message passed");
+        /* This is the "real" zmq_send wrapper, which is called from
+           the Perl subroutine.
+        */
 
-        if (sv_isobject(message) && sv_isa(message, "ZMQ::LibZMQ2::Message")) {
-            MAGIC *mg = PerlLibzmq2_Context_mg_find(aTHX_ SvRV(message), &PerlLibzmq2_Message_vtbl);
-            if (mg) {
-                msg = (PerlLibzmq2_Message *) mg->mg_ptr;
-            }
-
-            if (msg == NULL) {
-                croak("Got invalid message object");
-            }
-            
-            RETVAL = zmq_send(socket->socket, msg, flags);
-        } else {
-            STRLEN data_len;
-            char *x_data;
-            char *data = SvPV(message, data_len);
-            zmq_msg_t msg;
-
-            x_data = (char *)malloc(data_len);
-            memcpy(x_data, data, data_len);
-            zmq_msg_init_data(&msg, x_data, data_len, PerlLibzmq2_free_string, NULL);
-            RETVAL = zmq_send(socket->socket, &msg, flags);
-            zmq_msg_close( &msg ); 
+        PerlLibzmq2_trace( "START zmq_send" );
+        RETVAL = zmq_send( socket->socket, message, flags );
+        if (RETVAL != 0) {
+            SET_BANG;
         }
+        PerlLibzmq2_trace( "END zmq_send" );
     OUTPUT:
         RETVAL
 
