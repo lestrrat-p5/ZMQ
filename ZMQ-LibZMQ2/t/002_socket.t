@@ -11,11 +11,20 @@ BEGIN {
         zmq_close
         zmq_getsockopt
         zmq_setsockopt
+        zmq_term
     );
     use_ok "ZMQ::Constants", ':v2.1.11', ':all';
 }
 
 subtest 'simple creation and destroy' => sub {
+    is exception {
+        my $context = zmq_init(1);
+        my $socket  = zmq_socket( $context, -1 );
+        ok !$socket, "socket should not be created";
+        ok $!, "\$! should be set";
+
+    }, undef, "socket creation error";
+
     is exception {
         my $context = zmq_init(1);
         my $socket  = zmq_socket( $context, ZMQ_REP );

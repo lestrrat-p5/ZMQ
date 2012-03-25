@@ -528,21 +528,28 @@ PerlLibzmq2_zmq_socket (ctxt, type)
         IV type;
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ2::Socket", 19 ));
+        void *sock = NULL;
     CODE:
         PerlLibzmq2_trace( "START zmq_socket" );
-        Newxz( RETVAL, 1, PerlLibzmq2_Socket );
-        RETVAL->assoc_ctxt = NULL;
-        RETVAL->socket = NULL;
 #ifdef USE_ITHREADS
         PerlLibzmq2_trace( " + context wrapper %p, zmq context %p", ctxt, ctxt->ctxt );
-        RETVAL->socket = zmq_socket( ctxt->ctxt, type );
+        sock = zmq_socket( ctxt->ctxt, type );
 #else
         PerlLibzmq2_trace( " + zmq context %p", ctxt );
-        RETVAL->socket = zmq_socket( ctxt, type );
+        sock = zmq_socket( ctxt, type );
 #endif
-        RETVAL->assoc_ctxt = ST(0);
-        SvREFCNT_inc(RETVAL->assoc_ctxt);
-        PerlLibzmq2_trace( " + created socket %p", RETVAL );
+
+        if ( sock == NULL ) {
+            RETVAL = NULL;
+            SET_BANG;
+        } else {
+            Newxz( RETVAL, 1, PerlLibzmq2_Socket );
+            RETVAL->assoc_ctxt = ST(0);
+            RETVAL->socket = sock;
+            SvREFCNT_inc(RETVAL->assoc_ctxt);
+
+            PerlLibzmq2_trace( " + created socket %p", RETVAL );
+        }
         PerlLibzmq2_trace( "END zmq_socket" );
     OUTPUT:
         RETVAL
