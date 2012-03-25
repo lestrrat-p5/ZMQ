@@ -224,6 +224,17 @@ you cannot share sockets.
 
 =head1 FUNCTIONS
 
+ZMQ::LibZMQ2 attempts to stick to the libzmq interface as much as possible. Unless there is a structure is what the Perl binding expects, no function should throw an exception.
+
+Return values should resemble that of libzmq, except for when new data is allocated and returned to the user - That includes things like C<zmq_init()>, C<zmq_socket()>, C<zmq_msg_data()>, etc.
+
+Where applicable, $! should be updated to match the value set by libzmq, so you should be able to do:
+
+    my $cxt = zmq_init();
+    if (! $cxt) {
+        die "zmq_init() failed with $!";
+    }
+
 =head2 $cxt = zmq_init( $threads )
 
 Creates a new context object. C<$threads> argument is optional.
