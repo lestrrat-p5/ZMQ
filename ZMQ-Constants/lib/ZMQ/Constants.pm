@@ -143,9 +143,27 @@ our %EXPORT_TAGS = (
         ZMQ_HWM
         ZMQ_SWAP
         ZMQ_NOBLOCK
+    ),
+    # only in v2.x
+    qw(
+        ZMQ_XREQ
+        ZMQ_XREP
+        ZMQ_UPSTREAM
+        ZMQ_DOWNSTREAM
+        ZMQ_HWM
+        ZMQ_SWAP
     ) ],
     message => [ qw(
         ZMQ_MORE
+        ZMQ_MSG_MORE
+        ZMQ_MAX_VSM_SIZE
+        ZMQ_DELIMITER
+        ZMQ_VSM
+        ZMQ_MSG_SHARED
+        ZMQ_MSG_MASK
+    ),
+    # only in v2.x
+    qw(
         ZMQ_MSG_MORE
         ZMQ_MAX_VSM_SIZE
         ZMQ_DELIMITER
