@@ -333,7 +333,7 @@ Returns -1 upon failure, and sets $!.
 
 Queues C<$message> to be sent via C<$sock>. Argument C<$flags> may be omitted.
 
-If C<$message> is a non-ref, creates a new ZMQ::LibZMQ2::Message object via C<zmq_msg_init_data()>, and uses that to pass to the underlying C layer..
+If C<$message> is a non-ref, creates a new ZMQ::LibZMQ3::Message object via C<zmq_msg_init_data()>, and uses that to pass to the underlying C layer..
 
 Returns the number of bytes sent on success (which should be exact C<$size>)
 
@@ -406,7 +406,7 @@ C<@pollitems> are list of hash references containing the following elements:
 
 =item fd or socket
 
-One of either C<fd> or C<socket> key must exist. C<fd> should contain a UNIX file descriptor. C<socket> should contain a C<ZMQ::LibZMQ2::Socket> socket object.
+One of either C<fd> or C<socket> key must exist. C<fd> should contain a UNIX file descriptor. C<socket> should contain a C<ZMQ::LibZMQ3::Socket> socket object.
 
 =item events
 
@@ -433,9 +433,9 @@ Creates a new "device". See C<zmq_device> for details. zmq_device() will only re
 
 This function does not work on some versions, as certain early versions of libzmq3.x do not implement it.
 
-=head1 FUNCTIONS PROVIDED BY ZMQ::LIBZMQ2
+=head1 FUNCTIONS PROVIDED BY ZMQ::LIBZMQ3
 
-These functions are provided by ZMQ::LibZMQ2 to make some operations easier in the Perl binding. They are not part of the official libzmq interface.
+These functions are provided by ZMQ::LibZMQ3 to make some operations easier in the Perl binding. They are not part of the official libzmq interface.
 
 =head2 $value = zmq_getsockopt_int( $sock, $option )
 
