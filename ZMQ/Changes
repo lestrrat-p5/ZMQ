@@ -1,0 +1,203 @@
+Changelog for Perl module ZMQ.
+
+1.00_04 - Mar 26 2012
+  [INCOMPATIBLE CHANGES]
+  - Now ZMQ.pm is just a pure-perl wrapper around ZMQ::LibZMQ2 or ZMQ::LibZMQ3.
+    ZMQ::Raw has been removed.
+  - Fix sendmsg_as()
+  - Repositories have been consolidated. see https://github.com/lestrrat/p5-ZMQ/
+
+1.00_03 - Mar 14 2012
+  [DOCUMENTATION]
+  - Add section on errors
+  [MISCELLANEOUS]
+  - Add zmq_version()
+  - Add zmq_strerror()
+  - Fix eg/*.pl to use recvmsg() instead of recv()
+  - Fix constants - add new ones, remove old and renamed ones
+
+1.00_02 - Mar 14 2012
+  [DOCUMENTATION]
+  - Update and make sure to introduce send/recv along sendmsg/recvmsg
+  [INCOMPATIBLE CHANGES]
+  - Re-introduce zmq_send() (note, it's not the same zmq_recv() as in 2.x)
+  [MISCELLANEOUS]
+  - Add zmq_errno()
+
+1.00_01 - Mar 13 2012
+  [INCOMPATIBLE CHANGES]
+  - Support libzmq 3.1.x and up. Does not work with lower versions
+  - Rename to ZMQ, in acordance to other language bindings
+  - ZMQ::Raw::* functions will attempt to return what libzmq returns,
+    as much as possible. For example, you no longer should expect
+    zmq_connect() to throw an exception when connect fails. Instead,
+    check for the return value
+  - Make sure to set $! when an error occurs
+  - ZMQ::Socket::* functions will now croak
+  - Serialization methods sendmsg_as/recvmsg_as are now in a separate
+    package (TODO: Move this out to a separate dist)
+
+
+--- BELOW are change logs for ZeroMQ.pm ---
+
+0.19 Dec 08 2011
+  - Fix socket/context destruction order (github #20).
+  - Apply doc patches.
+  - Make ZMQ_NOBLOCK to ZMQ_DONTWAIT when libzmq >= 3
+  - Change tests to using Test::Fatal instead of Test::Exception
+  - Change tests to using Test::TCP object interface
+
+0.18 Nov 06 2011
+  - Pass $flags in ZeroMQ::Socket->recv_as() as is documented
+
+0.17 Fri Sep 09 2011 12:40 JST
+  - Add support for ZMQ_LINGER in setsockopt (sebnow)
+    https://github.com/lestrrat/ZeroMQ-Perl/pull/19
+
+0.16 Sat Jul 23 2011 08:00 JST
+  - Fix memory leaks
+    * rt #69572
+    * https://github.com/lestrrat/ZeroMQ-Perl/pull/17 (linuxfood)
+  - Make sure to check for libzmq 2.1.x, as we don't support anything else
+    on this release
+
+0.15 Mon May 23 2011 17:30 JST
+  - Do not use PKG_CONFIG_PATH as the path to pkg-config binary.
+    If for some reason you want to use a different pkg-config than
+    in your PATH, use PKGCONFIG_CMD environmental variable.
+    Reported by Johan Ström (rt #68108)
+  - Doc tweaks
+  - Fix/update autobuild tools used in Jenkins tests.
+
+0.14 Thu May 12 2011 17:05 JST
+  - Argh, forgot to change all the occurances of pkg-config to $pkg_config
+
+0.13 Thu May 12 2011 17:00 JST
+  - Fix problems introduced by using Devel::CheckLib + ZMQ_HOME et al.
+    Problem reported by Johan Ström (rt #68108)
+  - Respect PKG_CONFIG_PATH when probing for zeromq
+
+0.12 Fri Apr 15 2011 15:35 JST
+  - Add missing tools/detect_zmq.pl which implemented the detection
+    scheme introduced in 0.11
+
+0.11 Fri Apr 15 2011 15:30 JST
+  - Make header, incpath, lib detection smarter. 
+    * Now supports pkg-config!
+    * Environment variables ZMQ_HOME, ZMQ_INCLUDES, ZMQ_LIBS are
+      honored. Please see POD for how to configure ZeroMQ.pm
+  - Include a section on how to install in the POD.
+  - Remove usage of DOWNSTREAM/UPSTREAM, and connect inproc
+    sockets using PAIR
+
+0.10 Wed Apr 13 2011 10:30 JST
+  - Use Module::Instsall::CheckLib
+  - Silence test failures [https://github.com/lestrrat/ZeroMQ-Perl/issues/11]
+    (reported by oyvindsk)
+
+0.09_01 Fri Mar 11 2011 08:00 JST
+  - Add ZeroMQ::Poller (https://github.com/lestrrat/ZeroMQ-Perl/pull/8)
+
+0.09 Wed Feb 16 2011 22:30 JST
+  - Only run silly Module::Install hoopla if you're an author
+  - Tweak Makefile.PL
+  - Smarter zmq.h detection
+  - Include Devel::CheckLib in requires
+
+0.08 Sun Jan 23 2011 14:45 JST
+  - Fixed many memory leaks (rt #64944) reported by Jason Ball
+    * Plugged ZeroMQ::Raw::Message related leaks 
+    * Plugged leaks when setting $!
+    * Wrote tests using zmq_poll() and AnyEvent to do non-blocking
+      recv() with zeromq
+  - Backwards incompatible change! zmq_send() now returns exactly what
+    the underlying zeromq library returns -- previously it used to
+    return a "true" value for success and false otherwise.
+
+0.07 Tue Jan 18 2011 07:50 JST
+  - Somehow zmq_device() was missing through 0.03 to 0.06. Re-added
+    as ZeroMQ::Raw::zmq_device()
+
+0.06 Tue Jan 18 2011 07:20 JST
+  - Fix critical message corruption bug introduced by wrong usage of
+    zmq_msg_init_data() (rt #64836). Reported, diagnosed by Jason Ball
+
+0.05 Thu Jan 06 2011 19:20 JST
+  - Various issues (rt #64520) reported by Jason Ball
+    * Make sure to generate const-xs.inc and the like when installing
+    * Tweak to work with perls older than 5.10
+    * Only generate README for authors
+
+0.04 Wed Jan 05 2011 18:20 JST
+  - Grr, remove autobuild stuff from MANIFEST, repackage.
+  - Code is identical to 0.03
+
+0.03 Wed Jan 05 2011 15:00 JST
+  - Ad docs, and upload 0.03
+
+0.02_05 Tue Jan 03 2011 00:30 JST
+  - Add zmq_poll, with the ability to poll random file descriptors along with
+    zmq sockets (rt #62851)
+
+0.02_04 Tue Dec 29 2010 16:20 JST
+  - Add zmq_msg_copy and zmq_msg_move
+  - Fix minor compile warning
+  - Make it so that ZeroMQ::Raw doesn't depend on ZeroMQ -- and other
+    modules that it in turn depends on. Now ZeroMQ::Raw can be used standalone
+
+0.02_03 Tue Dec 28 2010 21:40 JST
+  - Rework the internals to allow high level API (perl-ish, OO) and
+    low level API (straight portof zeromq C binding), thanks to jrockway
+  - Remove PollItem in favor of getsockopt + ZMQ_FD. Holler if you need it back
+
+0.02_02 Sat Oct 30 2010 21:20 JST
+  - Update to work with zeromq2 master (as of 10/28)
+  - Added new constants
+  - ZMQ_POLLIN callbacks used to pass the ZeroMQ::Message argument
+    to the callback function, but this is error prone, so now the callback
+    does not receive anything
+
+0.02_01 Mon Sep 06 2010 19:20 JST
+  - Releasing a dev release to get some test coverage
+  - Add zmq_poll support via ZeroMQ::PollItem
+  - Lots of doc fixes
+  - Lots of test fixes
+  - For people cloning from github, tell them what Module::Install
+    modules you need to install
+  - Loudly tell the user that you're going to get a blocking socket
+    even if you send a SIGINT/SIGTERM while it's in recv().
+    This is a problem in libzmq, and it is planned to be fixed on
+    libzmq 2.1.x
+
+0.02  Sat Aug 22 2010 09:00 JST
+  - Changes from 0.01_01 to 0.02 were tested against zeromq-2.0.7
+  - Implement version()
+  - Be more paranoid about getting an invalid object (with a
+    bad struct)
+  - House cleaning, and release a new version!
+
+0.01_03  Thu Aug 20 2010 21:00 JST
+  - Fake ZMQ_PULL and ZMQ_PUSH, which were introduced in git, but not in
+    the released version
+  - Use assert_lib() to die if zmq is not found
+  - Implement socket close()
+
+0.01_02  Thu Aug 20 2010 08:00 JST
+  - No code change.
+  - Add missing xs/const-xs.inc file
+  - Add POD tests (author tests)
+
+0.01_01  Thu Aug 19 2010 20:00 JST
+  - Daisuke Maki (lestrrat) hacked the following:
+    * Use plain XS -- only because I don't know C++
+    * Implemented serialization/deserialization
+    * Worked on more thread safety
+    * Updated constants
+    * Implemented $ctxt->socket
+    * Implemented $socket->send($plain_string)
+    * Implemented ZeroMQ::device() 
+    * Implemented example scripts from http://zeromq.org/docs:introduction
+      under eg/
+
+0.01  Tue Jul 13 2010 20:00 CET
+  - Initial release
