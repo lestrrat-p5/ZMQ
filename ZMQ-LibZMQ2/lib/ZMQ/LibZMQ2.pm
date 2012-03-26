@@ -224,7 +224,7 @@ you cannot share sockets.
 
 =head1 FUNCTIONS
 
-ZMQ::LibZMQ2 attempts to stick to the libzmq interface as much as possible. Unless there is a structure is what the Perl binding expects, no function should throw an exception.
+ZMQ::LibZMQ2 attempts to stick to the libzmq interface as much as possible. Unless there is a structural problem (say, an underlying poitner that the Perl binding expects was missing), no function should throw an exception.
 
 Return values should resemble that of libzmq, except for when new data is allocated and returned to the user - That includes things like C<zmq_init()>, C<zmq_socket()>, C<zmq_msg_data()>, etc.
 
