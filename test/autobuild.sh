@@ -3,7 +3,7 @@
 ABSPATH=$(cd ${0%/*} && echo $PWD/${0##*/})
 THISDIR=$(dirname $ABSPATH)
 export CPANM=$THISDIR/cpanm
-export PERL=(which perl)
+export PERL=$(which perl)
 
 cd $1
 
