@@ -16,6 +16,9 @@ $PERL $CPANM -lextlib \
     AnyEvent
 
 $PERL Makefile.PL -g
+# XXX Currently we don't have ZMQ::Constants up on CPAN, so 
+# install it locally
+$PERL $CPANM -lextlib ../ZMQ-Constants 
 $PERL $CPANM -lextlib --installdeps -lextlib .
 
 make test
