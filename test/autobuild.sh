@@ -7,7 +7,7 @@ export PERL=$(which perl)
 
 cd $1
 
-export PERL5OPT=-Mlib=exlit/lib/perl5
+export PERL5OPT=-Mlib=extlib/lib/perl5
 
 $PERL $CPANM -lextlib \
     Module::Install \
