@@ -23,6 +23,7 @@ EOM
     $ENV{PERL_ZMQ_BACKEND} = 'ZMQ::LibZMQ2';
 }
 
+auto_set_repository;
 requires $ENV{PERL_ZMQ_BACKEND};
 requires 'ZMQ::Constants';
 
