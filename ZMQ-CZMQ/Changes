@@ -1,9 +1,6 @@
 Changes
 =======
 
-1.00_02
-    - Add ZMQ::Constants in the prerequisite
-    - Add zmq_interrupted() and zsocket_type_str()
-
 1.00_01 Mar 26 2012
     - Initial release
+
