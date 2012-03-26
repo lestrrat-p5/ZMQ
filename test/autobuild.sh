@@ -11,6 +11,7 @@ $PERL $CPANM -lextlib \
     Module::Install \
     Module::Install::AuthorTests \
     Module::Install::CheckLib \
+    Module::Install::Repository \
     Module::Install::XSUtil \
     AnyEvent
 
