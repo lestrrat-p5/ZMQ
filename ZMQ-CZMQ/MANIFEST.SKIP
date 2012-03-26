@@ -1,4 +1,5 @@
 # Avoid archives of this distribution
+\bZMQ-CZMQ-\d+\.\d+(?:_\d+)?
 \bZMQ-CZMQ-\d+\.\d+(?:_\d+)?\.tar\.gz$
 
 # Avoid version control files.
