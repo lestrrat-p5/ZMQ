@@ -2,22 +2,102 @@
 
 This repository contains various modules for the libzmq Perl binding
 
+## MODULES IN THIS REPOSITORY
+
+Note that released versions for any of these modules can be downloaded via cpan/cpanm. 
+
+* http://metacpan.org/release/ZMQ-Constants
+* http://metacpan.org/release/ZMQ-LibZMQ2
+* http://metacpan.org/release/ZMQ-LibZMQ3
+* http://metacpan.org/release/ZMQ
+* http://metacpan.org/release/ZMQ-CZMQ
+
+If the particular version you're looking for isn't up on CPAN, you need to build/install them yourself from this repository. See the listing below for details.
+
+Note that you need Module::Install and several other plugins. Each module's Makefile.PL should warn you, but since this would be a "for developers" version, it is ultimately your responsibility to check for the environment.
+
+
 ### ZMQ-Constants
 
-Lists the constants used in libzmq
+Lists the constants used in libzmq.
+
+Pure Perl, required by all other modules. 
+
+    perl Makefile.PL
+    make
+    make test
+    make install
 
 ### ZMQ-CZMQ
 
-Binding to the high-level C API library czmq (http://czmq.zeromq.org)
+Binding to the high-level C API library czmq (http://czmq.zeromq.org).
+
+Requires a C compiler. 
+
+If you have pkg-config, czmq should be automatically detected:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+If you don't have pkg-config, or if you're installing against a manually 
+installed libczmq:
+
+    CZMQ_HOME=/path/to/czmq perl Makefile.PL
+    make
+    make test
+    make install
 
 ### ZMQ
 
-Perl-ish libzmq wrapper. Use ZMQ::LibZMQ2 and ZMQ::LibZMQ3 for direct one-to-one mapping for zmq functions
+Perl-ish libzmq wrapper. Use ZMQ::LibZMQ2 and ZMQ::LibZMQ3 for direct one-to-one mapping for zmq functions.
+
+Pure Perl, but requires either ZMQ::LibZMQ2 or ZMQ::LibZMQ3. 
 
 ### ZMQ-LibZMQ2
 
-Binding to the libzmq (2.x) library
+Binding to the libzmq (2.x) library.
+
+Requires a C compiler, and libzmq 2.1.x. 
+
+If you have pkg-config, libzmq should be automatically detected:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+If you don't have pkg-config, or if you're installing against a manually 
+installed libzmq:
+
+    ZMQ_HOME=/path/to/libzmq perl Makefile.PL
+    make
+    make test
+    make install
 
 ### ZMQ-LibZMQ3
 
 Binding to the libzmq (3.x) library
+
+Requires a C compiler, and libzmq 3.1.x. 
+
+If you have pkg-config, libzmq should be automatically detected:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+If you don't have pkg-config, or if you're installing against a manually 
+installed libzmq:
+
+    ZMQ_HOME=/path/to/libzmq perl Makefile.PL
+    make
+    make test
+    make install
+
+
+## TODO
+
+Refactor common scripts from ZMQ::LibZMQ2, ZMQ::LibZMQ3, ZMQ::CZMQ.
