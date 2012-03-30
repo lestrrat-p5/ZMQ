@@ -9,6 +9,14 @@ This repository contains various modules for the libzmq Perl binding
 
 Note that released versions for any of these modules can be downloaded via cpan/cpanm. 
 
+`cpan` command comes with Perl itself, but we recommend `cpanm`. If you don't have cpanm installed. Please see the README at https://github.com/miyagawa/cpanminus for details on how to install cpanm
+
+With cpanm, you can install the ZMQ perl bindings like so:
+
+    cpanm ZMQ::LibZMQ2
+
+Check for what's available on CPAN from the following links (as of this writing, only development releases have been uploaded, so the following links will show up empty)
+
 * http://metacpan.org/release/ZMQ-Constants
 * http://metacpan.org/release/ZMQ-LibZMQ2
 * http://metacpan.org/release/ZMQ-LibZMQ3
