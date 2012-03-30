@@ -28,33 +28,6 @@ Pure Perl, required by all other modules.
     make test
     make install
 
-### ZMQ-CZMQ
-
-Binding to the high-level C API library czmq (http://czmq.zeromq.org).
-
-Requires a C compiler. 
-
-If you have pkg-config, czmq should be automatically detected:
-
-    perl Makefile.PL
-    make
-    make test
-    make install
-
-If you don't have pkg-config, or if you're installing against a manually 
-installed libczmq:
-
-    CZMQ_HOME=/path/to/czmq perl Makefile.PL
-    make
-    make test
-    make install
-
-### ZMQ
-
-Perl-ish libzmq wrapper. Use ZMQ::LibZMQ2 and ZMQ::LibZMQ3 for direct one-to-one mapping for zmq functions.
-
-Pure Perl, but requires either ZMQ::LibZMQ2 or ZMQ::LibZMQ3. 
-
 ### ZMQ-LibZMQ2
 
 Binding to the libzmq (2.x) library.
@@ -97,6 +70,33 @@ installed libzmq:
     make test
     make install
 
+### ZMQ
+
+Perl-ish libzmq wrapper. Use ZMQ::LibZMQ2 and ZMQ::LibZMQ3 for direct one-to-one mapping for zmq functions.
+
+Pure Perl, but requires either ZMQ::LibZMQ2 or ZMQ::LibZMQ3. 
+
+### ZMQ-CZMQ
+
+Binding to the high-level C API library czmq (http://czmq.zeromq.org).
+Highly experimental. Your help/contribution is much appreciated.
+
+Requires a C compiler. 
+
+If you have pkg-config, czmq should be automatically detected:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+If you don't have pkg-config, or if you're installing against a manually 
+installed libczmq:
+
+    CZMQ_HOME=/path/to/czmq perl Makefile.PL
+    make
+    make test
+    make install
 
 ## TODO
 
