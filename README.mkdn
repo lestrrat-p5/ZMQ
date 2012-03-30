@@ -2,6 +2,9 @@
 
 This repository contains various modules for the libzmq Perl binding
 
+* http://zeromq.org
+* http://czmq.zeromq.org
+
 ## MODULES IN THIS REPOSITORY
 
 Note that released versions for any of these modules can be downloaded via cpan/cpanm. 
@@ -75,6 +78,11 @@ installed libzmq:
 Perl-ish libzmq wrapper. Use ZMQ::LibZMQ2 and ZMQ::LibZMQ3 for direct one-to-one mapping for zmq functions.
 
 Pure Perl, but requires either ZMQ::LibZMQ2 or ZMQ::LibZMQ3. 
+
+    perl Makefile.PL
+    make
+    make test
+    make install
 
 ### ZMQ-CZMQ
 
