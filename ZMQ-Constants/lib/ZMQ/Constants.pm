@@ -262,12 +262,6 @@ set_sockopt_type(
 
 our @CONSTANT_SETS;
 
-sub add_constant {
-    my (@args) = @_;
-    require constant;
-    constant->import({@args});
-}
-
 sub register_set {
     my ($version, @args) = @_;
     my $cb = (ref $version eq 'CODE') ? $version : sub { $version eq $_[0] };
@@ -381,8 +375,10 @@ If don't care to be strict about which constants to import into your code, then 
     
     use ZMQ::Constants qw(ZMQ_PUSH); # import just ZMQ_PUSH
 
-
 =head1 SUPPORTED VERSIONS
+
+I have checked that the constants for the following versions are available.
+Please send pullreqs if there are new constants that are not defined.
 
 =over 4
 
@@ -394,11 +390,29 @@ No ZMQ device related stuff
 
 =item libzmq 3.1.2
 
+NOTE: This is libzmq/master branch as of this writing. new constants may have been added.
+
 Reintroduces ZMQ device related constants, and adds ZMQ_FAIL_UNROUTABLE
 
 =back
 
-If you would like to add more sets, please send in a pullreq
+=head1 FUNCTIONS
+
+These functions are usually for internal use only. You should not need to
+use them if you're just a ZMQ.pm user
+
+=head2 register_set
+
+Creates a new "set" of constants for a particular version.
+
+=head2 get_sockopt_type
+
+Gets the type for the given libzmq socket option. This is used when
+ZMQ::getsockopt is called to determine the underlying socket option type
+
+=head2 set_sockopt_type
+
+Sets the type for the given libzmq socket option.
 
 =head1 SEE ALSO
 
