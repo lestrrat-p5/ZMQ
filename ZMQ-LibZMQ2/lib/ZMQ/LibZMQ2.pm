@@ -71,6 +71,8 @@ sub zmq_setsockopt {
     goto &{"zmq_setsockopt_$type"}
 }
 
+sub ZMQ::LibZMQ2::Socket::CLONE_SKIP { 1 } 
+
 1;
 
 __END__
@@ -262,6 +264,12 @@ Returns a non-zero status upon failure, and sets $!.
 Creates a new socket object. C<$socket_types> are constants declared in ZMQ::Constants. Sockets cannot be reused across threads.
 
 Returns undef upon error, and sets $!.
+
+C<ZMQ::LibZMQ2::Socket> objects aren't thread safe due to the underlying 
+library.  Therefore, they are currently not cloned when a new Perl ithread is
+spawned. The variables in the new thread that contained the socket in the 
+parent thread will be a scalar reference to C<undef> in the new thread.
+This makes the Perl wrapper thread safe (i.e. no segmentation faults).T
 
 =head2 $rv = zmq_bind( $sock, $address )
 
