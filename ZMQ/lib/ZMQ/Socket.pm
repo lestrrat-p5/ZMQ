@@ -48,7 +48,7 @@ EOM
                 }
                 ZMQ::call( "zmq_send", $self->{_socket}, $msg, @_ );
             }
-            sub sendvmsg {
+            sub sendmsg {
                 Carp::croak( "ZMQ::Socket->sendmsg is not implemented in this version ($ZMQ::BACKEND)" );
             }
             sub recvmsg {
