@@ -173,24 +173,41 @@ If an error occurs ( C<zmq_connect()> returns a non-zero status ), then an excep
 
 =head2 close
 
-=head2 send ($scalar, $lengh, $flag)
+Closes and terminates the socket.
+
+=head2 send 
+
+The semantics of this function varies greatly depending on the underlying 
+version of libzmq. 
+
+For ZMQ::LibZMQ2:
+
+    $sock->send( $msg [, $flags] );
+    $sock->send( $raw_string [, $flags] );
+
+For ZMQ::LibZMQ3:
+
+    $sock->send( $msg, $len [, $flags] );
 
 =head2 sendmsg ( $msg [, $flags] )
 
 The C<sendmsg($msg, $flags)> method queues the given message to be sent to the
 socket. The flags argument is a combination of the flags defined below.
 
-=item ZMQ_SNDMORE
+C<sendmsg> is only available if you are using C<ZMQ::LibZMQ3> as the underlying library.
 
-Specifies that the message being sent is a multi-part message, and
-that further message parts are to follow. Refer to the 0MQ manual
-for details regarding multi-part messages.
+=head2 recv
 
-=back
+The semantics of this function varies greatly depending on the underlying 
+version of libzmq. 
 
-=head2 recv( $buf, $len, $flag )
+For ZMQ::LibZMQ2:
 
-Reads up to $len bytes, and writes to $buf.
+    $msg = $sock->recv();
+
+For ZMQ::LibZMQ3:
+
+    $sock->recv( $msg, $len [, $flags] );
 
 =head2 recvmsg
 
@@ -200,16 +217,7 @@ If there are no messages available on the specified socket
 the C<recvmsg()> method blocks until the request can be satisfied.
 The flags argument is a combination of the flags defined below.
 
-=over 2
-
-=item ZMQ_NOBLOCK
-
-Specifies that the operation should be performed in non-blocking mode.
-If there are no messages available on the specified socket, the
-C<$sock-E<gt>recvmsg(ZMQ_NOBLOCK)> method call returns C<undef> and sets C<$ERRNO>
-to C<EAGAIN>.
-
-=back
+C<recvmsg> is only available if you are using C<ZMQ::LibZMQ3> as the underlying library.
 
 =head2 getsockopt
 
@@ -230,12 +238,9 @@ version. Please refer to the manual for libzmq for the correct list.
 =head1 CAVEATS
 
 C<ZMQ::Socket> objects aren't thread safe due to the underlying library.
-To avoid segmentation faults, if you try
-
-Therefore, they are currently not cloned when
-a new Perl ithread is spawned. The variables in the new thread
-that contained the socket in the parent thread will be a
-scalar reference to C<undef> in the new thread.
+Therefore, they are currently not cloned when a new Perl ithread is spawned. 
+The variables in the new thread that contained the socket in the parent 
+thread will be a scalar reference to C<undef> in the new thread.
 This makes the Perl wrapper thread safe (i.e. no segmentation faults).
 
 =head1 SEE ALSO
