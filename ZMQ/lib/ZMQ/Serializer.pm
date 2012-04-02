@@ -119,7 +119,7 @@ The callback receives the Perl structure given to C<sendmsg_as()>
 
 =head2 $rv = sendmsg_as( $type, $payload, $flags )
 
-Encodes E<$payload> according to the serializer specified by C<$type>, and enqueues a new message to be sent. C<$payload> should be whatever the serializer understands.
+Encodes C<$payload> according to the serializer specified by C<$type>, and enqueues a new message to be sent. C<$payload> should be whatever the serializer understands.
 
 =head2 $payload = $sock->recvmsg_as( $type, $flags );
 

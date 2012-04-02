@@ -37,12 +37,30 @@ __END__
 
 =head1 NAME
 
-ZMQ::Context -
+ZMQ::Context - ZMQ Context Object
 
 =head1 SYNOPSIS
 
     my $cxt = ZMQ::Context->new(1);
     my $sock = $cxt->socket( ZMQ_PUB );
     $cxt->term();
+
+=head1 DESCRIPTION
+
+A ZMQ::Context object represents a 0MQ context.
+
+=head1 METHODS
+
+=head2 ZMQ::Context->new($io_threads)
+
+Creates a new context object. Calls C<zmq_init>
+
+=head2 $cxt->socket( $sock_type )
+
+Creates a new socket object of C<$sock_type>.
+
+=head2 $cxt->term();
+
+Terminates the currenct context. May block if there are pending I/O operations.
 
 =cut

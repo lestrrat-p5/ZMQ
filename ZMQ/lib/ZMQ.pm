@@ -74,6 +74,13 @@ change:
     }
     use ZMQ;
 
+If you think your code will be used from another program that also uses libzmq,
+you might want to consider using the ZMQ::LibZMQ* modules. This is because you
+can't write "truly" portable code using this high level interface (libzmq's
+API change rather drastically between versions). Personally, I'd recommend
+only using this module for your one-shot scripts, and use ZMQ::LibZMQ* for
+all other uses. YMMV.
+
 =head1 FUNCTIONS
 
 =head2 ZMQ::call( $funcname, @args )
