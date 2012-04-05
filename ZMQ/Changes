@@ -1,5 +1,10 @@
 Changelog for Perl module ZMQ.
 
+1.00 - Apr 05 2012
+    - Fix send(msg) recv(msg) compatibility errors
+    - Add tests
+    - Add docs
+
 1.00_04 - Mar 26 2012
   [INCOMPATIBLE CHANGES]
   - Now ZMQ.pm is just a pure-perl wrapper around ZMQ::LibZMQ2 or ZMQ::LibZMQ3.
