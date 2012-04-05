@@ -1,6 +1,15 @@
 Changes
 =======
 
+1.00 - Apr 05 2012
+    - All of you using ZeroMQ.pm + libzmq 2.x, you are recommended to use this 
+      module instead. ZeroMQ will go into minimal maintenance mode, and new
+      features are not going to be added.
+    - Also, users writing ZMQ tools in Perl should also use the raw ZMQ
+      interface over the Perl-ish interface.
+    - Make sure to not clone ZMQ::LibZMQ2::Socket.
+    - Remove code that generates constants.
+
 1.00_02 - Mar 26 2012
     - Beef up the docs extensively.
     - Remove other croak() calls, make sure to set $!
