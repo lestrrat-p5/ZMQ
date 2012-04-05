@@ -1,6 +1,10 @@
 Changes
 =======
 
+1.00 - Apr 05 2012
+    - Add deprecated constants as well.
+    - Add documents.
+
 1.00_02 - Mar 26 2012
     - Add constants for errors
 
