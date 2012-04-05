@@ -1,6 +1,10 @@
 Changes
 =======
 
+1.00 Apr 05 2012
+    - Compilation under threaded Perls
+    - Yes, I know there are compilation warnings
+
 1.00_01 Mar 26 2012
     - Initial release
 
