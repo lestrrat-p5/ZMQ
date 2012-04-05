@@ -314,10 +314,6 @@ PerlLibzmq2_free_string(void *data, void *hint) {
 
 #include "mg-xs.inc"
 
-MODULE = ZMQ::LibZMQ2    PACKAGE = ZMQ::LibZMQ2::Constants 
-
-INCLUDE: const-xs.inc
-
 MODULE = ZMQ::LibZMQ2    PACKAGE = ZMQ::LibZMQ2   PREFIX = PerlLibzmq2_
 
 PROTOTYPES: DISABLED
