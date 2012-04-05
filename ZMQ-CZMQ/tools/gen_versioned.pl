@@ -145,8 +145,7 @@ foreach my $func ( keys %unavailable) {
     my($name) = ($func =~ /\s([\S]+)\s*\(/);
     print <<EOM
 $func
-    CODE:
-        @{[ $is_void ? "PERL_UNUSED_VAR(RETVAL);" : "" ]}
+    PPCODE:
         croak( "$name is not available in this version of czmq" );
 
 EOM
