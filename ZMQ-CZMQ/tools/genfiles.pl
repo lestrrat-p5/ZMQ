@@ -98,7 +98,7 @@ ${c_type}_mg_find( pTHX_ SV* const sv ) {
 
     PerlCZMQ_trace( "START mg_find (${perl_type})" );
     PerlCZMQ_trace( " + SV %p", sv )
-    mg = PerlCZMQ_mg_find( sv, &$vtablename );
+    mg = PerlCZMQ_mg_find( aTHX_ sv, &$vtablename );
     if (mg == NULL) {
         croak("${perl_type}: Invalid ${perl_type} object was passed to mg_find");
     }
