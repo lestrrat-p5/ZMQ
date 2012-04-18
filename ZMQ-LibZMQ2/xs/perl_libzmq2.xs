@@ -751,7 +751,7 @@ PerlLibzmq2_zmq_setsockopt_string(sock, option, value)
     OUTPUT:
         RETVAL
 
-int
+SV *
 PerlLibzmq2_zmq_poll( list, timeout = 0 )
         AV *list;
         long timeout;
@@ -760,6 +760,9 @@ PerlLibzmq2_zmq_poll( list, timeout = 0 )
         zmq_pollitem_t *pollitems;
         CV **callbacks;
         int i;
+        int rv;
+        int eventfired;
+        AV *events_fired;
     CODE:
         list_len = av_len( list ) + 1;
         if (list_len <= 0) {
@@ -825,25 +828,32 @@ PerlLibzmq2_zmq_poll( list, timeout = 0 )
         }
 
         /* now call zmq_poll */
-        RETVAL = zmq_poll( pollitems, list_len, timeout );
-        if (RETVAL < 0) {
+        rv = zmq_poll( pollitems, list_len, timeout );
+        if (rv < 0) {
             SET_BANG;
+            RETVAL = &PL_sv_undef;
         }
+        else {
+            events_fired = newAV();
+            RETVAL = newRV_noinc((SV *)events_fired);
+            av_fill(events_fired, list_len-1);
+            for ( i = 0; i < list_len; i++ ) {
+                eventfired = (pollitems[i].revents & pollitems[i].events) ? 1 : 0;
+                av_store(events_fired, i, newSViv(eventfired));
+                if (pollitems[i].revents & pollitems[i].events) {
+                    dSP;
+                    ENTER;
+                    SAVETMPS;
+                    PUSHMARK(SP);
+                    PUTBACK;
 
-        for ( i = 0; i < list_len; i++ ) {
-            if (pollitems[i].revents & pollitems[i].events) {
-                dSP;
-                ENTER;
-                SAVETMPS;
-                PUSHMARK(SP);
-                PUTBACK;
+                    call_sv( (SV*)callbacks[i], G_SCALAR );
+                    SPAGAIN;
 
-                call_sv( (SV*)callbacks[i], G_SCALAR );
-                SPAGAIN;
-
-                PUTBACK;
-                FREETMPS;
-                LEAVE;
+                    PUTBACK;
+                    FREETMPS;
+                    LEAVE;
+                }
             }
         }
         Safefree(pollitems);
