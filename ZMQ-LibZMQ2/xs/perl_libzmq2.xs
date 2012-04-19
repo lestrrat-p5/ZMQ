@@ -763,7 +763,7 @@ PerlLibzmq2_zmq_poll( list, timeout = 0 )
         int rv;
         int eventfired;
         AV *events_fired;
-    CODE:
+    PPCODE:
         list_len = av_len( list ) + 1;
         if (list_len <= 0) {
             XSRETURN(0);
@@ -829,37 +829,34 @@ PerlLibzmq2_zmq_poll( list, timeout = 0 )
 
         /* now call zmq_poll */
         rv = zmq_poll( pollitems, list_len, timeout );
-        if (rv < 0) {
-            SET_BANG;
-            RETVAL = &PL_sv_undef;
-        }
-        else {
-            events_fired = newAV();
-            RETVAL = newRV_noinc((SV *)events_fired);
-            av_fill(events_fired, list_len-1);
-            for ( i = 0; i < list_len; i++ ) {
+        SET_BANG;
+
+        for ( i = 0; i < list_len; i++ ) {
+            if (GIMME_V == G_ARRAY) {
                 eventfired = (pollitems[i].revents & pollitems[i].events) ? 1 : 0;
-                av_store(events_fired, i, newSViv(eventfired));
-                if (pollitems[i].revents & pollitems[i].events) {
-                    dSP;
-                    ENTER;
-                    SAVETMPS;
-                    PUSHMARK(SP);
-                    PUTBACK;
-
-                    call_sv( (SV*)callbacks[i], G_SCALAR );
-                    SPAGAIN;
-
-                    PUTBACK;
-                    FREETMPS;
-                    LEAVE;
-                }
+                mXPUSHi(eventfired);
             }
+            if (pollitems[i].revents & pollitems[i].events) {
+                dSP;
+                ENTER;
+                SAVETMPS;
+                PUSHMARK(SP);
+                PUTBACK;
+
+                call_sv( (SV*)callbacks[i], G_SCALAR );
+                SPAGAIN;
+
+                PUTBACK;
+                FREETMPS;
+                LEAVE;
+            }
+        }
+
+        if (GIMME_V == G_SCALAR) {
+            mXPUSHi(rv);
         }
         Safefree(pollitems);
         Safefree(callbacks);
-    OUTPUT:
-        RETVAL
 
 int
 PerlLibzmq2_zmq_device( device, insocket, outsocket )
