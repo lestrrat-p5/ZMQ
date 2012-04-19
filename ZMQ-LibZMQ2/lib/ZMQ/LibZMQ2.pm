@@ -212,6 +212,10 @@ descriptor, so use that to integrate ZMQ::LibZMQ2 and AnyEvent:
         undef $w;
     };
 
+Returns undef on error (and sets $! in that case). Returns an array reference
+containing as many booleans as there are elements in C<@list_of_hashrefs>.
+These booleans indicate whether the socket in question has fired the callback.
+
 =head1 NOTES ON MULTI-PROCESS and MULTI-THREADED USAGE
 
 0MQ works on both multi-process and multi-threaded use cases, but you need
