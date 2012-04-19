@@ -7,6 +7,7 @@ my @modules = qw(
     Module::Install::CheckLib
     Module::Install::ReadmeFromPod
     Module::Install::XSUtil
+    Module::Install::Repository
 );
 
 my @missing;

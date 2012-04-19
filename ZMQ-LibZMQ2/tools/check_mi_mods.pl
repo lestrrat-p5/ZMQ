@@ -8,6 +8,7 @@ my @modules = qw(
     Module::Install::ReadmeFromPod
     Module::Install::TestTarget
     Module::Install::XSUtil
+    Module::Install::Repository
 );
 
 my @missing;
