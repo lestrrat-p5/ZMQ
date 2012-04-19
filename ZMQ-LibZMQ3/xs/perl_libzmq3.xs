@@ -83,7 +83,7 @@ PerlLibzmq3_zmq_getsockopt_string(PerlLibzmq3_Socket *sock, int option, size_t l
     SV     *sv;
 
     Newxz(string, len, char);
-    status = zmq_getsockopt(sock->socket, option, &string, &len);
+    status = zmq_getsockopt(sock->socket, option, string, &len);
     if(status == 0) {
         sv = newSVpvn(string, len);
     } else {
