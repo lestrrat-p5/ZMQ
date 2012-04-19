@@ -84,7 +84,7 @@ EOM
                 if ( ref $msg && eval { $msg->isa( 'ZMQ::Message' ) } ) {
                     $msg = $msg->{_msg};
                 }
-                ZMQ::cal( "zmq_recv", $msg, @_ );
+                ZMQ::call( "zmq_recv", $msg, @_ );
             }
             sub send {
                 my $self = shift;
@@ -92,7 +92,7 @@ EOM
                 if ( ref $msg && eval { $msg->isa( 'ZMQ::Message' ) } ) {
                     $msg = $msg->{_msg};
                 }
-                ZMQ::cal( "zmq_send", $msg, @_ );
+                ZMQ::call( "zmq_send", $msg, @_ );
             }
 EOM
         die if $@;
