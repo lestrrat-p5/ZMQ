@@ -212,10 +212,6 @@ descriptor, so use that to integrate ZMQ::LibZMQ2 and AnyEvent:
         undef $w;
     };
 
-Returns undef on error (and sets $! in that case). Returns an array reference
-containing as many booleans as there are elements in C<@list_of_hashrefs>.
-These booleans indicate whether the socket in question has fired the callback.
-
 =head1 NOTES ON MULTI-PROCESS and MULTI-THREADED USAGE
 
 0MQ works on both multi-process and multi-threaded use cases, but you need
@@ -412,6 +408,27 @@ A bit mask containing C<ZMQ_POLLOUT>, C<ZMQ_POLLIN>, C<ZMQ_POLLERR> or combinati
 A subroutine reference, which will be called without arguments when the socket or descriptor is available.
 
 =back
+
+In scalar context, returns the return value of zmq_poll() in the C layer, and sets $!.
+
+    my $rv = zmq_poll( .... ); # do scalar(zmq_poll(...)) if you're nuerotic
+    if ( $rv == -1 ) {
+        warn "zmq_poll failed: $!";
+    }
+
+In list context, return a list containing as many booleans as there are 
+elements in C<@pollitems>.
+These booleans indicate whether the socket in question has fired the callback.
+
+    my @pollitems = (...);
+    my @fired     = zmq_poll( @pollitems ... );
+    for my $i ( 0 .. $#pollitems ) {
+        my $fired = $fired[$i];
+        if ( $fired ) {
+            my $item = $pollitems[$i];
+            ...
+        }
+    }
 
 =head2 zmq_version()
 
