@@ -38,7 +38,7 @@ subtest 'basic poll with fd' => sub {
                     callback => sub { $called++ }
                 }
             ], 1);
-            ok $called, "callback called";
+            is $called, 2, "callback called";
             ok(@rv == 2,
                "zmq_poll returns an array indicating whether the callback was invoked");
         }, undef, "PollItem (return array) doesn't die";
