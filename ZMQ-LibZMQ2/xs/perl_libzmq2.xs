@@ -762,7 +762,6 @@ PerlLibzmq2_zmq_poll( list, timeout = 0 )
         int i;
         int rv;
         int eventfired;
-        AV *events_fired;
     PPCODE:
         list_len = av_len( list ) + 1;
         if (list_len <= 0) {
