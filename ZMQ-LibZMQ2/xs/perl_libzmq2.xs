@@ -833,11 +833,12 @@ PerlLibzmq2_zmq_poll( list, timeout = 0 )
         
         if (rv != -1) {
             for ( i = 0; i < list_len; i++ ) {
+                eventfired = 
+                    (pollitems[i].revents & pollitems[i].events) ? 1 : 0;
                 if (GIMME_V == G_ARRAY) {
-                    eventfired = (pollitems[i].revents & pollitems[i].events) ? 1 : 0;
                     mXPUSHi(eventfired);
                 }
-                if (pollitems[i].revents & pollitems[i].events) {
+                if (eventfired) {
                     dSP;
                     ENTER;
                     SAVETMPS;
