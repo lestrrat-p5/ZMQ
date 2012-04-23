@@ -31,10 +31,15 @@ subtest 'basic poll with fd' => sub {
                     fd       => fileno(STDOUT),
                     events   => ZMQ_POLLOUT,
                     callback => sub { $called++ }
+                },
+                {
+                    fd       => fileno(STDERR),
+                    events   => ZMQ_POLLOUT,
+                    callback => sub { $called++ }
                 }
             ], 1);
             ok $called, "callback called";
-            ok(@rv == 1 && $rv[0] == $called,
+            ok(@rv == 2,
                "zmq_poll returns an array indicating whether the callback was invoked");
         }, undef, "PollItem (return array) doesn't die";
     }

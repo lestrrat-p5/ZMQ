@@ -830,25 +830,27 @@ PerlLibzmq2_zmq_poll( list, timeout = 0 )
         /* now call zmq_poll */
         rv = zmq_poll( pollitems, list_len, timeout );
         SET_BANG;
+        
+        if (rv != -1) {
+            for ( i = 0; i < list_len; i++ ) {
+                if (GIMME_V == G_ARRAY) {
+                    eventfired = (pollitems[i].revents & pollitems[i].events) ? 1 : 0;
+                    mXPUSHi(eventfired);
+                }
+                if (pollitems[i].revents & pollitems[i].events) {
+                    dSP;
+                    ENTER;
+                    SAVETMPS;
+                    PUSHMARK(SP);
+                    PUTBACK;
 
-        for ( i = 0; i < list_len; i++ ) {
-            if (GIMME_V == G_ARRAY) {
-                eventfired = (pollitems[i].revents & pollitems[i].events) ? 1 : 0;
-                mXPUSHi(eventfired);
-            }
-            if (pollitems[i].revents & pollitems[i].events) {
-                dSP;
-                ENTER;
-                SAVETMPS;
-                PUSHMARK(SP);
-                PUTBACK;
+                    call_sv( (SV*)callbacks[i], G_SCALAR );
+                    SPAGAIN;
 
-                call_sv( (SV*)callbacks[i], G_SCALAR );
-                SPAGAIN;
-
-                PUTBACK;
-                FREETMPS;
-                LEAVE;
+                    PUTBACK;
+                    FREETMPS;
+                    LEAVE;
+                }
             }
         }
 
