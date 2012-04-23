@@ -1,6 +1,22 @@
 Changes
 =======
 
+1.00_03 - Apr 23 2012
+    - Changed zmq_poll()'s return value. In list context, you can get the
+      array of boolean values indicating if the particular socket got fired
+
+        my @fired = zmq_poll(...);
+
+      In scalar context, you get the return value of zmq_poll() from the C
+      layer
+
+        my $rv = zmq_poll(...)
+
+      See https://github.com/lestrrat/p5-ZMQ/pull/1 (Steffen Mueller, Nick Peres)
+
+    - Fix getsockopt_string() 
+      https://github.com/lestrrat/p5-ZMQ/pull/2 (Sergey KHripchenko)
+
 1.00_02 - Mar 26 2012
     - Beef up the docs extensively.
     - Make sure to set $! upo failure
