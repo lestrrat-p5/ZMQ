@@ -1,6 +1,11 @@
 Changelog for Perl module ZMQ.
 
+1.01 - Apr 23 2012
+    - Fix silly typo
+      https://github.com/lestrrat/p5-ZMQ/pull/2 (Sergey KHripchenko)
+
 1.00 - Apr 05 2012
+
     - Fix send(msg) recv(msg) compatibility errors
     - Add tests
     - Add docs
