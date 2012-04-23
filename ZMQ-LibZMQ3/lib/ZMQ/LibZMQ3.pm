@@ -418,6 +418,27 @@ A subroutine reference, which will be called without arguments when the socket o
 
 =back
 
+In scalar context, returns the return value of zmq_poll() in the C layer, and sets $!.
+
+    my $rv = zmq_poll( .... ); # do scalar(zmq_poll(...)) if you're nuerotic
+    if ( $rv == -1 ) {
+        warn "zmq_poll failed: $!";
+    }
+
+In list context, return a list containing as many booleans as there are 
+elements in C<@pollitems>.
+These booleans indicate whether the socket in question has fired the callback.
+
+    my @pollitems = (...);
+    my @fired     = zmq_poll( @pollitems ... );
+    for my $i ( 0 .. $#pollitems ) {
+        my $fired = $fired[$i];
+        if ( $fired ) {
+            my $item = $pollitems[$i];
+            ...
+        }
+    }
+
 =head2 zmq_version()
 
 Returns the version of the underlying zeromq library that is being linked.

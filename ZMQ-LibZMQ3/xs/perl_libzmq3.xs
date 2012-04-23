@@ -821,7 +821,9 @@ PerlLibzmq3_zmq_poll( list, timeout = 0 )
         zmq_pollitem_t *pollitems;
         CV **callbacks;
         int i;
-    CODE:
+        int rv;
+        int eventfired;
+    PPCODE:
         PerlLibzmq3_trace( "START zmq_poll" );
 
         list_len = av_len( list ) + 1;
@@ -892,19 +894,20 @@ PerlLibzmq3_zmq_poll( list, timeout = 0 )
         }
 
         /* now call zmq_poll */
-        RETVAL = zmq_poll( pollitems, list_len, timeout );
+        rv = zmq_poll( pollitems, list_len, timeout );
+        SET_BANG;
         PerlLibzmq3_trace( " + zmq_poll returned with rv '%d'", RETVAL );
 
-        if (RETVAL > 0) {
+        if (rv != -1 ) {
             for ( i = 0; i < list_len; i++ ) {
                 PerlLibzmq3_trace( " + checking events for %d", i );
-                if (! (pollitems[i].revents & pollitems[i].events) ) {
-                    PerlLibzmq3_trace( " + no events for %d", i );
-                    break;
+                eventfired = 
+                    (pollitems[i].revents & pollitems[i].events) ? 1 : 0;
+                if (GIMME_V == G_ARRAY) {
+                    mXPUSHi(eventfired);
                 }
 
-                PerlLibzmq3_trace( " + got events for %d", i );
-                {
+                if (eventfired) {
                     dSP;
                     ENTER;
                     SAVETMPS;
@@ -920,11 +923,13 @@ PerlLibzmq3_zmq_poll( list, timeout = 0 )
                 }
             }
         }
+
+        if (GIMME_V == G_SCALAR) {
+            mXPUSHi(rv);
+        }
         Safefree(pollitems);
         Safefree(callbacks);
         PerlLibzmq3_trace( "END zmq_poll" );
-    OUTPUT:
-        RETVAL
 
 int
 PerlLibzmq3_zmq_device( device, insocket, outsocket )
