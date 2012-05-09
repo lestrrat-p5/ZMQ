@@ -56,7 +56,23 @@ our %EXPORT_OK = (
         zmsg_unwrap
         zmsg_wrap
     ) ],
-
+    zframe => [ qw(
+        zframe_data
+        zframe_destroy
+        zframe_dup
+        zframe_eq
+        zframe_more
+        zframe_new
+        zframe_print
+        zframe_recv
+        zframe_recv_nowait
+        zframe_reset
+        zframe_send
+        zframe_size
+        zframe_strdup
+        zframe_streq
+        zframe_strhex
+    ) ]
 );
 our @EXPORT = map { @$_ } values %EXPORT_OK;
 
