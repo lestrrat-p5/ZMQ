@@ -83,12 +83,14 @@ sub zsocket_connect {
 
 sub zmsg_pushstr {
     my ($msg, $fmt, @args) = @_;
-    zmsg_pushmem( $msg, sprintf $fmt, @args );
+    my $buf = sprintf $fmt, @args;
+    zmsg_pushmem( $msg, $buf, length $buf );
 }
 
 sub zmsg_addstr {
     my ($msg, $fmt, @args) = @_;
-    zmsg_addmem( $msg, sprintf $fmt, @args );
+    my $buf = sprintf $fmt, @args;
+    zmsg_addmem( $msg, $buf, length $buf );
 }
 
 1;
