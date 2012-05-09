@@ -14,6 +14,7 @@ our %EXPORT_OK = (
         zctx_destroy
         zctx_set_iothreads
         zctx_set_linger
+        zctx_interrupted
     ) ],
     zsocket => [ qw(
         zsocket_new
