@@ -72,7 +72,48 @@ our %EXPORT_OK = (
         zframe_strdup
         zframe_streq
         zframe_strhex
-    ) ]
+    ) ],
+    zsockopt => [ qw(
+        zsockopt_affinity
+        zsockopt_backlog
+        zsockopt_events
+        zsockopt_fd
+        zsockopt_hwm
+        zsockopt_linger
+        zsockopt_maxmsgsize
+        zsockopt_mcast_loop
+        zsockopt_rate
+        zsockopt_rcvbuf
+        zsockopt_rcvhwm
+        zsockopt_rcvmore
+        zsockopt_reconnect_ivl
+        zsockopt_reconnect_ivl_max
+        zsockopt_recovery_ivl
+        zsockopt_recovery_ivl_msec
+        zsockopt_set_affinity
+        zsockopt_set_backlog
+        zsockopt_set_hwm
+        zsockopt_set_identity
+        zsockopt_set_linger
+        zsockopt_set_maxmsgsize
+        zsockopt_set_mcast_loop
+        zsockopt_set_rate
+        zsockopt_set_rcvbuf
+        zsockopt_set_rcvhwm
+        zsockopt_set_reconnect_ivl
+        zsockopt_set_reconnect_ivl_max
+        zsockopt_set_recovery_ivl
+        zsockopt_set_recovery_ivl_msec
+        zsockopt_set_sndbuf
+        zsockopt_set_sndhwm
+        zsockopt_set_subscribe
+        zsockopt_set_swap
+        zsockopt_set_unsubscribe
+        zsockopt_sndbuf
+        zsockopt_sndhwm
+        zsockopt_swap
+        zsockopt_type
+    ) ],
 );
 our @EXPORT = map { @$_ } values %EXPORT_OK;
 
