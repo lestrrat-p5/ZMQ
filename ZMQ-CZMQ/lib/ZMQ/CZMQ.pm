@@ -27,7 +27,35 @@ our %EXPORT_OK = (
         zstr_recv_nowait
         zstr_sendm
         zstr_sendf
-    ) ]
+    ) ],
+    zmsg => [ qw(
+        zmsg_add
+        zmsg_addmem
+        zmsg_addstr
+        zmsg_content_size
+        zmsg_decode
+        zmsg_destroy
+        zmsg_dup
+        zmsg_encode
+        zmsg_first
+        zmsg_last
+        zmsg_load
+        zmsg_new
+        zmsg_next
+        zmsg_pop
+        zmsg_popstr
+        zmsg_push
+        zmsg_pushmem
+        zmsg_pushstr
+        zmsg_recv
+        zmsg_remove
+        zmsg_save
+        zmsg_send
+        zmsg_size
+        zmsg_unwrap
+        zmsg_wrap
+    ) ],
+
 );
 our @EXPORT = map { @$_ } values %EXPORT_OK;
 
