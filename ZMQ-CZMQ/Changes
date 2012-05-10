@@ -1,6 +1,11 @@
 Changes
 =======
 
+1.01 May 10 2012
+    - Merge (https://github.com/lestrrat/p5-ZMQ/pull/5) by taryk
+      * Fix zmsg_addstr()
+      * Add zmsg_*, zframe_*, zsockopt_* and zctxt_interrupted to EXPORT_OK
+
 1.00 Apr 05 2012
     - Compilation under threaded Perls
     - Yes, I know there are compilation warnings
