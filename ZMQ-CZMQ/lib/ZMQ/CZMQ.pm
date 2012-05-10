@@ -14,6 +14,7 @@ our %EXPORT_OK = (
         zctx_destroy
         zctx_set_iothreads
         zctx_set_linger
+        zctx_interrupted
     ) ],
     zsocket => [ qw(
         zsocket_new
@@ -27,7 +28,92 @@ our %EXPORT_OK = (
         zstr_recv_nowait
         zstr_sendm
         zstr_sendf
-    ) ]
+    ) ],
+    zmsg => [ qw(
+        zmsg_add
+        zmsg_addmem
+        zmsg_addstr
+        zmsg_content_size
+        zmsg_decode
+        zmsg_destroy
+        zmsg_dup
+        zmsg_encode
+        zmsg_first
+        zmsg_last
+        zmsg_load
+        zmsg_new
+        zmsg_next
+        zmsg_pop
+        zmsg_popstr
+        zmsg_push
+        zmsg_pushmem
+        zmsg_pushstr
+        zmsg_recv
+        zmsg_remove
+        zmsg_save
+        zmsg_send
+        zmsg_size
+        zmsg_unwrap
+        zmsg_wrap
+    ) ],
+    zframe => [ qw(
+        zframe_data
+        zframe_destroy
+        zframe_dup
+        zframe_eq
+        zframe_more
+        zframe_new
+        zframe_print
+        zframe_recv
+        zframe_recv_nowait
+        zframe_reset
+        zframe_send
+        zframe_size
+        zframe_strdup
+        zframe_streq
+        zframe_strhex
+    ) ],
+    zsockopt => [ qw(
+        zsockopt_affinity
+        zsockopt_backlog
+        zsockopt_events
+        zsockopt_fd
+        zsockopt_hwm
+        zsockopt_linger
+        zsockopt_maxmsgsize
+        zsockopt_mcast_loop
+        zsockopt_rate
+        zsockopt_rcvbuf
+        zsockopt_rcvhwm
+        zsockopt_rcvmore
+        zsockopt_reconnect_ivl
+        zsockopt_reconnect_ivl_max
+        zsockopt_recovery_ivl
+        zsockopt_recovery_ivl_msec
+        zsockopt_set_affinity
+        zsockopt_set_backlog
+        zsockopt_set_hwm
+        zsockopt_set_identity
+        zsockopt_set_linger
+        zsockopt_set_maxmsgsize
+        zsockopt_set_mcast_loop
+        zsockopt_set_rate
+        zsockopt_set_rcvbuf
+        zsockopt_set_rcvhwm
+        zsockopt_set_reconnect_ivl
+        zsockopt_set_reconnect_ivl_max
+        zsockopt_set_recovery_ivl
+        zsockopt_set_recovery_ivl_msec
+        zsockopt_set_sndbuf
+        zsockopt_set_sndhwm
+        zsockopt_set_subscribe
+        zsockopt_set_swap
+        zsockopt_set_unsubscribe
+        zsockopt_sndbuf
+        zsockopt_sndhwm
+        zsockopt_swap
+        zsockopt_type
+    ) ],
 );
 our @EXPORT = map { @$_ } values %EXPORT_OK;
 
@@ -54,12 +140,14 @@ sub zsocket_connect {
 
 sub zmsg_pushstr {
     my ($msg, $fmt, @args) = @_;
-    zmsg_pushmem( $msg, sprintf $fmt, @args );
+    my $buf = sprintf $fmt, @args;
+    zmsg_pushmem( $msg, $buf, length $buf );
 }
 
 sub zmsg_addstr {
     my ($msg, $fmt, @args) = @_;
-    zmsg_addmem( $msg, sprintf $fmt, @args );
+    my $buf = sprintf $fmt, @args;
+    zmsg_addmem( $msg, $buf, length $buf );
 }
 
 1;
