@@ -31,7 +31,9 @@ PerlZMQ_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param) {
 }
 
 EOM
-    open my $src, '<', "xs/perl_zeromq.xs";
+
+    my $file = "xs/perl_libzmq3.xs";
+    open my $src, '<', $file or die "Failed to open $file: $!";
     my @perl_types = qw(
         ZMQ::LibZMQ3::Context
         ZMQ::LibZMQ3::Socket
