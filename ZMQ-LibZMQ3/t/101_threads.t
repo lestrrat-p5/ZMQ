@@ -36,8 +36,8 @@ use ZMQ::Constants qw/:v3.1.1 :all/;
             zmq_connect($client, "inproc://myPrivateSocket");
         }, undef, "connected client socket";
 
-        zmq_send( $client, "Wee Woo" );
-        my $data = zmq_recv($sock);
+        zmq_sendmsg( $client, "Wee Woo" );
+        my $data = zmq_recvmsg($sock);
         my $ok = 0;
         if (ok $data) {
             $ok = is zmq_msg_data($data), "Wee Woo", "got same message";
