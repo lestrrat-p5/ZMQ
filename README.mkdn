@@ -85,6 +85,8 @@ installed libzmq:
 
 Perl-ish libzmq wrapper. Use ZMQ::LibZMQ2 and ZMQ::LibZMQ3 for direct one-to-one mapping for zmq functions.
 
+The author recommends that you use ZMQ::LibZMQ[23] for most use cases -- ZMQ.pm tries to be "nice", but isn't exactly free from things like API changes between libzmq2 <-> libzmq3, for example. For example, with ZMQ.pm you still need to be conscious about using recv and/or recvmsg. This would be problematic for "portable" code... so the only sane suggestion is to explicitly specify the libzmq version you're using via an explicit "use ZMQ::LibZMQ[23]"
+
 Pure Perl, but requires either ZMQ::LibZMQ2 or ZMQ::LibZMQ3. 
 
     perl Makefile.PL
