@@ -27,7 +27,7 @@ PerlLibzmq3_zmq_getsockopt_int(PerlLibzmq3_Socket *sock, int option) {
     size_t len;
     int    status;
     I32    i32;
-    SV     *sv;
+    SV     *sv = newSV(0);
 
     len = sizeof(i32);
     status = zmq_getsockopt(sock->socket, option, &i32, &len);
@@ -45,7 +45,7 @@ PerlLibzmq3_zmq_getsockopt_int64(PerlLibzmq3_Socket *sock, int option) {
     size_t  len;
     int     status;
     int64_t i64;
-    SV      *sv;
+    SV      *sv = newSV(0);
 
     len = sizeof(i64);
     status = zmq_getsockopt(sock->socket, option, &i64, &len);
@@ -63,7 +63,7 @@ PerlLibzmq3_zmq_getsockopt_uint64(PerlLibzmq3_Socket *sock, int option) {
     size_t len;
     int    status;
     uint64_t u64;
-    SV *sv;
+    SV *sv = newSV(0);
 
     len = sizeof(u64);
     status = zmq_getsockopt(sock->socket, option, &u64, &len);
@@ -80,7 +80,7 @@ SV *
 PerlLibzmq3_zmq_getsockopt_string(PerlLibzmq3_Socket *sock, int option, size_t len) {
     int    status;
     char   *string;
-    SV     *sv;
+    SV     *sv = newSV(0);
 
     Newxz(string, len, char);
     status = zmq_getsockopt(sock->socket, option, string, &len);
