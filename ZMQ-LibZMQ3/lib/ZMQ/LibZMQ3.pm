@@ -304,6 +304,9 @@ socket option. You can easily add new constants to this map:
     use ZMQ::Constants;
     ZMQ::Constants::add_sockopt_type( "int" => ZMQ_NEW_SHINY_OPTION );
 
+    # Then elsewhere...
+    my $value = zmq_getsockopt( $socket, ZMQ_NEW_SHINY_OPTION );
+
 =item Using utilities in ZMQ::LibZMQ3
 
     /* say you know that the value is an int, int64, uint64, or char *
@@ -343,7 +346,7 @@ Returns -1 upon failure, and sets $!.
 
 Receives a new message from C<$sock>, and store the message payload in C<$buffer>, up to C<$len> bytes. Argument C<$flags> may be omitted.
 
-Returns the number of bytes in the I<original> message, which may exceed C<$len> (if you have C<$rv> > C<$len>, then the message was truncated).
+Returns the number of bytes in the I<original> message, which may exceed C<$len> (if you have C<$rv> E<gt> C<$len>, then the message was truncated).
 
 Returns -1 upon failure, and sets $!.
 
