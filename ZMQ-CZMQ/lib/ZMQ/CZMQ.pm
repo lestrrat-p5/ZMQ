@@ -38,6 +38,7 @@ our %EXPORT_OK = (
         zmsg_decode
         zmsg_destroy
         zmsg_dup
+        zmsg_dump
         zmsg_encode
         zmsg_first
         zmsg_last

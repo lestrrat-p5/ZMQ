@@ -455,5 +455,8 @@ zmsg_dup(msg)
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpv("ZMQ::CZMQ::zmsg", 0));
 
+void
+zmsg_dump(msg)
+        PerlCZMQ_zmsg *msg;
 
 
