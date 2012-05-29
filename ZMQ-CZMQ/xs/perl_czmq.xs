@@ -145,6 +145,11 @@ _zsocket_connect( socket, address )
     OUTPUT:
         RETVAL
 
+Bool
+zsocket_poll( socket, msecs)
+        PerlCZMQ_zsocket_raw *socket;
+        int msecs;
+
 char *
 zstr_recv(socket)
         PerlCZMQ_zsocket_raw *socket;
@@ -450,5 +455,8 @@ zmsg_dup(msg)
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpv("ZMQ::CZMQ::zmsg", 0));
 
+void
+zmsg_dump(msg)
+        PerlCZMQ_zmsg *msg;
 
 
