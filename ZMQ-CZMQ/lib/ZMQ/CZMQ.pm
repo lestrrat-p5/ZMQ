@@ -21,6 +21,7 @@ our %EXPORT_OK = (
         zsocket_destroy
         zsocket_bind
         zsocket_connect
+        zsocket_poll
     ) ],
     zstr => [ qw(
         zstr_send

@@ -145,6 +145,11 @@ _zsocket_connect( socket, address )
     OUTPUT:
         RETVAL
 
+Bool
+zsocket_poll( socket, msecs)
+        PerlCZMQ_zsocket_raw *socket;
+        int msecs;
+
 char *
 zstr_recv(socket)
         PerlCZMQ_zsocket_raw *socket;
