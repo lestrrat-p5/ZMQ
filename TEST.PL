@@ -45,11 +45,11 @@ sub test_binding {
 }
 
 if ( $target eq 'ZMQ-Constants' ) {
-    test_binding("ZMQ-Constants");
     cpanm(qw(
         inc::Module::Install
         Module::Install::Repository
     ));
+    test_binding("ZMQ-Constants");
 } elsif ( $target eq 'ZMQ-LibZMQ2' ) {
     install_libzmq("zeromq-2.2.0");
     cpanm(qw(
