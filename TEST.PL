@@ -45,7 +45,7 @@ if ( $target eq 'ZMQ-LibZMQ2' ) {
         Module::Install::TestTarget
         Module::Install::XSUtil
         Module::Install::Repository
-    );
+    ));
     mysystem("cpanm", "--notest", "--installdeps", ".");
     mysystem("perl", "Makefile.PL");
     mysystem("make", "test");
