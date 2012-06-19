@@ -7,7 +7,7 @@ sub mysystem(@) {
 
 # LWP needs to be installed!
 BEGIN {
-    mysystem("cpanm", "--notest", "LWP::UserAgent");
+    mysystem("cpanm", "--quiet", "--notest", "LWP::UserAgent");
 }
 use Cwd ();
 use File::Spec;
@@ -36,7 +36,7 @@ if ( $target eq 'ZMQ-LibZMQ2' ) {
     mysystem("make", "install");
 
     $ENV{ZMQ_HOME} = $prefix;
-    chdir File::Spec->catdir($pwd, "ZMQ-LibZMQ2");
+    chdir File::Spec->catdir($root, "ZMQ-LibZMQ2");
     mysystem("cpanm", "--notest", qw(
         inc::Module::Install
         Module::Install::AuthorTests
