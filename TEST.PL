@@ -80,4 +80,14 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::Repository
     ));
     test_binding("ZMQ-LibZMQ3");
+} elsif ( $target eq 'ZMQ' ) {
+    $ENV{ZMQ_HOME} = install_libzmq("zeromq-2.2.0");
+    cpanm(File::Spec->catdir($ROOT, "ZMQ-LibZMQ2"));
+    $ENV{ZMQ_HOME} = install_libzmq("zeromq-3.2.0", "-rc1");
+    cpanm(File::Spec->catdir($ROOT, "ZMQ-LibZMQ3"));
+
+    $ENV{PERL_ZMQ_BACKEND} = "ZMQ::LibZMQ2";
+    test_binding("ZMQ");
+    $ENV{PERL_ZMQ_BACKEND} = "ZMQ::LibZMQ3";
+    test_binding("ZMQ");
 }
