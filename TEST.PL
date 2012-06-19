@@ -45,10 +45,6 @@ sub test_binding {
     mysystem("make", "test");
 }
 
-if (my $pre_install = $ENV{PRE_INSTALL}) {
-    cpanm(split /,/, $pre_install);
-}
-
 if ( $target eq 'ZMQ-Constants' ) {
     cpanm(qw(
         inc::Module::Install
@@ -68,6 +64,8 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::Repository
     ));
     test_binding("ZMQ-LibZMQ2");
+    cpanm(qw(AnyEvent Proc::Guard));
+    test_binding("ZMQ-LibZMQ2");
 } elsif ( $target eq 'ZMQ-LibZMQ3' ) {
     install_libzmq("zeromq-3.2.0", "-rc1");
     cpanm(qw(
@@ -79,6 +77,8 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::XSUtil
         Module::Install::Repository
     ));
+    test_binding("ZMQ-LibZMQ3");
+    cpanm(qw(AnyEvent Proc::Guard));
     test_binding("ZMQ-LibZMQ3");
 } elsif ( $target eq 'ZMQ' ) {
     $ENV{ZMQ_HOME} = install_libzmq("zeromq-2.2.0");
