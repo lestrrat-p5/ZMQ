@@ -19,11 +19,11 @@ sub install_libzmq(@) {
     my ($basename, $tail) = @_;
 
     $tail ||= '';
-    my $prefix = File::Spec->catdir($EXTDIR, $base);
-    my $file   = "$base$tail.tar.gz";
+    my $prefix = File::Spec->catdir($EXTDIR, $basename);
+    my $file   = "$basename$tail.tar.gz";
     mysystem("curl", "-LO", "http://download.zeromq.org/$file");
     mysystem("tar", "xzf", $file);
-    chdir $base;
+    chdir $basename;
     mysystem("./configure", "--prefix", $prefix);
     mysystem("make");
     mysystem("make", "install");
