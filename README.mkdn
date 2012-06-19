@@ -5,6 +5,10 @@ This repository contains various modules for the libzmq Perl binding
 * http://zeromq.org
 * http://czmq.zeromq.org
 
+## TRAVIS CI
+
+[![Build Status](https://secure.travis-ci.org/lestrrat/p5-ZMQ.png?branch=master)](http://travis-ci.org/lestrrat/p5-ZMQ)
+
 ## MODULES IN THIS REPOSITORY
 
 Note that released versions for any of these modules can be downloaded via cpan/cpanm. 
