@@ -48,8 +48,8 @@ if ( $target eq 'ZMQ-LibZMQ2' ) {
     my $tail   = "-rc1";
     my $base   = "zeromq-3.2.0";
     my $prefix = File::Spec->catdir($install_dir, $base);
-    my $file   = "$base.tar.gz";
-    mysystem("curl", "-L", "http://download.zeromq.org/$file$tail", "-o", $file);
+    my $file   = "$base$tail.tar.gz";
+    mysystem("curl", "-LO", "http://download.zeromq.org/$file");
     mysystem("tar", "xzf", $file);
     chdir $base;
     mysystem("./configure", "--prefix", $prefix);
