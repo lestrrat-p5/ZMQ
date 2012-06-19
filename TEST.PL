@@ -1,12 +1,17 @@
 #!perl
 use strict;
-use Cwd ();
-use File::Spec;
-use LWP::UserAgent;
 
 sub mysystem(@) {
     system(@_) == 0 or die "Failed to execute @_: $!";
 }
+
+# LWP needs to be installed!
+BEGIN {
+    mysystem("cpanm", "--notest", "LWP::UserAgent");
+}
+use Cwd ();
+use File::Spec;
+use LWP::UserAgent;
 
 my $ua     = LWP::UserAgent->new();
 my $root   = Cwd::abs_path( Cwd::cwd() );
