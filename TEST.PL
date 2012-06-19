@@ -45,6 +45,10 @@ sub test_binding {
     mysystem("make", "test");
 }
 
+if (my $pre_install = $ENV{PRE_INSTALL}) {
+    cpanm(split /,/, $pre_install);
+}
+
 if ( $target eq 'ZMQ-Constants' ) {
     cpanm(qw(
         inc::Module::Install
