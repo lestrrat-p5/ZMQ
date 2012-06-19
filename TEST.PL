@@ -48,6 +48,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     cpanm(qw(
         inc::Module::Install
         Module::Install::Repository
+        Test::Requires
     ));
     test_binding("ZMQ-Constants");
 } elsif ( $target eq 'ZMQ-LibZMQ2' ) {
