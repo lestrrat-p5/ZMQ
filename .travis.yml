@@ -3,4 +3,7 @@ perl:
   - "5.14"
   - "5.12"
 install: "perl ./TEST.PL"
+env:
+  - PERL_ZMQ_TEST_TARGET=ZMQ-LibZMQ2
+  - PERL_ZMQ_TEST_TARGET=ZMQ-LibZMQ3
 
