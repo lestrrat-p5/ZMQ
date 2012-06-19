@@ -81,6 +81,15 @@ if ( $target eq 'ZMQ-Constants' ) {
     cpanm(qw(AnyEvent Proc::Guard));
     test_binding("ZMQ-LibZMQ3");
 } elsif ( $target eq 'ZMQ' ) {
+    cpanm(qw(
+        inc::Module::Install
+        Module::Install::AuthorTests
+        Module::Install::CheckLib
+        Module::Install::ReadmeFromPod
+        Module::Install::TestTarget
+        Module::Install::XSUtil
+        Module::Install::Repository
+    ));
     $ENV{ZMQ_HOME} = install_libzmq("zeromq-2.2.0");
     cpanm(File::Spec->catdir($ROOT, "ZMQ-LibZMQ2"));
     $ENV{ZMQ_HOME} = install_libzmq("zeromq-3.2.0", "-rc1");
