@@ -1,19 +1,13 @@
 #!perl
 use strict;
+use Cwd ();
+use File::Spec;
+
 
 sub mysystem(@) {
     system(@_) == 0 or die "Failed to execute @_: $!";
 }
 
-# LWP needs to be installed!
-BEGIN {
-    mysystem("cpanm", "--quiet", "--notest", "LWP::UserAgent");
-}
-use Cwd ();
-use File::Spec;
-use LWP::UserAgent;
-
-my $ua     = LWP::UserAgent->new();
 my $root   = Cwd::abs_path( Cwd::cwd() );
 my $target = $ENV{PERL_ZMQ_TEST_TARGET} || 'ZMQ-LibZMQ2';
 
@@ -28,7 +22,7 @@ if ( $target eq 'ZMQ-LibZMQ2' ) {
     my $base   = "zeromq-2.2.0";
     my $prefix = File::Spec->catdir($install_dir, $base);
     my $file   = "$base.tar.gz";
-    $ua->mirror("http://download.zeromq.org/$file");
+    mysystem("curl", "-LO", "http://download.zeromq.org/$file");
     mysystem("tar", "xvzf", $file);
     chdir $base;
     mysystem("./configure", "--prefix", $prefix);
