@@ -3,15 +3,23 @@ use strict;
 use Cwd ();
 use File::Spec;
 
+my $ROOT   = Cwd::abs_path( Cwd::cwd() );
+my $EXTDIR = File::Spec->catdir($ROOT, "ext");
+my $target = $ENV{PERL_ZMQ_TEST_TARGET} || 'ZMQ-LibZMQ2';
+
+if (! -d $target) {
+    die "$target does not exist";
+}
 
 sub mysystem(@) {
     system(@_) == 0 or die "Failed to execute @_: $!";
 }
+
 sub install_libzmq(@) {
-    my ($basedir, $basename, $tail) = @_;
+    my ($basename, $tail) = @_;
 
     $tail ||= '';
-    my $prefix = File::Spec->catdir($install_dir, $base);
+    my $prefix = File::Spec->catdir($EXTDIR, $base);
     my $file   = "$base$tail.tar.gz";
     mysystem("curl", "-LO", "http://download.zeromq.org/$file");
     mysystem("tar", "xzf", $file);
@@ -36,15 +44,6 @@ sub test_binding {
     mysystem("make", "test");
 }
 
-my $ROOT   = Cwd::abs_path( Cwd::cwd() );
-my $target = $ENV{PERL_ZMQ_TEST_TARGET} || 'ZMQ-LibZMQ2';
-
-if (! -d $target) {
-    die "$target does not exist";
-}
-
-my $install_dir = File::Spec->catdir($ROOT, "ext");
-
 if ( $target eq 'ZMQ-Constants' ) {
     test_binding("ZMQ-Constants");
     cpanm(qw(
@@ -52,7 +51,7 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::Repository
     ));
 } elsif ( $target eq 'ZMQ-LibZMQ2' ) {
-    install_libzmq($install_dir, "zeromq-2.2.0");
+    install_libzmq("zeromq-2.2.0");
     cpanm(qw(
         inc::Module::Install
         Module::Install::AuthorTests
@@ -64,7 +63,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     ));
     test_binding("ZMQ-LibZMQ2");
 } elsif ( $target eq 'ZMQ-LibZMQ3' ) {
-    install_libzmq($install_dir, "zeromq-3.2.0", "-rc1");
+    install_libzmq("zeromq-3.2.0", "-rc1");
     cpanm(qw(
         inc::Module::Install
         Module::Install::AuthorTests
