@@ -33,13 +33,14 @@ sub install_libzmq(@) {
 }
 
 sub cpanm (@) {
-    mysystem("cpanm", "--notest", @_);
+    @_ = ("cpanm", "--notest", @_);
+    goto &mysystem;
 }
 
 sub test_binding {
     my $subdir = shift;
     chdir File::Spec->catdir($ROOT, $subdir);
-    mysystem("cpanm", "--notest", "--installdeps", ".");
+    cpanm("--installdeps", ".");
     mysystem("perl", "Makefile.PL");
     mysystem("make", "test");
 }
