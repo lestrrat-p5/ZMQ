@@ -1,8 +1,5 @@
 use strict;
-use Config;
 use File::Spec;
-use File::Basename qw(dirname);
-use List::Util qw(first);
 
 write_typemap( File::Spec->catfile('xs', 'typemap') );
 write_magic_file( File::Spec->catfile('xs', 'mg-xs.inc') );
