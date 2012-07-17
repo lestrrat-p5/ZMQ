@@ -53,7 +53,11 @@ cc_libs $ENV{ZMQ_LIBS};
 cc_include_paths 'xs';
 cc_src_paths 'xs';
 cc_assert_lib 'zmq';
-cc_libs 'zmq', 'uuid'; # uuid for cygwin, but can't hurt
+if ($^O eq 'cygwin') {
+    cc_libs 'zmq', 'uuid'; # uuid for cygwin, but can't hurt
+} else {
+    cc_libs 'zmq';
+}
 if ($ENV{ZMQ_TRACE}) {
     cc_define qq|-DPERLZMQ_TRACE=$ENV{ZMQ_TRACE}|;
 }
