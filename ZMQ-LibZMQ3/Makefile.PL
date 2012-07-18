@@ -51,14 +51,14 @@ EOM
 # XXX As of Devel::CheckLib 0.93, it seems like LIBS = "-L/path/to/foo"
 # gets ignored (unlike what the docs say). So we manually strip and
 # re-arrange the paths here
+my @libs = grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS};
 assertlibs
     lib => 'zmq',
     header => 'zmq.h',
     incpath => [ split /\s+/, $ENV{ZMQ_INCLUDES} ],
-    libpath => [ grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS} ]
+    libpath => \@libs,
 ;
 
-auto_set_repository;
 requires 'Task::Weaken';
 requires 'ZMQ::Constants';
 test_requires 'Test::More', '0.98';
@@ -86,5 +86,17 @@ if ($ENV{ZMQ_TRACE}) {
 author_tests 'xt';
 clean_files "xs/*.inc xs/typemap";
 
+repository "https://github.com/lestrrat/p5-ZMQ";
+
 do 'tools/genfiles.pl';
 WriteAll;
+
+if (-f "Makefile") {
+    local @ARGV = qw(Makefile);
+    local $^I = '';
+    while (<>) {
+        s/OTHERLDFLAGS =\s*$/OTHERLDFLAGS = -Wl,-rpath,@{[ join ",", @libs]}\n/;
+        print;
+    }
+}
+
