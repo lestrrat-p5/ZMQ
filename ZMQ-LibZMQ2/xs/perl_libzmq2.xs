@@ -204,9 +204,11 @@ PerlLibzmq2_Context_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
             Safefree(ctxt);
         }
 #else
-        PerlLibzmq2_trace(" + zmq context %p", ctxt);
-        zmq_term( ctxt );
-        mg->mg_ptr = NULL;
+        PerlLibzmq2_trace(" + zmq context %p", ctxt->ctxt);
+        if ( ctxt->interp == getpid() ) { /* is where I came from */
+            zmq_term( ctxt->ctxt );
+            mg->mg_ptr = NULL;
+        }
 #endif
     }
     PerlLibzmq2_trace("END mg_free (Context)");
@@ -376,7 +378,8 @@ PerlLibzmq2_zmq_init( nthreads = 5 )
             PerlLibzmq2_trace( " + zmq context %p", RETVAL->ctxt );
 #else
             PerlLibzmq2_trace( " + non-threaded context");
-            RETVAL = cxt;
+            RETVAL->interp = getpid();
+            RETVAL->ctxt   = cxt;
 #endif
         }
         PerlLibzmq2_trace( "END zmq_init");
@@ -387,11 +390,7 @@ int
 PerlLibzmq2_zmq_term( context )
         PerlLibzmq2_Context *context;
     CODE:
-#ifdef USE_ITHREADS
         RETVAL = zmq_term( context->ctxt );
-#else
-        RETVAL = zmq_term( context );
-#endif
         if ( RETVAL != 0 ) {
             SET_BANG;
         } else {
@@ -557,8 +556,8 @@ PerlLibzmq2_zmq_socket (ctxt, type)
         PerlLibzmq2_trace( " + context wrapper %p, zmq context %p", ctxt, ctxt->ctxt );
         sock = zmq_socket( ctxt->ctxt, type );
 #else
-        PerlLibzmq2_trace( " + zmq context %p", ctxt );
-        sock = zmq_socket( ctxt, type );
+        PerlLibzmq2_trace( " + zmq context %p", ctxt->ctxt );
+        sock = zmq_socket( ctxt->ctxt, type );
 #endif
 
         if ( sock == NULL ) {
