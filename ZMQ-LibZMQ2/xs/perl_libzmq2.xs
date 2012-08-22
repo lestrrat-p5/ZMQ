@@ -195,24 +195,24 @@ PerlLibzmq2_Context_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
     PerlLibzmq2_trace("START mg_free (Context)");
     if (ctxt != NULL) {
         PerlLibzmq2_trace( " + context wrapper %p with zmq context %p", ctxt, ctxt->ctxt );
-#ifdef USE_ITHREADS
-        PerlLibzmq2_trace( " + thread enabled. thread %p", aTHX );
-        if ( ctxt->interp == aTHX ) { /* is where I came from */
-            PerlLibzmq2_trace( " + detected mg_free from creating thread %p, cleaning up", aTHX );
-            zmq_term( ctxt->ctxt );
-            mg->mg_ptr = NULL;
-            ctxt->ctxt = NULL;
-        }
-#else
-        PerlLibzmq2_trace(" + zmq context %p", ctxt);
         if ( ctxt->pid == getpid() ) {
-            PerlLibzmq2_trace(" + detected mg_free from creating pid %d, clearning up", ctxt->pid );
+            PerlLibzmq2_trace( " + owner pid %d matches current pid", ctx->pid );
+#ifdef USE_ITHREADS
+            PerlLibzmq2_trace( " + thread enabled. thread %p", aTHX );
+            if ( ctxt->interp == aTHX ) { /* is where I came from */
+                PerlLibzmq2_trace( " + detected mg_free from creating thread %p, cleaning up", aTHX );
+                zmq_term( ctxt->ctxt );
+                mg->mg_ptr = NULL;
+                ctxt->ctxt = NULL;
+                Safefree(ctxt);
+            }
+#else
             zmq_term( ctxt->ctxt );
             mg->mg_ptr = NULL;
             ctxt->ctxt = NULL;
-        }
+            Safefree(ctxt);
 #endif
-        Safefree(ctxt);
+        }
     }
     PerlLibzmq2_trace("END mg_free (Context)");
     return 1;

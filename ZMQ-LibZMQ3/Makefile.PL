@@ -52,6 +52,8 @@ EOM
 # gets ignored (unlike what the docs say). So we manually strip and
 # re-arrange the paths here
 my @libs = grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS};
+use Data::Dumper;
+warn Dumper(\@libs);
 assertlibs
     lib => 'zmq',
     header => 'zmq.h',

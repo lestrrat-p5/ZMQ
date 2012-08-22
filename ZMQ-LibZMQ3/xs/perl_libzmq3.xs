@@ -368,16 +368,14 @@ PerlLibzmq3_zmq_init( nthreads = 5 )
             SET_BANG;
             RETVAL = NULL;
         } else {
+            Newxz( RETVAL, 1, PerlLibzmq3_Context );
+            PerlLibzmq3_trace( " + created context wrapper %p", RETVAL );
+            RETVAL->ctxt   = cxt;
+            RETVAL->
 #ifdef USE_ITHREADS
             PerlLibzmq3_trace( " + threads enabled, aTHX %p", aTHX );
-            Newxz( RETVAL, 1, PerlLibzmq3_Context );
             RETVAL->interp = aTHX;
-            RETVAL->ctxt   = cxt;
-            PerlLibzmq3_trace( " + created context wrapper %p", RETVAL );
             PerlLibzmq3_trace( " + zmq context %p", RETVAL->ctxt );
-#else
-            PerlLibzmq3_trace( " + non-threaded context");
-            RETVAL = cxt;
 #endif
         }
         PerlLibzmq3_trace( "END zmq_init");
