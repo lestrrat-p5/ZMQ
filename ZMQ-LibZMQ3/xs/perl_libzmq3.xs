@@ -578,13 +578,7 @@ PerlLibzmq3_zmq_socket (ctxt, type)
         void *sock = NULL;
     CODE:
         PerlLibzmq3_trace( "START zmq_socket" );
-#ifdef USE_ITHREADS
-        PerlLibzmq3_trace( " + context wrapper %p, zmq context %p", ctxt, ctxt->ctxt );
         sock = zmq_socket( ctxt->ctxt, type );
-#else
-        PerlLibzmq3_trace( " + zmq context %p", ctxt );
-        sock = zmq_socket( ctxt, type );
-#endif
         if (sock == NULL) {
             RETVAL = NULL;
             SET_BANG;
