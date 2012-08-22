@@ -188,32 +188,26 @@ PerlLibzmq2_Message_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
 }
 
 STATIC_INLINE int
-PerlLibzmq2_Context_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
-    PerlLibzmq2_Context* const ctxt = (PerlLibzmq2_Context *) mg->mg_ptr;
-    int close = (ctxt != NULL);
-    PERL_UNUSED_VAR(sv);
+PerlLibzmq2_Context_invalidate( PerlLibzmq2_Context *ctxt ) {
+    int rv = -1;
+    int close = 1;
+    if (ctxt->ctxt == NULL) {
+        close = 0;
+        PerlLibzmq2_trace( " + context already seems to be freed");
+    }
 
-    PerlLibzmq2_trace("START mg_free (Context)");
-    if (ctxt != NULL) {
-        if (ctxt->ctxt == NULL) {
-            close = 0;
-            PerlLibzmq2_trace( " + context already seems to be freed");
-        }
-
-        if (ctxt->pid != getpid()) {
-            close = 0;
-            PerlLibzmq2_trace( " + context was not created in this process");
-        }
+    if (ctxt->pid != getpid()) {
+        close = 0;
+        PerlLibzmq2_trace( " + context was not created in this process");
+    }
 
 #ifdef USE_ITHREADS
-        if (ctxt->interp != aTHX) {
-            close = 0;
-            PerlLibzmq2_trace( " + context was not created in this thread");
-        }
-#endif
+    if (ctxt->interp != aTHX) {
+        close = 0;
+        PerlLibzmq2_trace( " + context was not created in this thread");
     }
+#endif
     if (close) {
-        int rv;
         PerlLibzmq2_trace( " + calling actual zmq_term()");
         rv = zmq_term( ctxt->ctxt );
         if ( rv != 0 ) {
@@ -224,9 +218,21 @@ PerlLibzmq2_Context_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
 #endif
             ctxt->ctxt   = NULL;
             ctxt->pid    = 0;
-            mg->mg_ptr   = NULL;
             Safefree(ctxt);
         }
+    }
+    return rv;
+}
+
+STATIC_INLINE int
+PerlLibzmq2_Context_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
+    PerlLibzmq2_Context* const ctxt = (PerlLibzmq2_Context *) mg->mg_ptr;
+    PERL_UNUSED_VAR(sv);
+
+    PerlLibzmq2_trace("START mg_free (Context)");
+    if (ctxt != NULL) {
+        PerlLibzmq2_Context_invalidate( ctxt );
+        mg->mg_ptr = NULL;
     }
     PerlLibzmq2_trace("END mg_free (Context)");
     return 1;
@@ -407,46 +413,19 @@ int
 PerlLibzmq2_zmq_term( ctxt )
         PerlLibzmq2_Context *ctxt;
     CODE:
-        if (ctxt->ctxt == NULL) {
-            PerlLibzmq2_trace( " + context already seems to be freed");
-            RETVAL = 0;
-            XSRETURN(1);
-        }
+        RETVAL = PerlLibzmq2_Context_invalidate( ctxt );
 
-        if (ctxt->pid != getpid()) {
-            PerlLibzmq2_trace( " + context was not created in this process");
-            RETVAL = 0;
-            XSRETURN(1);
-        }
-#ifdef USE_ITHREADS
-        if (ctxt->interp != aTHX) {
-            PerlLibzmq2_trace( " + context was not created in this thread");
-            RETVAL = 0;
-            XSRETURN(1);
-        }
-#endif
-        PerlLibzmq2_trace( " + calling actual zmq_term()");
-        RETVAL = zmq_term( ctxt->ctxt );
-        if ( RETVAL != 0 ) {
-            SET_BANG;
-            XSRETURN(1);
-        }
-#ifdef USE_ITHREADS
-        ctxt->interp = NULL;
-#endif
-        ctxt->ctxt   = NULL;
-        ctxt->pid    = 0;
-
-        /* Cancel the SV's mg attr so to not call zmq_term automatically */
-        MAGIC *mg =
-            PerlLibzmq2_Context_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq2_Context_vtbl );
-        mg->mg_ptr = NULL;
-
-        /* mark the original SV's _closed flag as true */
-        {
-            SV *svr = SvRV(ST(0));
-            if (hv_stores( (HV *) svr, "_closed", &PL_sv_yes ) == NULL) {
-                croak("PANIC: Failed to store closed flag on blessed reference");
+        if (RETVAL == 0) {
+            /* Cancel the SV's mg attr so to not call zmq_term automatically */
+            MAGIC *mg =
+                PerlLibzmq2_Context_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq2_Context_vtbl );
+            mg->mg_ptr = NULL;
+            /* mark the original SV's _closed flag as true */
+            {
+                SV *svr = SvRV(ST(0));
+                if (hv_stores( (HV *) svr, "_closed", &PL_sv_yes ) == NULL) {
+                    croak("PANIC: Failed to store closed flag on blessed reference");
+                }
             }
         }
     OUTPUT:
