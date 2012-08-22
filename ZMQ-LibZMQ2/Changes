@@ -1,6 +1,23 @@
 Changes
 =======
 
+1.02 - Aug 22 2012
+    - Fix implicit and explicit destructors for context and sockets.
+      (https://github.com/lestrrat/p5-ZMQ/issues/11), spotted by @melo
+
+      Previously this threw an assertion:
+
+        my $ctxt = zmq_init();
+        my $pid = fork();
+        exit(0) unless $pid;
+        waitpid($pid, 0);
+
+     This is because $ctxt was being freed on both the child and the parent.
+
+     As of this version, we make sure that behind the scenes the context 
+     can only be freed in the process and thread that it was created in.
+     Likewise sockets can only be freed within the same process.
+
 1.01 - Apr 23 2012
     - Changed zmq_poll()'s return value. In list context, you can get the
       array of boolean values indicating if the particular socket got fired
