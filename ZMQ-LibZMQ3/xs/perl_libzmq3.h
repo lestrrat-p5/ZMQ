@@ -25,8 +25,9 @@ typedef struct {
 } PerlLibzmq3_Context;
 
 typedef struct {
-    void *socket;
-    SV   *assoc_ctxt; /* keep context around with sockets so we know */
+    void  *socket;
+    SV    *assoc_ctxt; /* keep context around with sockets so we know */
+    pid_t  pid;
 } PerlLibzmq3_Socket;
 
 typedef zmq_msg_t PerlLibzmq3_Message;
