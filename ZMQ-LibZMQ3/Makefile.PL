@@ -52,8 +52,6 @@ EOM
 # gets ignored (unlike what the docs say). So we manually strip and
 # re-arrange the paths here
 my @libs = grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS};
-use Data::Dumper;
-warn Dumper(\@libs);
 assertlibs
     lib => 'zmq',
     header => 'zmq.h',
@@ -94,9 +92,16 @@ do 'tools/genfiles.pl';
 WriteAll;
 
 if (-f "Makefile") {
+    my $version = `sw_vers -productVersion`;
+    chomp $version;
+    $version =~ s/\.\d+$//;
+
     local @ARGV = qw(Makefile);
     local $^I = '';
     while (<>) {
+        if ($^O eq 'darwin') {
+            s/MACOSX_DEPLOYMENT_TARGET=(\d+\.\d+)/$1 < 10.5 ? "MACOSX_DEPLOYMENT_TARGET=$version" : "MACOSX_DEPLOYMENT_TARGET=$1"/e;
+        }
         s/OTHERLDFLAGS =\s*$/OTHERLDFLAGS = -Wl,-rpath,@{[ join ",", @libs]}\n/;
         print;
     }
