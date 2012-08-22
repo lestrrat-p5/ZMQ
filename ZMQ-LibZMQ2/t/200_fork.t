@@ -34,6 +34,18 @@ subtest 'parent creates context, socket, and forks, child does nothing' => sub {
     pass('zmq_init() is fork-resistant');
 };
 
+subtest 'parent creates context, socket, and forks, child calls zmq_close()' => sub {
+    my $ctx = zmq_init(1);
+    my $sock = zmq_socket($ctx, ZMQ_REQ);
+    my $pid = fork();
+    if (! $pid) {
+        zmq_close($sock);
+        exit(0);
+    }
+    waitpid($pid, 0);
+    pass('zmq_init() is fork-resistant');
+};
+
 subtest 'parent creates context, message, and forks, child does nothing' => sub {
     my $ctx = zmq_init(1);
     my $msg = zmq_msg_init();
