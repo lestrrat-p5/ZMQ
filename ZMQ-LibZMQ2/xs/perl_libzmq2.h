@@ -6,6 +6,7 @@
 #include "ppport.h"
 #include <zmq.h>
 #include <errno.h>
+#include <unistd.h>
 
 #ifndef PERLZMQ_TRACE
 #define PERLZMQ_TRACE 0
@@ -13,9 +14,6 @@
 #define _ERRNO        errno
 #define SET_BANG      PerlLibzmq2_set_bang(aTHX_ _ERRNO)
 
-#ifndef USE_ITHREADS
-typedef void      PerlLibzmq2_Context;
-#else
 typedef struct {
 #ifdef tTHX /* tTHX doesn't exist in older perls */
     tTHX    interp;
@@ -23,8 +21,8 @@ typedef struct {
     PerlInterpreter *interp;
 #endif
     void   *ctxt;
+    pid_t   pid;
 } PerlLibzmq2_Context;
-#endif
 
 typedef struct {
     void *socket;
