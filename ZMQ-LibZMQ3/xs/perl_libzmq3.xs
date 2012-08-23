@@ -12,7 +12,8 @@
 #define PerlLibzmq3_trace(...)
 #endif
 
-STATIC_INLINE void
+STATIC_INLINE
+void
 PerlLibzmq3_set_bang(pTHX_ int err) {
     SV *errsv = get_sv("!", GV_ADD);
     PerlLibzmq3_trace(" + Set ERRSV ($!) to %d", err);
@@ -21,7 +22,7 @@ PerlLibzmq3_set_bang(pTHX_ int err) {
     errno = err;
 }
 
-static
+STATIC_INLINE
 SV *
 PerlLibzmq3_zmq_getsockopt_int(PerlLibzmq3_Socket *sock, int option) {
     size_t len;
@@ -39,7 +40,7 @@ PerlLibzmq3_zmq_getsockopt_int(PerlLibzmq3_Socket *sock, int option) {
     return sv;
 }
 
-static
+STATIC_INLINE
 SV *
 PerlLibzmq3_zmq_getsockopt_int64(PerlLibzmq3_Socket *sock, int option) {
     size_t  len;
@@ -57,7 +58,7 @@ PerlLibzmq3_zmq_getsockopt_int64(PerlLibzmq3_Socket *sock, int option) {
     return sv;
 }
 
-static
+STATIC_INLINE
 SV *
 PerlLibzmq3_zmq_getsockopt_uint64(PerlLibzmq3_Socket *sock, int option) {
     size_t len;
@@ -75,7 +76,7 @@ PerlLibzmq3_zmq_getsockopt_uint64(PerlLibzmq3_Socket *sock, int option) {
     return sv;
 }
 
-static
+STATIC_INLINE
 SV *
 PerlLibzmq3_zmq_getsockopt_string(PerlLibzmq3_Socket *sock, int option, size_t len) {
     int    status;
@@ -117,7 +118,7 @@ PerlLibzmq3_zmq_setsockopt_int64( PerlLibzmq3_Socket *sock, int option, int64_t 
     return status;
 }
 
-static
+STATIC_INLINE
 int
 PerlLibzmq3_zmq_setsockopt_uint64(PerlLibzmq3_Socket *sock, int option, uint64_t val) {
     int status;
@@ -128,7 +129,7 @@ PerlLibzmq3_zmq_setsockopt_uint64(PerlLibzmq3_Socket *sock, int option, uint64_t
     return status;
 }
     
-static
+STATIC_INLINE
 int
 PerlLibzmq3_zmq_setsockopt_string(PerlLibzmq3_Socket *sock, int option, const char *ptr, size_t len) {
     int status;
@@ -139,7 +140,8 @@ PerlLibzmq3_zmq_setsockopt_string(PerlLibzmq3_Socket *sock, int option, const ch
     return status;
 }
 
-STATIC_INLINE int
+STATIC_INLINE
+int
 PerlLibzmq3_Message_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param) {
     PerlLibzmq3_Message *const src = (PerlLibzmq3_Message *) mg->mg_ptr;
     PerlLibzmq3_Message *dest;
@@ -154,7 +156,8 @@ PerlLibzmq3_Message_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param) {
     return 0;
 }
 
-STATIC_INLINE int
+STATIC_INLINE
+int
 PerlLibzmq3_Message_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
     PerlLibzmq3_Message* const msg = (PerlLibzmq3_Message *) mg->mg_ptr;
 
@@ -169,7 +172,8 @@ PerlLibzmq3_Message_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
     return 1;
 }
 
-STATIC_INLINE MAGIC*
+STATIC_INLINE
+MAGIC*
 PerlLibzmq3_Message_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
     MAGIC* mg;
 
@@ -189,7 +193,8 @@ PerlLibzmq3_Message_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
     return NULL; /* not reached */
 }
 
-STATIC_INLINE int
+STATIC_INLINE
+int
 PerlLibzmq3_Context_invalidate( PerlLibzmq3_Context *ctxt ) {
     int rv = -1;
     int close = 1;
@@ -226,7 +231,8 @@ PerlLibzmq3_Context_invalidate( PerlLibzmq3_Context *ctxt ) {
     return rv;
 }
 
-STATIC_INLINE int
+STATIC_INLINE
+int
 PerlLibzmq3_Context_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
     PerlLibzmq3_Context* const ctxt = (PerlLibzmq3_Context *) mg->mg_ptr;
     PERL_UNUSED_VAR(sv);
@@ -240,7 +246,8 @@ PerlLibzmq3_Context_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
     return 1;
 }
 
-STATIC_INLINE MAGIC*
+STATIC_INLINE
+MAGIC*
 PerlLibzmq3_Context_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
     MAGIC* mg;
 
@@ -258,14 +265,16 @@ PerlLibzmq3_Context_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
     return NULL; /* not reached */
 }
 
-STATIC_INLINE int
+STATIC_INLINE
+int
 PerlLibzmq3_Context_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param){
     PERL_UNUSED_VAR(mg);
     PERL_UNUSED_VAR(param);
     return 0;
 }
 
-STATIC_INLINE int
+STATIC_INLINE
+int
 PerlLibzmq3_Socket_invalidate( PerlLibzmq3_Socket *sock )
 {
     SV *ctxt_sv = sock->assoc_ctxt;
@@ -291,7 +300,8 @@ PerlLibzmq3_Socket_invalidate( PerlLibzmq3_Socket *sock )
     return rv;
 }
 
-STATIC_INLINE int
+STATIC_INLINE
+int
 PerlLibzmq3_Socket_mg_free(pTHX_ SV* const sv, MAGIC* const mg)
 {
     PerlLibzmq3_Socket* const sock = (PerlLibzmq3_Socket *) mg->mg_ptr;
@@ -305,7 +315,8 @@ PerlLibzmq3_Socket_mg_free(pTHX_ SV* const sv, MAGIC* const mg)
     return 1;
 }
 
-STATIC_INLINE int
+STATIC_INLINE
+int
 PerlLibzmq3_Socket_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param){
     PerlLibzmq3_trace("START mg_dup (Socket)");
 #ifdef USE_ITHREADS /* single threaded perl has no "xxx_dup()" APIs */
@@ -319,7 +330,8 @@ PerlLibzmq3_Socket_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param){
     return 0;
 }
 
-STATIC_INLINE MAGIC*
+STATIC_INLINE
+MAGIC*
 PerlLibzmq3_Socket_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
     MAGIC* mg;
 
@@ -337,7 +349,8 @@ PerlLibzmq3_Socket_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
     return NULL; /* not reached */
 }
 
-STATIC_INLINE void 
+STATIC_INLINE
+void 
 PerlZMQ_free_string(void *data, void *hint) {
     PERL_SET_CONTEXT(hint);
     Safefree( (char *) data );
