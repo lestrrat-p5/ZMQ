@@ -9,6 +9,11 @@ BEGIN {
     XSLoader::load(__PACKAGE__, $VERSION);
 }
 
+use constant PERL_LIBZMQ2_RCVMORE_HACK => 
+    exists $ENV{PERL_LIBZMQ2_RCVMORE_HACK} ? 
+         $ENV{PERL_LIBZMQ2_RCVMORE_HACK} : 1
+;
+
 our @EXPORT = qw(
     zmq_init
     zmq_term
@@ -53,19 +58,34 @@ sub zmq_send {
 
 sub zmq_getsockopt {
     my ($sock, $option) = @_;
-    my $type = ZMQ::Constants::get_sockopt_type($option);
-    if (! $type) {
-        Carp::croak("zmq_getsockopt: Could not find the data type for option $option");
+    # XXX Ugly hack to work around libzmq2->ZMQ_RCVMORE is int and
+    # libzmq3->ZMQ_RCVMORE is int64. If in the future this breaks
+    # do this and disable the hack
+    #     PERL_LIBZMQ2_RCVMORE_HACK=0 ./yourprog.pl
+    my $type;
+    if (PERL_LIBZMQ2_RCVMORE_HACK && $option == ZMQ::Constants::ZMQ_RCVMORE()) {
+        $type = "int64";
+    } else {
+        $type = ZMQ::Constants::get_sockopt_type($option);
+        if (! $type) {
+            Carp::croak("zmq_getsockopt: Could not find the data type for option $option");
+        }
     }
+
     no strict 'refs';
     goto &{"zmq_getsockopt_$type"}
 }
 
 sub zmq_setsockopt {
     my ($sock, $option) = @_;
-    my $type = ZMQ::Constants::get_sockopt_type($option);
-    if (! $type) {
-        Carp::croak("zmq_setsockopt: Could not find the data type for option $option");
+    my $type;
+    if (PERL_LIBZMQ2_RCVMORE_HACK && $option == ZMQ::Constants::ZMQ_RCVMORE()) {
+        $type = "int64";
+    } else {
+        $type = ZMQ::Constants::get_sockopt_type($option);
+        if (! $type) {
+            Carp::croak("zmq_setsockopt: Could not find the data type for option $option");
+        }
     }
     no strict 'refs';
     goto &{"zmq_setsockopt_$type"}
