@@ -1,6 +1,16 @@
 Changes
 =======
 
+1.03
+    - Workaround ZMQ_RCVMORE being "int64" on libzmq2 and "int" on libzmq3
+      (ZMQ::Constants::ZMQ_RCVMORE is int), by hardcoding.
+      If this becomes a problem in the future, set an environment variable
+      like so to disable this workaround
+
+            PERL_LIBZMQ2_RCVMORE_HACK=0 ./yourprog.pl
+
+      Reported by sorear.
+
 1.02 - Aug 22 2012
     - Fix implicit and explicit destructors for context and sockets.
       (https://github.com/lestrrat/p5-ZMQ/issues/11), spotted by @melo
