@@ -694,46 +694,24 @@ PerlLibzmq3_zmq_recvmsg(socket, flags = 0)
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Message", 20 ));
         int rv;
-        zmq_msg_t msg;
     CODE:
         PerlLibzmq3_trace( "START zmq_recvmsg" );
-        RETVAL = NULL;
-        rv = zmq_msg_init(&msg);
+        Newxz(RETVAL, 1, PerlLibzmq3_Message);
+        rv = zmq_msg_init(RETVAL);
         if (rv != 0) {
             SET_BANG;
             PerlLibzmq3_trace("zmq_msg_init failed (%d)", rv);
             XSRETURN_EMPTY;
         }
-        rv = zmq_recvmsg(socket->socket, &msg, flags);
+        rv = zmq_recvmsg(socket->socket, RETVAL, flags);
         PerlLibzmq3_trace(" + zmq_recvmsg with flags %d", flags);
         PerlLibzmq3_trace(" + zmq_recvmsg returned with rv '%d'", rv);
         if (rv == -1) {
             SET_BANG;
             PerlLibzmq3_trace(" + zmq_recvmsg got bad status, closing temporary message");
-            zmq_msg_close(&msg);
-        } else {
-            PerlLibzmq3_trace(" + message data (%s)", (char *) zmq_msg_data(&msg) );
-            PerlLibzmq3_trace(" + message size (%d)", (int) zmq_msg_size(&msg) );
-            Newxz(RETVAL, 1, PerlLibzmq3_Message);
-            rv = zmq_msg_init(RETVAL);
-            if (rv != 0) {
-                SET_BANG;
-                PerlLibzmq3_trace(" + zmq_msg_init (copy) failed with %d", rv );
-                Safefree(RETVAL);
-                zmq_msg_close(&msg);
-                XSRETURN_EMPTY;
-            }
-
-            rv = zmq_msg_copy( RETVAL, &msg );
-            if (rv != 0) {
-                SET_BANG;
-                PerlLibzmq3_trace(" + zmq_msg_copy failed with %d", rv );
-                Safefree(RETVAL);
-                zmq_msg_close(&msg);
-                XSRETURN_EMPTY;
-            }
-            PerlLibzmq3_trace(" + zmq_recvmsg created message %p", RETVAL );
-            zmq_msg_close(&msg);
+            zmq_msg_close(RETVAL);
+            Safefree(RETVAL);
+            XSRETURN_EMPTY;
         }
         PerlLibzmq3_trace( "END zmq_recvmsg" );
     OUTPUT:

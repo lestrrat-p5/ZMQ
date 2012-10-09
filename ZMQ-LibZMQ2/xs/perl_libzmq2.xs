@@ -668,43 +668,25 @@ PerlLibzmq2_zmq_recv(socket, flags = 0)
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ2::Message", 20 ));
         int rv;
-        zmq_msg_t msg;
     CODE:
         PerlLibzmq2_trace( "START zmq_recv" );
         RETVAL = NULL;
-        rv = zmq_msg_init(&msg);
+        Newxz(RETVAL, 1, PerlLibzmq2_Message);
+        rv = zmq_msg_init(RETVAL);
         if (rv != 0) {
             SET_BANG;
             PerlLibzmq2_trace(" + zmq_msg_init failed with %d", rv );
             XSRETURN_EMPTY;
         }
-        rv = zmq_recv(socket->socket, &msg, flags);
+        rv = zmq_recv(socket->socket, RETVAL, flags);
         PerlLibzmq2_trace(" + zmq recv with flags %d", flags);
         PerlLibzmq2_trace(" + zmq_recv returned with rv '%d'", rv);
         if (rv != 0) {
             SET_BANG;
             PerlLibzmq2_trace(" + zmq_recv got bad status, closing temporary message");
-            zmq_msg_close(&msg);
-        } else {
-            Newxz(RETVAL, 1, PerlLibzmq2_Message);
-            rv = zmq_msg_init(RETVAL);
-            if (rv != 0) {
-                SET_BANG;
-                PerlLibzmq2_trace(" + zmq_msg_init (copy) failed with %d", rv );
-                Safefree(RETVAL);
-                zmq_msg_close(&msg);
-                XSRETURN_EMPTY;
-            }
-
-            rv = zmq_msg_copy( RETVAL, &msg );
-            if (rv != 0) {
-                SET_BANG;
-                PerlLibzmq2_trace(" + zmq_msg_copy failed with %d", rv );
-                Safefree(RETVAL);
-                zmq_msg_close(&msg);
-                XSRETURN_EMPTY;
-            }
-            PerlLibzmq2_trace(" + zmq_recv created message %p", RETVAL );
+            zmq_msg_close(RETVAL);
+            Safefree(RETVAL);
+            XSRETURN_EMPTY;
         }
         PerlLibzmq2_trace( "END zmq_recv" );
     OUTPUT:
