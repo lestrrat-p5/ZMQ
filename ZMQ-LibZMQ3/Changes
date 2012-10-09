@@ -1,6 +1,10 @@
 Changes
 =======
 
+1.01 - Oct 09 2012
+    - Fix memory leak in zmq_recvmsg(), retported by trinitum
+      (https://github.com/lestrrat/p5-ZMQ/issues/15)
+
 1.00 - Aug 22 2012
     - Fix implicit and explicit destructors for context and sockets.
       (https://github.com/lestrrat/p5-ZMQ/issues/11), spotted by @melo
