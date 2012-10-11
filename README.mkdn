@@ -19,7 +19,7 @@ With cpanm, you can install the ZMQ perl bindings like so:
 
     cpanm ZMQ::LibZMQ2
 
-Check for what's available on CPAN from the following links (as of this writing, only development releases have been uploaded, so the following links will show up empty)
+Check for what's available on CPAN from the following links:
 
 * http://metacpan.org/release/ZMQ-Constants
 * http://metacpan.org/release/ZMQ-LibZMQ2
