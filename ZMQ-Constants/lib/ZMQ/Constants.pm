@@ -200,7 +200,7 @@ our %EXPORT_TAGS = (
 );
 $EXPORT_TAGS{all} = [ @EXPORT_OK ];
 
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 
 our $DEFAULT_VERSION = '2.1.11';
 

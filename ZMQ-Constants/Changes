@@ -1,6 +1,11 @@
 Changes
 =======
 
+1.01 - Oct 20 2012
+    - No code change
+    - Upgrade to Module::Install 1.06
+      (see http://weblog.bulknews.net/post/33907905561/do-not-ship-modules-with-module-install-1-04)
+
 1.00 - Apr 05 2012
     - Add deprecated constants as well.
     - Add documents.
