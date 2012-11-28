@@ -21,8 +21,12 @@ sub install_libzmq(@) {
     $tail ||= '';
     my $prefix = File::Spec->catdir($EXTDIR, $basename);
     my $file   = "$basename$tail.tar.gz";
-    mysystem("curl", "-LO", "http://download.zeromq.org/$file");
-    mysystem("tar", "xzf", $file);
+    if (! -e $file) {
+        mysystem("curl", "-LO", "http://download.zeromq.org/$file");
+    }
+    if (! -e $basename) {
+        mysystem("tar", "xzf", $file);
+    }
     chdir $basename;
     mysystem("./configure", "--prefix", $prefix);
     mysystem("make");
@@ -67,7 +71,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     cpanm(qw(AnyEvent Proc::Guard));
     test_binding("ZMQ-LibZMQ2");
 } elsif ( $target eq 'ZMQ-LibZMQ3' ) {
-    install_libzmq("zeromq-3.2.0", "-rc1");
+    install_libzmq("zeromq-3.2.2");
     cpanm(qw(
         inc::Module::Install
         Module::Install::AuthorTests
