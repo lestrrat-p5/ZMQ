@@ -457,6 +457,13 @@ Creates a new "device". See C<zmq_device> for details. zmq_device() will only re
 
 This function does not work on some versions, as certain early versions of libzmq3.x do not implement it.
 
+=head2 zmq_proxy($frontend_sock, $backend_sock, $capture_sock)
+
+Start a proxy in the current thread, which connects the frontend socket to a
+backend socket. The capture sock is optional, and is by default undef.
+
+This function does not work on some versions, as certain early versions of libzmq3.x do not implement it.
+
 =head1 FUNCTIONS PROVIDED BY ZMQ::LIBZMQ3
 
 These functions are provided by ZMQ::LibZMQ3 to make some operations easier in the Perl binding. They are not part of the official libzmq interface.

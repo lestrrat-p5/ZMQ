@@ -955,3 +955,24 @@ PerlLibzmq3_zmq_device( device, insocket, outsocket )
     OUTPUT:
         RETVAL
 
+int
+PerlLibzmq3_zmq_proxy(frontend, backend, capture = NULL)
+        PerlLibzmq3_Socket *frontend;
+        PerlLibzmq3_Socket *backend;
+        PerlLibzmq3_Socket *capture;
+    CODE:
+#ifdef zmq_proxy
+        RETVAL = zmq_proxy(frontend, backend, capture);
+#else
+        PERL_UNUSED_VAR(frontend);
+        PERL_UNUSED_VAR(backend);
+        PERL_UNUSED_VAR(capture);
+        {
+            int major, minor, patch;
+            zmq_version(&major, &minor, &patch);
+            croak("zmq_proxy is not available in this version of libzmq (%d.%d.%d)", major, minor, patch );
+        }
+#endif
+    OUTPUT:
+        RETVAL
+
