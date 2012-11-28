@@ -96,7 +96,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     ));
     $ENV{ZMQ_HOME} = install_libzmq("zeromq-2.2.0");
     cpanm(File::Spec->catdir($ROOT, "ZMQ-LibZMQ2"));
-    $ENV{ZMQ_HOME} = install_libzmq("zeromq-3.2.0", "-rc1");
+    $ENV{ZMQ_HOME} = install_libzmq("zeromq-3.2.2");
     cpanm(File::Spec->catdir($ROOT, "ZMQ-LibZMQ3"));
 
     $ENV{PERL_ZMQ_BACKEND} = "ZMQ::LibZMQ2";
