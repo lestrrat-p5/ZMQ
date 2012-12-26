@@ -77,11 +77,6 @@ sub probe_pkgconfig {
 
         print " + found $pkg $version\n";
 
-        my ($major, $minor, $micro) = split /\./, $version;
-        if ( $major != 2 && $minor != 1 ) {
-            die "Whoa there! We don't support anything other than libzmq 2.1.x";
-        }
-
         if (! $ENV{ZMQ_INCLUDES}) {
             if (my $cflags = qx/$pkg_config --cflags-only-I $pkg/) {
                 chomp $cflags;
