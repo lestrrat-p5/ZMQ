@@ -84,7 +84,8 @@ ZMQ::LibZMQ3 - A libzmq 3.x wrapper for Perl
 
 =head1 SYNOPSIS
 
-    use ZMQ::LibZMQ;
+    use ZMQ::LibZMQ3;
+    use ZMQ::Constants; # separate module
 
     my $ctxt = zmq_init($threads);
     my $rv   = zmq_term($ctxt);
@@ -157,6 +158,8 @@ how the C API works in order to properly use this module.
 Note that this is a wrapper for libzmq 3.x. For 2.x, you need to check L<ZMQ::LibZMQ2>
 
 =head1 BASIC USAGE
+
+Please make sure you already have ZMQ::Constants module. If you installed ZMQ::LibZMQ3 from CPAN via cpan/cpanm, it should have already been installed for you. All socket types and other flags are declared in this module.
 
 To start using ZMQ::LibZMQ3, you need to create a context object, then as many ZMQ::LibZMQ3::Socket obects as you need:
 
@@ -521,7 +524,7 @@ When you see the crash, get a backtrace:
 This is an early release. Proceed with caution, please report
 (or better yet: fix) bugs you encounter.
 
-This module has been tested againt B<zeromq 3.1.1>. Semantics of this
+This module has been tested againt B<zeromq 3.2.2>. Semantics of this
 module rely heavily on the underlying zeromq version. Make sure
 you know which version of zeromq you're working with.
 
@@ -530,6 +533,10 @@ you know which version of zeromq you're working with.
 L<http://zeromq.org>
 
 L<http://github.com/lestrrat/p5-ZMQ>
+
+L<ZMQ::Constants>
+
+L<ZMQ::LibZMQ2>
 
 =head1 AUTHOR
 
