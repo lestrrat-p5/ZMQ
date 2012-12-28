@@ -175,6 +175,10 @@ Note that this is a wrapper for libzmq 2.x. For 3.x, you need to check L<ZMQ::Li
 
 =head1 BASIC USAGE
 
+Please make sure you already have ZMQ::Constants module. If you installed ZMQ::L
+ibZMQ3 from CPAN via cpan/cpanm, it should have already been installed for you. 
+All socket types and other flags are declared in this module.
+
 To start using ZMQ::LibZMQ2, you need to create a context object, then as many ZMQ::LibZMQ2::Socket obects as you need:
 
     my $ctxt = zmq_init;
@@ -524,6 +528,10 @@ you know which version of zeromq you're working with.
 L<http://zeromq.org>
 
 L<http://github.com/lestrrat/p5-ZMQ>
+
+L<ZMQ::Constants>
+
+L<ZMQ::LibZMQ3>
 
 =head1 AUTHOR
 
