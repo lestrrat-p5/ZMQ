@@ -1,6 +1,13 @@
 Changes
 =======
 
+1.02 - Dec 26 2012
+    - Fix tools/detect_zmq.pl as it was checking for old libzmq2 version
+      (https://github.com/lestrrat/p5-ZMQ/pull/17), pr by @andyjones
+    - EXPERIMENTAL: Add zmq_proxy(). Test cases are most welcome.
+      (https://github.com/lestrrat/p5-ZMQ/issues/16)
+    - Fix SYNOPSIS for zmq_send(msg)?, zmq_recv(msg)?
+
 1.01 - Oct 09 2012
     - Fix memory leak in zmq_recvmsg(), retported by trinitum
       (https://github.com/lestrrat/p5-ZMQ/issues/15)
