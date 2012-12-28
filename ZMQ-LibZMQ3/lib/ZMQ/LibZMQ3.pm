@@ -102,8 +102,10 @@ ZMQ::LibZMQ3 - A libzmq 3.x wrapper for Perl
     my $rv   = zmq_setsockopt( $socket, $option, $value );
     my $val  = zmq_getsockopt( $socket, $option );
     my $rv   = zmq_bind( $sock, $addr );
-    my $rv   = zmq_send( $sock, $msg, $flags );
-    my $msg  = zmq_recv( $sock, $flags );
+    my $rv   = zmq_send( $sock, $buffer, $length, $flags );
+    my $msg  = zmq_sendmsg( $sock, $msg, $flags );
+    my $rv   = zmq_recv( $sock, $buffer, $length, $flags );
+    my $msg  = zmq_recvmsg( $sock, $flags );
 
 =head1 INSTALLATION
 
