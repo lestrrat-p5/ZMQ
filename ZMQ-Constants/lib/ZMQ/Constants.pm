@@ -202,8 +202,6 @@ $EXPORT_TAGS{all} = [ @EXPORT_OK ];
 
 our $VERSION = '1.01';
 
-our $DEFAULT_VERSION = '2.1.11';
-
 our %SOCKOPT_MAP;
 sub set_sockopt_type {
     my $type = shift;
@@ -354,6 +352,10 @@ ZMQ::Constants - Constants for libzmq
     use ZMQ::Constants ':v3.1.1', ':all'; # pulls in constants for 3.1.1
     use ZMQ::Constants ':v3.1.2', ':all'; # pulls in constants for 3.1.2
 
+    # If you know what you're doing, this is the best way:
+    # (i.e., explicitly import the symbols)
+    use ZMQ::Constants qw(ZMQ_REQ);
+
 =head1 DESCRIPTION
 
 libzmq is a fast-chanding beast and constants get renamed, new one gest
@@ -378,6 +380,14 @@ If don't care to be strict about which constants to import into your code, then 
 =head1 SUPPORTED VERSIONS
 
 I have checked that the constants for the following versions are available.
+
+Note that for regular usage, you should just explicitly import what you need.
+The following exist to basically allow me to create a sane catalog of what's
+available in what version. I reiterate: IN MOST CASES YOU SHOULD JUST IMPORT 
+WHAT YOU NEED:
+
+    use ZMQ::Constants qw(ZMQ_REP ZMQ_REQ); # etc
+
 Please send pullreqs if there are new constants that are not defined.
 
 =over 4
