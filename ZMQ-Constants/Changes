@@ -1,6 +1,10 @@
 Changes
 =======
 
+1.02 - Dec 28 2012
+    - Explicitly state that you should import constant names explicitly
+    - Remove unused variable DEFAULT_VERSION
+
 1.01 - Oct 20 2012
     - No code change
     - Upgrade to Module::Install 1.06
