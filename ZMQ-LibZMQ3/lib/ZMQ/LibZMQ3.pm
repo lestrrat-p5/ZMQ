@@ -36,6 +36,7 @@ our @EXPORT = qw(
     zmq_poll
 
     zmq_device
+    zmq_proxy
 );
 
 sub zmq_sendmsg {
@@ -141,10 +142,19 @@ If you want to compile with debugging on:
 =head1 DESCRIPTION
 
 The C<ZMQ::LibZMQ3> module is a wrapper of the 0MQ message passing library for Perl. 
-It's a thin wrapper around the C API. Please read L<http://zeromq.org> for
-more details on 0MQ.
 
-Note that this is a wrapper for libzmq 2.x. For 3.x, you need to check L<ZMQ::LibZMQ3>
+Before you start using this module, please make sure you have read and understood the zguide.
+
+    http://zguide.zeromq.org/page:all
+
+For specifics on each function, please refer to their documentation for the definitive explanation of each.
+
+    http://api.zeromq.org/
+
+This module is merely a thin wrapper around the C API: You need to understand
+how the C API works in order to properly use this module.
+
+Note that this is a wrapper for libzmq 3.x. For 2.x, you need to check L<ZMQ::LibZMQ2>
 
 =head1 BASIC USAGE
 
@@ -460,6 +470,8 @@ Creates a new "device". See C<zmq_device> for details. zmq_device() will only re
 This function does not work on some versions, as certain early versions of libzmq3.x do not implement it.
 
 =head2 zmq_proxy($frontend_sock, $backend_sock, $capture_sock)
+
+WARNING: EXPERIMENTAL. Use at your own risk.
 
 Start a proxy in the current thread, which connects the frontend socket to a
 backend socket. The capture sock is optional, and is by default undef.
