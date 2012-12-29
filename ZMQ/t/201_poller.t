@@ -27,12 +27,23 @@ for (;;) {
     for (@fired) {
         if ($_->{socket} == $push && $_->{events} == ZMQ_POLLOUT) {
             ok(1, 'push out fired');
-            $push->sendmsg('Hello');
+            if ( $ZMQ::BACKEND eq 'ZMQ::LibZMQ2' ) {
+                $push->send('Hello');
+            }
+            else {
+                $push->sendmsg('Hello');
+            }
             $cnt++;
         }
         elsif ($_->{socket} == $pull && $_->{events} == ZMQ_POLLIN) {
             ok(1, 'pull in fired');
-            my $msg = $pull->recvmsg;
+            my $msg;
+            if ( $ZMQ::BACKEND eq 'ZMQ::LibZMQ2' ) {
+                $msg = $pull->recv;
+            }
+            else {
+                $msg = $pull->recvmsg;
+            }
             is($msg->data, 'Hello');
             is($msg->size, 5);
             $cnt++;
