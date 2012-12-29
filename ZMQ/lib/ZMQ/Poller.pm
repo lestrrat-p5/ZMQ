@@ -65,3 +65,95 @@ sub poll {
 }
 
 1;
+
+__END__
+
+
+=head1 NAME
+
+ZMQ::Poller - Stateful wrapper around zmq_poll
+
+=head1 SYNOPSIS
+
+    use ZMQ;
+    use ZMQ::Constants qw/:all/;
+
+    my $ctx = ZMQ::Context->new;
+
+    my $push = $ctx->socket(ZMQ_PUSH);
+    $push->bind('tcp://127.0.0.1:5908');
+
+    my $pull = $ctx->socket(ZMQ_PULL);
+    $pull->connect('tcp://127.0.0.1:5908');
+
+    my $poller = ZMQ::Poller->new;
+    $poller->register($push, ZMQ_POLLOUT);
+    $poller->register($pull, ZMQ_POLLIN);
+
+    my $cnt = 0;
+
+    POLL: for (;;) {
+        my @fired = $poller->poll(1000); # 1 second timeout
+
+        for (@fired) {
+            if ($_->{socket} == $push && $_->{events} == ZMQ_POLLOUT) {
+                $push->sendmsg("Hello world");
+            }
+            elsif ($_->{socket} == $pull && $_->{events} == ZMQ_POLLIN) {
+                my $msg = $pull->recvmsg;
+                print $msg->data . "\n";
+                last POLL if ++$cnt == 10;
+            }
+        }
+    }
+
+=head1 DESCRIPTION
+
+ZMQ::Poller is a stateful wrapper around zmq_poll.
+
+=head1 METHODS
+
+=head2 ZMQ::Poller->new;
+
+Creates a new poller object.
+
+=head2 $poller->register($socket, ZMQ_POLLOUT|ZMQ_POLLIN)
+=head2 $poller->register($fd, ZMQ_POLLOUT|ZMQ_POLLIN)
+
+Register a socket or file descriptor for polling.
+
+=head2 $poller->unregister($socket)
+=head2 $poller->unregister($fd)
+
+Remove the socket or file descriptor from the poller. If the same socket or
+file descriptor is registered for different events then all these objects are
+removed from the poller.
+
+=head2 $poller->poll($timeout)
+
+Poll the registered sockets. Returns an array of the sockets and file
+descriptors that fired. If no sockets or file descriptors fire within the
+timeout an empty array is returned.
+
+Specify $timeout in milliseconds.
+
+=head1 SEE ALSO
+
+L<ZMQ>, L<ZMQ::Socket>
+
+L<http://zeromq.org>
+
+=head1 AUTHOR
+
+Peter Stuifzand E<lt>peter@stuifzand.euE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2012 by Peter Stuifzand
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.0 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
+
