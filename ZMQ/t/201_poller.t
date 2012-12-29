@@ -1,4 +1,5 @@
 use Test::More;
+use lib 'lib';
 
 use ZMQ;
 use ZMQ::Constants qw/:all/;
@@ -25,13 +26,15 @@ for (;;) {
 
     for (@fired) {
         if ($_->{socket} == $push && $_->{events} == ZMQ_POLLOUT) {
-            $push->sendmsg('Hello');
             ok(1, 'push out fired');
+            $push->sendmsg('Hello');
+            $cnt++;
         }
         elsif ($_->{socket} == $pull && $_->{events} == ZMQ_POLLIN) {
             ok(1, 'pull in fired');
             my $msg = $pull->recvmsg;
             is($msg->data, 'Hello');
+            is($msg->size, 5);
             $cnt++;
         }
     }

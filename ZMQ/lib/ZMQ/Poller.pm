@@ -1,8 +1,7 @@
 package ZMQ::Poller;
 use strict;
 
-use ZMQ::LibZMQ3;
-use ZMQ::Constants qw(ZMQ_PULL ZMQ_SUB ZMQ_SUBSCRIBE ZMQ_POLLIN);
+use ZMQ;
 
 sub new {
     my ($class) = @_;
@@ -29,32 +28,39 @@ sub _poll {
 
     my @pollitems;
     
+    my @fired = ((0) x scalar @$items);
+    my $i = 0;
+
     for (@$items) {
+        my $callback = (sub { my $n = shift; return sub { $fired[$n] = 1; }; })->($i);
+
         if (ref($_->{socket}) eq 'ZMQ::Socket') {
-            push @pollitems, { socket => $_->{socket}{_socket}, events => $_->{events}, callback => sub {} };
+            push @pollitems, { socket => $_->{socket}{_socket}, events => $_->{events}, callback => $callback };
         }
         elsif (ref($_->{socket}) eq 'ZMQ::LibZMQ2::Socket') {
-            push @pollitems, { socket => $_->{socket}, events => $_->{events}, callback => sub {} };
+            push @pollitems, { socket => $_->{socket}, events => $_->{events}, callback => sub { my $n = $i; $fired[$n] = 1; } };
         }
         elsif (ref($_->{socket}) eq 'ZMQ::LibZMQ3::Socket') {
-            push @pollitems, { socket => $_->{socket}, events => $_->{events}, callback => sub {} };
+            push @pollitems, { socket => $_->{socket}, events => $_->{events}, callback => sub { my $n = $i; $fired[$n] = 1;} };
         }
         elsif ($_->{socket} =~ m/^\d+$/) {
-            push @pollitems, { fd => int($_->{socket}), events => $_->{events}, callback => sub {} };
+            push @pollitems, { fd => int($_->{socket}), events => $_->{events}, callback => sub { my $n = $i; $fired[$n] = 1;} };
         }
         else {
             die "Unknown type of socket";
         }
     }
+    continue { $i++; };
 
-    my @rv = zmq_poll(\@pollitems, $timeout);
+    my @rv = ZMQ::call('zmq_poll', \@pollitems, $timeout);
 
     my @res;
-    my $i = 0;
-    for (@rv) {
-        push @res, $items->[$i] if $rv[$i];
+
+    my $c = 0;
+    for (@fired) {
+        push @res, $items->[$c] if $fired[$c];
     }
-    continue { $i++; }
+    continue { $c++; }
 
     return @res;
 }
