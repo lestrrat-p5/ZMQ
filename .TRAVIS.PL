@@ -58,7 +58,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     test_binding("ZMQ-Constants");
 } elsif ( $target eq 'ZMQ-CZMQ' ) {
     install_libzmq("zeromq-3.2.2");
-    install_libzmq("czmq-1.3.2", {
+    install_libzmq("czmq-1.3.2", undef, {
         extra_configure_args => [
             '--with-libzmq' => File::Spec->catdir($EXTDIR, "zeromq-3.2.2")
         ]
