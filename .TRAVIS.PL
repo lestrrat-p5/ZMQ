@@ -16,7 +16,7 @@ sub mysystem(@) {
 }
 
 sub install_libzmq(@) {
-    my ($basename, $tail) = @_;
+    my ($basename, $tail, %opts) = @_;
 
     $tail ||= '';
     my $prefix = File::Spec->catdir($EXTDIR, $basename);
@@ -28,7 +28,7 @@ sub install_libzmq(@) {
         mysystem("tar", "xzf", $file);
     }
     chdir $basename;
-    mysystem("./configure", "--prefix", $prefix);
+    mysystem("./configure", "--prefix", $prefix, @{$opts{extra_configure_args} ||[]});
     mysystem("make");
     mysystem("make", "install");
 
@@ -56,6 +56,19 @@ if ( $target eq 'ZMQ-Constants' ) {
         Test::Requires
     ));
     test_binding("ZMQ-Constants");
+} elsif ( $target eq 'ZMQ-CZMQ' ) {
+    install_libzmq("zeromq-3.2.2");
+    install_libzmq("czmq-1.3.2", {
+        extra_configure_args => [
+            '--with-libzmq' => File::Spec->catdir($EXTDIR, "zeromq-3.2.2")
+        ]
+    });
+    cpanm(qw(
+        inc::Module::Install
+        Module::Install::Repository
+        Test::Requires
+    ));
+    test_binding("ZMQ-CZMQ");
 } elsif ( $target eq 'ZMQ-LibZMQ2' ) {
     install_libzmq("zeromq-2.2.0");
     cpanm(qw(
