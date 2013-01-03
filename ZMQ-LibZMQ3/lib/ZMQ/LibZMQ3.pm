@@ -180,17 +180,17 @@ When sending data, you can either pass a ZMQ::LibZMQ3::Message object or a Perl 
 
     # the following two send() calls are equivalent
     my $msg = zmq_msg_init_data( "a simple message" );
-    zmq_send( $socket, $msg );
+    zmq_sendmsg( $socket, $msg );
     
-    zmq_send( $socket, "a simple message" ); 
+    zmq_sendmsg( $socket, "a simple message" ); 
 
 In most cases using ZMQ::LibZMQ3::Message is redundunt, so you will most likely use the string version.
 
-To receive, simply call C<zmq_recv()> on the socket
+To receive, simply call C<zmq_recvmsg()> on the socket
 
-    my $msg = zmq_recv( $socket );
+    my $msg = zmq_recvmsg( $socket );
 
-The received message is an instance of ZMQ::LibZMQ3::Message object, and you can access the content held in the message via the C<data()> method:
+The received message is an instance of ZMQ::LibZMQ3::Message object, and you can access the content held in the message via the C<zmq_msg_data()> method:
 
     my $data = zmq_msg_data( $msg );
 
@@ -237,7 +237,9 @@ Create separate contexts for each process, and therefore you shouldn't
 be sharing the socket objects either.
 
 For multi-thread environemnts, you can share the same context object. However
-you cannot share sockets.
+you cannot share sockets. Note that while the Perl Socket objects survive
+between threads, their underlying C structures do not, and you will get an 
+error if you try to use them between sockets.
 
 =head1 FUNCTIONS
 
