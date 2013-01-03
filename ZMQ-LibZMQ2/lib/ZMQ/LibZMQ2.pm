@@ -255,7 +255,9 @@ Create separate contexts for each process, and therefore you shouldn't
 be sharing the socket objects either.
 
 For multi-thread environemnts, you can share the same context object. However
-you cannot share sockets.
+you cannot share sockets. Note that while the Perl Socket objects survive
+between threads, their underlying C structures do not, and you will get an 
+error if you try to use them between sockets.
 
 =head1 FUNCTIONS
 
