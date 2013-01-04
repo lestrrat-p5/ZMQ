@@ -48,8 +48,17 @@ sub install_libzmq(@) {
 }
 
 sub cpanm (@) {
-    @_ = ("cpanm", "--notest", @_);
-    goto &mysystem;
+    eval {
+        mysystem("cpanm", "--notest", @_);
+    };
+    if (my $e = $@) {
+        my $cpanm_log = "/home/travis/.cpanm/build.log";
+        open my $fh, '<', $cpanm_log;
+        while (<$fh>) {
+            print;
+        }
+        die $e;
+    }
 }
 
 sub test_binding {
@@ -79,7 +88,10 @@ if ( $target eq 'ZMQ-Constants' ) {
     cpanm(qw(
         inc::Module::Install
         Module::Install::Repository
+        Module::Install::XSUtil
+        Module::Install::CheckLib
         Test::Requires
+        Test::TCP
     ));
     $ENV{CZMQ_HOME} = File::Spec->catdir($EXTDIR, "czmq-1.3.2");
     test_binding("ZMQ-CZMQ");
@@ -90,7 +102,6 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::AuthorTests
         Module::Install::CheckLib
         Module::Install::ReadmeFromPod
-        Module::Install::TestTarget
         Module::Install::XSUtil
         Module::Install::Repository
     ));
@@ -104,7 +115,6 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::AuthorTests
         Module::Install::CheckLib
         Module::Install::ReadmeFromPod
-        Module::Install::TestTarget
         Module::Install::XSUtil
         Module::Install::Repository
     ));
@@ -117,7 +127,6 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::AuthorTests
         Module::Install::CheckLib
         Module::Install::ReadmeFromPod
-        Module::Install::TestTarget
         Module::Install::XSUtil
         Module::Install::Repository
     ));

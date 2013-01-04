@@ -8,7 +8,7 @@ all_from 'lib/ZMQ/CZMQ.pm';
 use_xshelper '-clean';
 cc_warnings;
 cc_include_paths split/\s+/, $ENV{CZMQ_INCLUDES};
-cc_libs "$ENV{CZMQ_LIBS} -lzmq";
+cc_libs "$ENV{CZMQ_LIBS} -lzmq -lczmq";
 cc_include_paths 'xs';
 cc_src_paths 'xs';
 cc_assert_lib 'zmq', 'czmq';

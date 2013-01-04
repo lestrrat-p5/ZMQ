@@ -225,6 +225,8 @@ This is a wrapper around libczmq.
 
 =head2 zmsg_destroy
 
+=head2 zmsg_dump
+
 =head2 zmsg_dup
 
 =head2 zmsg_encode
@@ -270,6 +272,8 @@ This is a wrapper around libczmq.
 =head2 zsocket_destroy
 
 =head2 zsocket_new
+
+=head2 zsocket_poll
 
 =head2 zsocket_type_str
 
