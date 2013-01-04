@@ -1,5 +1,8 @@
 Changelog for Perl module ZMQ.
 
+1.03 - Jan 04 2013
+    - Add ZMQ::Poller (by @pstuifzand, https://github.com/lestrrat/p5-ZMQ/pull/19)
+
 1.02 - Oct 20 2012
     - No code change
     - Upgrade to Module::Install 1.06
