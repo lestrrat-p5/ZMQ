@@ -1,12 +1,46 @@
 package ZMQ::Socket;
 use strict;
 use ZMQ;
+use ZMQ::Constants qw/ZMQ_SNDMORE ZMQ_RCVMORE/;
 
 sub CLONE_SKIP { 1 }
 
 sub _wrap {
     my ($class, $sock) = @_;
     bless { _socket => $sock }, $class;
+}
+
+sub send_multipart {
+    my ($self, $msg, $flags) = @_;
+
+    $flags = 0 if !defined $flags;
+
+    my @frames = @$msg;
+
+    if (@frames) { # There is at least one part
+        my $last = pop @frames;
+        for (@frames) {
+            $self->_send_message($_, ZMQ_SNDMORE|$flags);
+        }
+        $self->_send_message($last, $flags);
+    }
+
+    return;
+}
+
+sub recv_multipart {
+    my ($self, $flags) = @_;
+    $flags = 0 if !defined $flags;
+
+    my @frames;
+
+    push @frames, $self->_recv_message($flags);
+
+    while ($self->getsockopt(ZMQ_RCVMORE)) {
+        push @frames, $self->_recv_message($flags);
+    }
+
+    return @frames;
 }
 
 sub close {
@@ -54,7 +88,6 @@ EOM
             sub recvmsg {
                 Carp::croak( "ZMQ::Socket->recvmsg is not implemented in this version ($ZMQ::BACKEND)" );
             }
-
 EOM
         die if $@;
     } else {
@@ -96,6 +129,15 @@ EOM
             }
 EOM
         die if $@;
+    }
+
+    if ($ZMQ::BACKEND eq 'ZMQ::LibZMQ2') {
+        *_send_message = \&send;
+        *_recv_message = \&recv;
+    }
+    else {
+        *_send_message = \&sendmsg;
+        *_recv_message = \&recvmsg;
     }
 }
 
@@ -218,6 +260,26 @@ the C<recvmsg()> method blocks until the request can be satisfied.
 The flags argument is a combination of the flags defined below.
 
 C<recvmsg> is only available if you are using C<ZMQ::LibZMQ3> as the underlying library.
+
+=head2 send_multipart( \@frames [, $flags] )
+
+The C<send_multipart(\@frames, $flags)> method sends a multipart message to the
+socket. The method will send the frames with the C<ZMQ_SNDMORE> flag, except
+for the last. The flags argument is a combination of the flags defined below.
+There is no return value.
+
+This method will use the right method for sending independent of the backend
+that is used.
+
+=head2 recv_multipart( [$flags] )
+
+The C<recv_multipart($flags)> method receives a multipart message from the
+socket and returns an array of C<ZMQ::Message> objects. The method will receive
+frames as long as the C<ZMQ_RCVMORE> flag is set on the socket. The flags argument
+is a combination of the flags defined below.
+
+This method will use the right method for receiving independent of the backend
+that is used.
 
 =head2 getsockopt
 
