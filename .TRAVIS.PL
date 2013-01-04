@@ -91,6 +91,7 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::XSUtil
         Module::Install::CheckLib
         Test::Requires
+        Test::TCP
     ));
     $ENV{CZMQ_HOME} = File::Spec->catdir($EXTDIR, "czmq-1.3.2");
     test_binding("ZMQ-CZMQ");
