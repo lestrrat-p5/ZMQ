@@ -88,6 +88,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     cpanm(qw(
         inc::Module::Install
         Module::Install::Repository
+        Module::Install::XSUtil
         Test::Requires
     ));
     $ENV{CZMQ_HOME} = File::Spec->catdir($EXTDIR, "czmq-1.3.2");
@@ -99,7 +100,6 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::AuthorTests
         Module::Install::CheckLib
         Module::Install::ReadmeFromPod
-        Module::Install::TestTarget
         Module::Install::XSUtil
         Module::Install::Repository
     ));
@@ -113,7 +113,6 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::AuthorTests
         Module::Install::CheckLib
         Module::Install::ReadmeFromPod
-        Module::Install::TestTarget
         Module::Install::XSUtil
         Module::Install::Repository
     ));
@@ -126,7 +125,6 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::AuthorTests
         Module::Install::CheckLib
         Module::Install::ReadmeFromPod
-        Module::Install::TestTarget
         Module::Install::XSUtil
         Module::Install::Repository
     ));
