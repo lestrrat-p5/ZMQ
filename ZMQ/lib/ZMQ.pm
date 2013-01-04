@@ -27,6 +27,7 @@ BEGIN {
 use ZMQ::Context;
 use ZMQ::Socket;
 use ZMQ::Message;
+use ZMQ::Poller;
 
 sub call {
     my $funcname = shift;
