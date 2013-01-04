@@ -1,6 +1,11 @@
 Changes
 =======
 
+1.03 - Jan 04 2013
+    - Tweaks to Makefile.PL
+    - Add doc stubs
+    - Make it so that this is also picked up by Travis CI
+
 1.02 - Oct 20 2012
     - No code change
     - Upgrade to Module::Install 1.06
