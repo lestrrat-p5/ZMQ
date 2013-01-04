@@ -1,6 +1,9 @@
 Changes
 =======
 
+1.03 - Jan 05 2013
+    - Update docs
+
 1.02 - Dec 26 2012
     - Fix tools/detect_zmq.pl as it was checking for old libzmq2 version
       (https://github.com/lestrrat/p5-ZMQ/pull/17), pr by @andyjones
