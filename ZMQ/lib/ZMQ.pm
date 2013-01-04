@@ -1,6 +1,6 @@
 package ZMQ;
 use strict;
-our $VERSION = '1.03';
+our $VERSION = '1.04';
 our $BACKEND;
 BEGIN {
     $BACKEND ||= $ENV{PERL_ZMQ_BACKEND};
