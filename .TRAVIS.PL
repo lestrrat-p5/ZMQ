@@ -48,8 +48,17 @@ sub install_libzmq(@) {
 }
 
 sub cpanm (@) {
-    @_ = ("cpanm", "--notest", @_);
-    goto &mysystem;
+    eval {
+        mysystem("cpanm", "--notest", @_);
+    };
+    if (my $e = $@) {
+        my $cpanm_log = "/home/travis/.cpanm/build.log";
+        open my $fh, '<', $cpanm_log;
+        while (<$fh>) {
+            print;
+        }
+        die $e;
+    }
 }
 
 sub test_binding {
