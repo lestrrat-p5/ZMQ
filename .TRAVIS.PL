@@ -89,6 +89,7 @@ if ( $target eq 'ZMQ-Constants' ) {
         inc::Module::Install
         Module::Install::Repository
         Module::Install::XSUtil
+        Module::Install::CheckLib
         Test::Requires
     ));
     $ENV{CZMQ_HOME} = File::Spec->catdir($EXTDIR, "czmq-1.3.2");
