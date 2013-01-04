@@ -1,6 +1,10 @@
 Changes
 =======
 
+1.04 - Jan 04 2013
+    - Update docs
+    - Remove Module::Install::TestTarget
+
 1.03 - Oct 09 2012
     - Fix memory leak in zmq_recv(), retported by trinitum
       (https://github.com/lestrrat/p5-ZMQ/issues/15)
