@@ -7,6 +7,15 @@ my $ROOT   = Cwd::abs_path( Cwd::cwd() );
 my $EXTDIR = File::Spec->catdir($ROOT, "ext");
 my $target = $ENV{PERL_ZMQ_TEST_TARGET} || 'ZMQ-LibZMQ2';
 
+sub myguard::DESTROY {
+    if ($_[0]->{code}) {
+        $_[0]->{code}->();
+    }
+}
+sub myguard(&) {
+    bless { code => $_[0] }, 'myguard';
+}
+
 if (! -d $target) {
     die "$target does not exist";
 }
@@ -27,6 +36,8 @@ sub install_libzmq(@) {
     if (! -e $basename) {
         mysystem("tar", "xzf", $file);
     }
+    my $cwd = Cwd::abs_path();
+    my $guard = myguard { chdir $cwd };
     chdir $basename;
     mysystem("./configure", "--prefix", $prefix, @{$opts{extra_configure_args} ||[]});
     mysystem("make");
@@ -43,6 +54,8 @@ sub cpanm (@) {
 
 sub test_binding {
     my $subdir = shift;
+    my $cwd = Cwd::abs_path();
+    my $guard = myguard { chdir $cwd };
     chdir File::Spec->catdir($ROOT, $subdir);
     cpanm("--installdeps", ".");
     mysystem("perl", "Makefile.PL");
