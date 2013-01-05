@@ -1,5 +1,10 @@
 Changelog for Perl module ZMQ.
 
+1.05 - Jan 05 2013
+    - Add send_multipart() and recv_multipart()
+      (by @pstuifzand, https://github.com/lestrrat/p5-ZMQ/pull/21)
+    - Slight tweak on Makefile.PL
+
 1.04 - Jan 04 2013
     - Distro packaging mess-up. I forgot to update the MANIFEST file.
       ZMQ::Poller is now included :/
