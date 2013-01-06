@@ -71,7 +71,7 @@ my %symbols = (
         'void zsockopt_set_maxmsgsize (void *socket, int maxmsgsize);',
         'void zsockopt_set_subscribe (void *socket, char * subscribe);',
         'void zsockopt_set_unsubscribe (void *socket, char * unsubscribe);',
-        'void zsockopt_set_hwm (void *socket, int hwm);',
+#        'void zsockopt_set_hwm (void *socket, int hwm);',
     ],
     4 => [
         'int  zsockopt_sndhwm (void *socket);',
@@ -109,10 +109,14 @@ my %symbols = (
 );
 
 my $this_version = delete $symbols{$major};
+if (! $this_version) {
+    warn "there are no deprecated symbols for $major.x";
+}
 my %unavailable;
 while ( my ($v, $list) = each %symbols ) {
     %unavailable = ( %unavailable, map { ($_ => 1) } @$list );
 }
+
 delete @unavailable{ @$this_version };
 
 my $parse_prologue = sub {
@@ -121,7 +125,7 @@ my $parse_prologue = sub {
     foreach my $arg ( split qr{\s*,\s*}, $params ) {
         if ($arg =~ m{^void \*socket}) {
             push @names, 'socket';
-            push @decls, "PerlCZMQ_zsocket_raw *socket";
+            push @decls, "PerlLibCZMQ1_zsocket_raw *socket";
         } elsif ( $arg =~ m{^.* (\w+)$} ) {
             push @names, $1;
             push @decls, $arg;

@@ -6,10 +6,10 @@ use List::Util qw(first);
 
 
 my @perl_types = qw(
-    ZMQ::CZMQ::zctx
-    ZMQ::CZMQ::zsocket
-    ZMQ::CZMQ::zframe
-    ZMQ::CZMQ::zmsg
+    ZMQ::LibCZMQ1::zctx
+    ZMQ::LibCZMQ1::zsocket
+    ZMQ::LibCZMQ1::zframe
+    ZMQ::LibCZMQ1::zmsg
 );
 
 # write_constants_file( File::Spec->catfile('xs', 'const-xs.inc') );
@@ -25,7 +25,7 @@ sub write_magic_file {
     print $fh <<EOM;
 STATIC_INLINE
 int
-PerlCZMQ_mg_free(pTHX_ SV * const sv, MAGIC *const mg ) {
+PerlLibCZMQ1_mg_free(pTHX_ SV * const sv, MAGIC *const mg ) {
     PERL_UNUSED_VAR(sv);
     Safefree(mg->mg_ptr);
     return 0;
@@ -33,14 +33,14 @@ PerlCZMQ_mg_free(pTHX_ SV * const sv, MAGIC *const mg ) {
 
 STATIC_INLINE
 int
-PerlCZMQ_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param) {
+PerlLibCZMQ1_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param) {
     PERL_UNUSED_VAR(mg);
     PERL_UNUSED_VAR(param);
     return 0;
 }
 
 STATIC_INLINE MAGIC*
-PerlCZMQ_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
+PerlLibCZMQ1_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
     MAGIC* mg;
 
     assert(sv   != NULL);
@@ -61,7 +61,7 @@ EOM
     foreach my $perl_type (@perl_types) {
         my $c_type = $perl_type;
         $c_type =~ s/::/_/g;
-        $c_type =~ s/^ZMQ_CZMQ/PerlCZMQ/;
+        $c_type =~ s/^ZMQ_LibCZMQ1/PerlLibCZMQ1/;
         my $vtablename = sprintf '%s_vtbl', $c_type;
 
         # check if we have a function named ${c_type}_free and ${c_type}_mg_dup
@@ -73,8 +73,8 @@ EOM
             $has_find++ if /^${c_type}_mg_find\b/;
         }
 
-        my $free = $has_free ? "${c_type}_mg_free" : "PerlCZMQ_mg_free";
-        my $dup  = $has_dup  ? "${c_type}_mg_dup"  : "PerlCZMQ_mg_dup";
+        my $free = $has_free ? "${c_type}_mg_free" : "PerlLibCZMQ1_mg_free";
+        my $dup  = $has_dup  ? "${c_type}_mg_dup"  : "PerlLibCZMQ1_mg_dup";
         print $fh <<EOM;
 static MGVTBL $vtablename = { /* for identity */
     NULL, /* get */
@@ -96,9 +96,9 @@ STATIC_INLINE MAGIC *
 ${c_type}_mg_find( pTHX_ SV* const sv ) {
     MAGIC *mg;
 
-    PerlCZMQ_trace( "START mg_find (${perl_type})" );
-    PerlCZMQ_trace( " + SV %p", sv )
-    mg = PerlCZMQ_mg_find( aTHX_ sv, &$vtablename );
+    PerlLibCZMQ1_trace( "START mg_find (${perl_type})" );
+    PerlLibCZMQ1_trace( " + SV %p", sv )
+    mg = PerlLibCZMQ1_mg_find( aTHX_ sv, &$vtablename );
     if (mg == NULL) {
         croak("${perl_type}: Invalid ${perl_type} object was passed to mg_find");
     }
@@ -168,7 +168,7 @@ sub write_typemap {
     push @decl, "const void * T_PV";
     push @decl, "Bool         T_BOOL";
     push @decl, "byte *       T_PV";
-    push @decl, "PerlCZMQ_zsocket_raw* PERLCZMQ_ZSOCKET_RAW";
+    push @decl, "PerlLibCZMQ1_zsocket_raw* PERLCZMQ_ZSOCKET_RAW";
     push @input, <<EOM;
 PERLCZMQ_ZSOCKET_RAW
     {
@@ -198,22 +198,22 @@ PERLCZMQ_ZSOCKET_RAW
             }
         }
 
-        mg = PerlCZMQ_zsocket_mg_find(aTHX_ SvRV(\$arg));
+        mg = PerlLibCZMQ1_zsocket_mg_find(aTHX_ SvRV(\$arg));
         if (mg) {
             if (mg->mg_ptr == NULL)
-                croak(\\"Invalid ZMQ::CZMQ::zsocket object (perhaps you've already freed it?)\\");
-            \$var = ((PerlCZMQ_zsocket *) mg->mg_ptr)->socket;
+                croak(\\"Invalid ZMQ::LibCZMQ1::zsocket object (perhaps you've already freed it?)\\");
+            \$var = ((PerlLibCZMQ1_zsocket *) mg->mg_ptr)->socket;
         }
 
         if (\$var == NULL)
-            croak(\\"Invalid ZMQ::CZMQ::zsocket object (perhaps you've already freed it?)\\");
+            croak(\\"Invalid ZMQ::LibCZMQ1::zsocket object (perhaps you've already freed it?)\\");
     }
 EOM
 
     foreach my $perl_type (@perl_types) {
         my $c_type = $perl_type;
         $c_type =~ s/::/_/g;
-        $c_type =~ s/^ZMQ_CZMQ_/PerlCZMQ_/;
+        $c_type =~ s/^ZMQ_LibCZMQ1_/PerlLibCZMQ1_/;
         my $typemap_type = 'T_' . uc $c_type;
 
         push @decl, "$c_type* $typemap_type";

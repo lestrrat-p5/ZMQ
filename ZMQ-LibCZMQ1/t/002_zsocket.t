@@ -3,7 +3,7 @@ use Test::More;
 use Test::TCP;
 BEGIN {
     use_ok "ZMQ::Constants", ":all";
-    use_ok "ZMQ::CZMQ";
+    use_ok "ZMQ::LibCZMQ1";
 }
 
 subtest 'basic' => sub {
@@ -12,7 +12,7 @@ subtest 'basic' => sub {
 
     my $socket = zsocket_new( $ctx, ZMQ_PAIR );
     ok $socket, "new socket";
-    isa_ok $socket, "ZMQ::CZMQ::zsocket";
+    isa_ok $socket, "ZMQ::LibCZMQ1::zsocket";
     
     zsocket_destroy( $ctx, $socket );
     zctx_destroy( $ctx );

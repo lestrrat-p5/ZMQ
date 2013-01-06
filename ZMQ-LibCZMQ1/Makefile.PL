@@ -2,8 +2,8 @@ use inc::Module::Install;
 
 do "tools/detect.pl";
 
-name 'ZMQ-CZMQ';
-all_from 'lib/ZMQ/CZMQ.pm';
+name 'ZMQ-LibCZMQ1';
+all_from 'lib/ZMQ/LibCZMQ1.pm';
 
 use_xshelper '-clean';
 cc_warnings;

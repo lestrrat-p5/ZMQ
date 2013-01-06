@@ -1,4 +1,4 @@
-package ZMQ::CZMQ;
+package ZMQ::LibCZMQ1;
 use strict;
 use Exporter 'import';
 use XSLoader;
@@ -156,11 +156,11 @@ sub zmsg_addstr {
 
 =head1 NAME
 
-ZMQ::CZMQ - Wrapper Around czmq high level ZMQ API
+ZMQ::LibCZMQ1 - Wrapper Around czmq high level ZMQ API
 
 =head1 SYNOPSIS
 
-    use ZMQ::CZMQ;
+    use ZMQ::LibCZMQ1;
 
     my $ctx = zctx_new();
     zctx_destroy( $ctx );
@@ -291,7 +291,7 @@ This is a wrapper around libczmq.
 
 =head2 zsockopt_maxmsgsize
 
-=head2 zsockopt_mcast_loop
+=head2 zsockopt_mcast_loop (only in libzmq 2.x)
 
 =head2 zsockopt_rate
 
@@ -313,7 +313,7 @@ This is a wrapper around libczmq.
 
 =head2 zsockopt_set_backlog
 
-=head2 zsockopt_set_hwm
+=head2 zsockopt_set_hwm (only for libzmq 2.x)
 
 =head2 zsockopt_set_identity
 
@@ -321,7 +321,7 @@ This is a wrapper around libczmq.
 
 =head2 zsockopt_set_maxmsgsize
 
-=head2 zsockopt_set_mcast_loop
+=head2 zsockopt_set_mcast_loop (only in libzmq 2.x)
 
 =head2 zsockopt_set_rate
 
@@ -333,9 +333,9 @@ This is a wrapper around libczmq.
 
 =head2 zsockopt_set_reconnect_ivl_max
 
-=head2 zsockopt_set_recovery_ivl
+=head2 zsockopt_set_recovery_ivl (only in libzmq 2.x)
 
-=head2 zsockopt_set_recovery_ivl_msec
+=head2 zsockopt_set_recovery_ivl_msec (only in libzmq 2.x)
 
 =head2 zsockopt_set_sndbuf
 
@@ -343,7 +343,7 @@ This is a wrapper around libczmq.
 
 =head2 zsockopt_set_subscribe
 
-=head2 zsockopt_set_swap
+=head2 zsockopt_set_swap (only in libzmq 2.x)
 
 =head2 zsockopt_set_unsubscribe
 
@@ -351,7 +351,7 @@ This is a wrapper around libczmq.
 
 =head2 zsockopt_sndhwm
 
-=head2 zsockopt_swap
+=head2 zsockopt_swap (only in libzmq 2.x)
 
 =head2 zsockopt_type
 

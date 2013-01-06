@@ -1,6 +1,9 @@
 Changes
 =======
 
+1.04
+    - Rename to ZMQ::LibCZMQ1
+
 1.03 - Jan 04 2013
     - Tweaks to Makefile.PL
     - Add doc stubs
