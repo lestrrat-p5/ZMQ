@@ -16,11 +16,54 @@ sub destroy {
 }
 
 BEGIN {
-    foreach my $method (qw(bind connect disconnect poll type_str)) {
+    foreach my $method (qw(
+        bind
+        connect
+        disconnect
+        poll
+        type_str
+        type
+    )) {
         eval <<EOM;
             sub $method {
                 my \$self = shift;
                 ZMQ::CZMQ::call("zsocket_$method", \$self->{_socket}, \@_);
+            }
+EOM
+        die if $@;
+    }
+
+    # These socket options are both getters and setters
+    foreach my $method (qw(
+        affinity
+        backlog
+        events
+        fd
+        identity
+        ipv4only
+        last_endpoint
+        linger
+        maxmsgsize
+        multicast_hops
+        rate
+        rcvbuf
+        rcvhwm
+        rcvmore
+        rcvtimeo
+        reconnect_ivl
+        reconnect_ivl_max
+        recovery_ivl
+        sndbuf
+        sndhwm
+        sndtimeo
+    )) {
+        eval <<EOM;
+            sub $method {
+                my \$self = shift;
+                return \@_ ?
+                    ZMQ::CZMQ::call("zsocket_set_$method", \$self->{_socket}, \@_) :
+                    ZMQ::CZMQ::call("zsocket_$method", \$self->{_socket});
+                ;
             }
 EOM
         die if $@;
@@ -44,17 +87,15 @@ sub sendm {
     return ZMQ::CZMQ::call("zstr_sendm", $self->{_socket}, @_);
 }
 
-sub sockopt {
-    my $self = shift;
-    my $name = shift;
-
-    $self->
-
 1;
 
 __END__
 
 =head1 NAME
+
+ZMQ::CZMQ::Zsocket - Wrapper Around zsocket_t
+
+=head1 SYNOPSIS
 
     use ZMQ::CZMQ;
     use ZMQ::Constants (ZMQ_REQ);
@@ -77,6 +118,28 @@ __END__
 
     # sockopts are very much dependent on the underlying
     # libzmq version: don't just trust this list
-    $sock->sockopt($optname);
+
+    # If you pass an argument, you can set values
+    $sock->affinity()
+    $sock->backlog()
+    $sock->events()
+    $sock->fd()
+    $sock->identity()
+    $sock->ipv4only()
+    $sock->last_endpoint()
+    $sock->linger()
+    $sock->maxmsgsize()
+    $sock->multicast_hops()
+    $sock->rate()
+    $sock->rcvbuf()
+    $sock->rcvhwm()
+    $sock->rcvmore()
+    $sock->rcvtimeo()
+    $sock->reconnect_ivl()
+    $sock->reconnect_ivl_max()
+    $sock->recovery_ivl()
+    $sock->sndbuf()
+    $sock->sndhwm()
+    $sock->sndtimeo()
 
 =cut

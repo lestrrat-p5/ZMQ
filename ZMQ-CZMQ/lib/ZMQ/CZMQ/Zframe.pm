@@ -19,8 +19,9 @@ sub dup {
     $class->_wrap( ZMQ::CZMQ::call("zframe_dup", $self->{_frame}) );
 }
 
-# Grr, zframe_send is wicked. You need to pass in a pointer to a pointer
-# of zframe, and it also gets rid of the frame... 
+sub send {
+    ZMQ::CZMQ::call("zframe_send", $_[0], $_[1]->{_socket});
+}
 
 # TODO: zframe_new_zero_copy
 
@@ -53,3 +54,17 @@ EOM
 }
 
 1;
+
+__END__
+
+=head1 NAME
+
+ZMQ::CZMQ::Zframe - Wrapper Around zframe_t
+
+=head1 SYNOPSIS
+
+    use ZMQ::CZMQ;
+
+    my $frame = zframe_new("foo", 3);
+
+=cut

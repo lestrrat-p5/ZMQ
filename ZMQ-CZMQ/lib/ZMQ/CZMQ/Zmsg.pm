@@ -88,7 +88,15 @@ EOM
 
 __END__
 
+=head1 NAME
+
+ZMQ::CZMQ::Zmsg - Wrapper Around zmsg_t
+
 =head1 SYNOPSIS
+
+    use ZMQ::CZMQ;
+
+    my $msg = zmsg_new();
 
     # Note: these methods invalidate the frame objects, because
     # memory ownership for the underlying buffer is now in zmq

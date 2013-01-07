@@ -49,6 +49,10 @@ EOM
 
 __END__
 
+=head1 NAME
+
+ZMQ::CZMQ::Ctx - Wrapper Around zctx_t
+
 =head1 SYNOPSIS
 
     use ZMQ::CZMQ;
