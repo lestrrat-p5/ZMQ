@@ -190,14 +190,9 @@ _zsocket_connect( socket, address )
            is such a pain, we're not going to allow it 
         */
         /* XXX czmq 1.1.0 defines this as void, where as 1.2.0 declares
-           it as int
+           it as int. We're not supporting old czmq
         */
-#ifdef CZMQ_VOID_RETURN_VALUES
-        zsocket_connect( socket, address );
-        RETVAL = 0;
-#else
         RETVAL = zsocket_connect( socket, address );
-#endif
     OUTPUT:
         RETVAL
 
