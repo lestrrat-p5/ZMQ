@@ -201,6 +201,160 @@ zsocket_poll( socket, msecs)
         PerlLibCZMQ1_zsocket_raw *socket;
         int msecs;
 
+int  zsocket_sndhwm (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_rcvhwm (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_affinity (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_rate (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_recovery_ivl (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_sndbuf (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_rcvbuf (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_linger (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_reconnect_ivl (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_reconnect_ivl_max (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_backlog (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_maxmsgsize (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_type (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_rcvmore (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_fd (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+int  zsocket_events (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+
+void zsocket_set_sndhwm (socket, sndhwm)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int sndhwm;
+
+void zsocket_set_rcvhwm (socket, rcvhwm)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int rcvhwm;
+
+void zsocket_set_affinity (socket, affinity)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int affinity;
+
+void zsocket_set_identity (socket, identity)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        char * identity;
+
+void zsocket_set_rate (socket, rate)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int rate;
+
+void zsocket_set_recovery_ivl (socket, recovery_ivl)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int recovery_ivl;
+
+void zsocket_set_sndbuf (socket, sndbuf)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int sndbuf;
+
+void zsocket_set_rcvbuf (socket, rcvbuf)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int rcvbuf;
+
+void zsocket_set_linger (socket, linger)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int linger;
+
+void zsocket_set_reconnect_ivl (socket, reconnect_ivl)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int reconnect_ivl;
+
+void zsocket_set_reconnect_ivl_max (socket, reconnect_ivl_max)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int reconnect_ivl_max;
+
+void zsocket_set_backlog (socket, backlog)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int backlog;
+
+void zsocket_set_maxmsgsize (socket, maxmsgsize)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int maxmsgsize;
+
+void zsocket_set_subscribe (socket, subscribe)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        char * subscribe;
+
+void zsocket_set_unsubscribe (socket, unsubscribe)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        char * unsubscribe;
+
+void zsocket_set_hwm (socket, hwm)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int hwm;
+    PPCODE:
+        croak( "zsocket_set_hwm is not available in this version of czmq" );
+
+void zsocket_set_recovery_ivl_msec (socket, recovery_ivl_msec)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int recovery_ivl_msec;
+    PPCODE:
+        croak( "zsocket_set_recovery_ivl_msec is not available in this version of czmq" );
+
+int  zsocket_swap (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+    PPCODE:
+        croak( "zsocket_swap is not available in this version of czmq" );
+
+int  zsocket_mcast_loop (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+    PPCODE:
+        croak( "zsocket_mcast_loop is not available in this version of czmq" );
+
+int  zsocket_hwm (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+    PPCODE:
+        croak( "zsocket_hwm is not available in this version of czmq" );
+
+void zsocket_set_mcast_loop (socket, mcast_loop)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int mcast_loop;
+    PPCODE:
+        croak( "zsocket_set_mcast_loop is not available in this version of czmq" );
+
+void zsocket_set_swap (socket, swap)
+        PerlLibCZMQ1_zsocket_raw *socket;
+        int swap;
+    PPCODE:
+        croak( "zsocket_set_swap is not available in this version of czmq" );
+
+int  zsocket_recovery_ivl_msec (socket)
+        PerlLibCZMQ1_zsocket_raw *socket;
+    PPCODE:
+#ifndef zsocket_recvoery_ivl_msec
+        croak( "zsocket_recovery_ivl_msec is not available in this version of czmq" );
+#endif
+
 char *
 zstr_recv(socket)
         PerlLibCZMQ1_zsocket_raw *socket;
@@ -222,8 +376,6 @@ int
 zstr_sendm(socket, string)
         PerlLibCZMQ1_zsocket_raw *socket;
         const char *string;
-
-INCLUDE: versioned-xs.inc
 
 PerlLibCZMQ1_zframe *
 zframe_new (data, size)

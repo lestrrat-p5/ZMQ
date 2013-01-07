@@ -25,9 +25,6 @@ postamble(<<'EOM');
 zmqinfo:
 	$(CC) $(PASTHRU_INC) $(INC) $(CCFLAGS) $(OPTIMIZE) $(PERLTYPE) $(MPOLLUTE) $(DEFINE_VERSION)  $(CCCDLFLAGS) "-I$(PERL_INC)" $(PASTHRU_DEFINE) $(DEFINE) zmqinfo.c -o zmqinfo
 
-gen_includes:
-	$(FULLPERLRUN) tools/gen_versioned.pl > src/versioned-xs.inc
-
 EOM
 
 auto_set_repository;
@@ -35,4 +32,4 @@ requires 'ZMQ::Constants';
 
 WriteAll;
 
-system $^X, "-i", "-pe", 's/pure_all :: config pm_to_blib subdirs linkext/pure_all :: zmqinfo gen_includes config pm_to_blib subdirs linkext/', 'Makefile';
+system $^X, "-i", "-pe", 's/pure_all :: config pm_to_blib subdirs linkext/pure_all :: zmqinfo config pm_to_blib subdirs linkext/', 'Makefile';
