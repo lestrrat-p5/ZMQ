@@ -221,6 +221,8 @@ In scalar context returns dotted version string.
 
 =head2 zframe_strhex
 
+=head2 zframe_zero_copy
+
 =head2 zmsg_add
 
 =head2 zmsg_addmem
