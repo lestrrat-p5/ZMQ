@@ -71,21 +71,13 @@ sub test_binding {
     mysystem("make", "test");
 }
 
-sub setup_libczmq {
+sub install_libczmq {
     install_libzmq("zeromq-3.2.2");
     install_libzmq("czmq-1.3.2", {
         extra_configure_args => [
             '--with-libzmq' => File::Spec->catdir($EXTDIR, "zeromq-3.2.2")
         ]
     });
-    cpanm(qw(
-        inc::Module::Install
-        Module::Install::Repository
-        Module::Install::XSUtil
-        Module::Install::CheckLib
-        Test::Requires
-        Test::TCP
-    ));
 }
 
 if ( $target eq 'ZMQ-Constants' ) {
@@ -96,12 +88,28 @@ if ( $target eq 'ZMQ-Constants' ) {
     ));
     test_binding("ZMQ-Constants");
 } elsif ( $target eq 'ZMQ-CZMQ' ) {
-    setup_libczmq();
+    install_libczmq();
+    cpanm(qw(
+        inc::Module::Install
+        Module::Install::Repository
+        Module::Install::XSUtil
+        Module::Install::CheckLib
+        Test::Requires
+        Test::TCP
+    ));
     $ENV{CZMQ_HOME} = File::Spec->catdir($EXTDIR, "czmq-1.3.2");
     cpanm(File::Spec->catdir($ROOT, "ZMQ-LibCZMQ1"));
     test_binding("ZMQ-CZMQ");
 } elsif ( $target eq 'ZMQ-LibCZMQ1' ) {
-    setup_libczmq();
+    install_libczmq();
+    cpanm(qw(
+        inc::Module::Install
+        Module::Install::Repository
+        Module::Install::XSUtil
+        Module::Install::CheckLib
+        Test::Requires
+        Test::TCP
+    ));
     $ENV{CZMQ_HOME} = File::Spec->catdir($EXTDIR, "czmq-1.3.2");
     test_binding("ZMQ-LibCZMQ1");
 } elsif ( $target eq 'ZMQ-LibZMQ2' ) {
