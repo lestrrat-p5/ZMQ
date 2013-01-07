@@ -5,7 +5,7 @@ BEGIN {
     use_ok "ZMQ::LibCZMQ1", qw(:zctx);
 }
 
-diag "Using czmq version " . scalar ZMQ::LibCZMQ1::version();
+diag "Using czmq version " . scalar ZMQ::LibCZMQ1::czmq_version();
 
 subtest 'basic' => sub {
     my $ctx = zctx_new();

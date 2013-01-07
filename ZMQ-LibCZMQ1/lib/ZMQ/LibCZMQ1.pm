@@ -194,7 +194,7 @@ requests if you have problems.
 
 =head1 FUNCTIONS
 
-=head2 version()
+=head2 czmq_version()
 
 In list context, returns 3 elements consisting of major version, minor version, and patch version.
 

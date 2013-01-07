@@ -72,7 +72,7 @@ MODULE = ZMQ::LibCZMQ1  PACKAGE = ZMQ::LibCZMQ1
 PROTOTYPES: DISABLE
 
 void
-version()
+czmq_version()
     PREINIT:
         I32 gimme;
     PPCODE:
