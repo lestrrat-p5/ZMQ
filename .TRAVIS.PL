@@ -71,7 +71,7 @@ sub test_binding {
     mysystem("make", "test");
 }
 
-sub setup_czmq {
+sub setup_libczmq {
     install_libzmq("zeromq-3.2.2");
     install_libzmq("czmq-1.3.2", {
         extra_configure_args => [
@@ -101,7 +101,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     cpanm(File::Spec->catdir($ROOT, "ZMQ-LibCZMQ1"));
     test_binding("ZMQ-CZMQ");
 } elsif ( $target eq 'ZMQ-LibCZMQ1' ) {
-    setup_czmq();
+    setup_libczmq();
     $ENV{CZMQ_HOME} = File::Spec->catdir($EXTDIR, "czmq-1.3.2");
     test_binding("ZMQ-LibCZMQ1");
 } elsif ( $target eq 'ZMQ-LibZMQ2' ) {
