@@ -1,28 +1,6 @@
 Changes
 =======
 
-1.04
-    - Rename to ZMQ::LibCZMQ1
-
-1.03 - Jan 04 2013
-    - Tweaks to Makefile.PL
-    - Add doc stubs
-    - Make it so that this is also picked up by Travis CI
-
-1.02 - Oct 20 2012
-    - No code change
-    - Upgrade to Module::Install 1.06
-      (see http://weblog.bulknews.net/post/33907905561/do-not-ship-modules-with-module-install-1-04)
-
-1.01 - May 10 2012
-    - Merge (https://github.com/lestrrat/p5-ZMQ/pull/5) by taryk
-      * Fix zmsg_addstr()
-      * Add zmsg_*, zframe_*, zsockopt_* and zctxt_interrupted to EXPORT_OK
-
-1.00 - Apr 05 2012
-    - Compilation under threaded Perls
-    - Yes, I know there are compilation warnings
-
-1.00_01 - Mar 26 2012
-    - Initial release
+0.01
+    - Rename from ZMQ::CZMQ to ZMQ::LibCZMQ1
 

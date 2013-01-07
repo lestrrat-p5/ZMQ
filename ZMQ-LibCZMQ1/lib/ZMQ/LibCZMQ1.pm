@@ -4,7 +4,7 @@ use Exporter 'import';
 use XSLoader;
 our $VERSION;
 BEGIN {
-    $VERSION = '1.03';
+    $VERSION = '0.01';
     XSLoader::load(__PACKAGE__, $VERSION);
 }
 
@@ -181,11 +181,16 @@ ZMQ::LibCZMQ1 - Wrapper Around czmq high level ZMQ API
     zctx_set_iothreads( $ctx, $iothreads );
     zctx_set_linger( $ctx, $linger );
 
+    # ...and a lot more
+
 =head1 DESCRIPTION
 
 This is a wrapper around libczmq (1.3.4). Versions prior to 1.3.4 have been
 deliberately dropped off from the supported libczmq version (however,
 patches are welcome)
+
+This module is still in heavey development. Please send issues, patches and pull 
+requests if you have problems.
 
 =head1 FUNCTIONS
 
