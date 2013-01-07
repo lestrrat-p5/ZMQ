@@ -203,9 +203,17 @@ zsocket_poll( socket, msecs)
 
 int  zsocket_sndhwm (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
+    PREINIT:
+#ifndef zsocket_sndhwm
+        croak( "zsocket_sndhwm is not available in this version of czmq" );
+#endif
 
 int  zsocket_rcvhwm (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
+    PREINIT:
+#ifndef zsocket_rcvhwm
+        croak( "zsocket_rcvhwm is not available in this version of czmq" );
+#endif
 
 int  zsocket_affinity (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
@@ -236,6 +244,10 @@ int  zsocket_backlog (socket)
 
 int  zsocket_maxmsgsize (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
+    PREINIT:
+#ifndef zsocket_maxmsgsize
+        croak( "zsocket_maxmsgsize is not available in this version of czmq" );
+#endif
 
 int  zsocket_type (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
@@ -252,10 +264,18 @@ int  zsocket_events (socket)
 void zsocket_set_sndhwm (socket, sndhwm)
         PerlLibCZMQ1_zsocket_raw *socket;
         int sndhwm;
+    PREINIT:
+#ifndef zsocket_set_sndhwm
+        croak( "zsocket_set_sndhwm is not available in this version of czmq" );
+#endif
 
 void zsocket_set_rcvhwm (socket, rcvhwm)
         PerlLibCZMQ1_zsocket_raw *socket;
         int rcvhwm;
+    PREINIT:
+#ifndef zsocket_set_rcvhwm
+        croak( "zsocket_set_rcvhwm is not available in this version of czmq" );
+#endif
 
 void zsocket_set_affinity (socket, affinity)
         PerlLibCZMQ1_zsocket_raw *socket;
@@ -300,6 +320,10 @@ void zsocket_set_backlog (socket, backlog)
 void zsocket_set_maxmsgsize (socket, maxmsgsize)
         PerlLibCZMQ1_zsocket_raw *socket;
         int maxmsgsize;
+    PREINIT:
+#ifndef zsocket_set_maxmsgsize
+        croak( "zsocket_set_maxmsgsize is not available in this version of czmq" );
+#endif
 
 void zsocket_set_subscribe (socket, subscribe)
         PerlLibCZMQ1_zsocket_raw *socket;
@@ -312,46 +336,64 @@ void zsocket_set_unsubscribe (socket, unsubscribe)
 void zsocket_set_hwm (socket, hwm)
         PerlLibCZMQ1_zsocket_raw *socket;
         int hwm;
-    PPCODE:
+    PREINIT:
+#ifndef zsocket_set_hwm
+        PERL_UNUSED_VAR(hwm);
         croak( "zsocket_set_hwm is not available in this version of czmq" );
+#endif
 
 void zsocket_set_recovery_ivl_msec (socket, recovery_ivl_msec)
         PerlLibCZMQ1_zsocket_raw *socket;
         int recovery_ivl_msec;
-    PPCODE:
+    PREINIT:
+#ifndef zsocket_set_recovery_ivl_msec
+        PERL_UNUSED_VAR(recovery_ivl_msec);
         croak( "zsocket_set_recovery_ivl_msec is not available in this version of czmq" );
+#endif zsocket_set_recovery_ivl_msec
 
 int  zsocket_swap (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
-    PPCODE:
+    PREINIT:
+#ifndef zsocket_swap
         croak( "zsocket_swap is not available in this version of czmq" );
+#endif
 
 int  zsocket_mcast_loop (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
-    PPCODE:
+    PREINIT:
+#ifndef zsocket_mcast_loop
         croak( "zsocket_mcast_loop is not available in this version of czmq" );
+#endif
 
 int  zsocket_hwm (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
-    PPCODE:
+    PREINIT:
+#ifndef zsocket_hwm
         croak( "zsocket_hwm is not available in this version of czmq" );
+#endif
 
 void zsocket_set_mcast_loop (socket, mcast_loop)
         PerlLibCZMQ1_zsocket_raw *socket;
         int mcast_loop;
-    PPCODE:
+    PREINIT:
+#ifndef zsocket_set_mcast_loop
+        PERL_UNUSED_VAR(mcast_loop);
         croak( "zsocket_set_mcast_loop is not available in this version of czmq" );
+#endif
 
 void zsocket_set_swap (socket, swap)
         PerlLibCZMQ1_zsocket_raw *socket;
         int swap;
-    PPCODE:
+    PREINIT:
+#ifndef zsocket_set_sawp
+        PERL_UNUSED_VAR(swap);
         croak( "zsocket_set_swap is not available in this version of czmq" );
+#endif
 
 int  zsocket_recovery_ivl_msec (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
-    PPCODE:
-#ifndef zsocket_recvoery_ivl_msec
+    PREINIT:
+#ifndef zsocket_recovery_ivl_msec
         croak( "zsocket_recovery_ivl_msec is not available in this version of czmq" );
 #endif
 
