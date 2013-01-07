@@ -9,8 +9,8 @@ use_xshelper '-clean';
 cc_warnings;
 cc_include_paths split/\s+/, $ENV{CZMQ_INCLUDES};
 cc_libs "$ENV{CZMQ_LIBS} -lzmq -lczmq";
-cc_include_paths 'xs';
-cc_src_paths 'xs';
+cc_include_paths 'src';
+cc_src_paths 'src';
 cc_assert_lib 'zmq', 'czmq';
 
 if ($ENV{CZMQ_VOID_RETURN_VALUES}) {
@@ -19,14 +19,14 @@ if ($ENV{CZMQ_VOID_RETURN_VALUES}) {
 
 do 'tools/genfiles.pl';
 
-clean_files "xs/typemap", "xs/*.inc", "zmqinfo";
+clean_files "src/typemap", "src/*.inc", "zmqinfo";
 
 postamble(<<'EOM');
 zmqinfo:
 	$(CC) $(PASTHRU_INC) $(INC) $(CCFLAGS) $(OPTIMIZE) $(PERLTYPE) $(MPOLLUTE) $(DEFINE_VERSION)  $(CCCDLFLAGS) "-I$(PERL_INC)" $(PASTHRU_DEFINE) $(DEFINE) zmqinfo.c -o zmqinfo
 
 gen_includes:
-	$(FULLPERLRUN) tools/gen_versioned.pl > xs/versioned-xs.inc
+	$(FULLPERLRUN) tools/gen_versioned.pl > src/versioned-xs.inc
 
 EOM
 

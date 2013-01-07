@@ -169,7 +169,9 @@ ZMQ::LibCZMQ1 - Wrapper Around czmq high level ZMQ API
 
 =head1 DESCRIPTION
 
-This is a wrapper around libczmq. 
+This is a wrapper around libczmq (1.3.4). Versions prior to 1.3.4 have been
+deliberately dropped off from the supported libczmq version (however,
+patches are welcome)
 
 =head1 FUNCTIONS
 

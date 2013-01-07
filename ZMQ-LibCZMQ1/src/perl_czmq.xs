@@ -1,7 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
-#include "xs/perl_czmq.h"
+#include "perl_czmq.h"
 
 STATIC_INLINE
 int
@@ -70,6 +70,31 @@ PerlLibCZMQ1_zmsg_mg_free(pTHX_ SV * const sv, MAGIC *const mg) {
 MODULE = ZMQ::LibCZMQ1  PACKAGE = ZMQ::LibCZMQ1 
 
 PROTOTYPES: DISABLE
+
+void
+version()
+    PREINIT:
+        I32 gimme;
+    PPCODE:
+        gimme = GIMME_V;
+        if (gimme == G_VOID) {
+            XSRETURN(0);
+        }
+
+        if (gimme == G_SCALAR) {
+            XPUSHs(sv_2mortal(newSVpvf(
+                "%d.%d.%d",
+                CZMQ_VERSION_MAJOR,
+                CZMQ_VERSION_MINOR,
+                CZMQ_VERSION_PATCH
+            )));
+            XSRETURN(1);
+        } else {
+            mXPUSHi(CZMQ_VERSION_MAJOR);
+            mXPUSHi(CZMQ_VERSION_MINOR);
+            mXPUSHi(CZMQ_VERSION_PATCH);
+            XSRETURN(3);
+        }
 
 PerlLibCZMQ1_zctx *
 zctx_new()
