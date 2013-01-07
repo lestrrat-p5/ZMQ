@@ -12,7 +12,7 @@ subtest 'basic' => sub {
 
     my $socket = zsocket_new( $ctx, ZMQ_PAIR );
     ok $socket, "new socket";
-    isa_ok $socket, "ZMQ::LibCZMQ1::zsocket";
+    isa_ok $socket, "ZMQ::LibCZMQ1::Zsocket";
     
     zsocket_destroy( $ctx, $socket );
     zctx_destroy( $ctx );

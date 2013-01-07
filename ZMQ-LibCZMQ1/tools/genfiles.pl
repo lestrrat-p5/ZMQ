@@ -6,15 +6,15 @@ use List::Util qw(first);
 
 
 my @perl_types = qw(
-    ZMQ::LibCZMQ1::zctx
-    ZMQ::LibCZMQ1::zsocket
-    ZMQ::LibCZMQ1::zframe
-    ZMQ::LibCZMQ1::zmsg
+    ZMQ::LibCZMQ1::Zctx
+    ZMQ::LibCZMQ1::Zsocket
+    ZMQ::LibCZMQ1::Zframe
+    ZMQ::LibCZMQ1::Zmsg
 );
 
-# write_constants_file( File::Spec->catfile('xs', 'const-xs.inc') );
-write_typemap( File::Spec->catfile('xs', 'typemap') );
-write_magic_file( File::Spec->catfile('xs', 'mg-xs.inc') );
+# write_constants_file( File::Spec->catfile('src', 'const-xs.inc') );
+write_typemap( File::Spec->catfile('src', 'typemap') );
+write_magic_file( File::Spec->catfile('src', 'mg-xs.inc') );
 
 sub write_magic_file {
     my $file = shift;
@@ -61,7 +61,7 @@ EOM
     foreach my $perl_type (@perl_types) {
         my $c_type = $perl_type;
         $c_type =~ s/::/_/g;
-        $c_type =~ s/^ZMQ_LibCZMQ1/PerlLibCZMQ1/;
+        $c_type =~ s/^ZMQ_LibCZMQ1_Z/PerlLibCZMQ1_z/;
         my $vtablename = sprintf '%s_vtbl', $c_type;
 
         # check if we have a function named ${c_type}_free and ${c_type}_mg_dup
@@ -213,7 +213,7 @@ EOM
     foreach my $perl_type (@perl_types) {
         my $c_type = $perl_type;
         $c_type =~ s/::/_/g;
-        $c_type =~ s/^ZMQ_LibCZMQ1_/PerlLibCZMQ1_/;
+        $c_type =~ s/^ZMQ_LibCZMQ1_Z/PerlLibCZMQ1_z/;
         my $typemap_type = 'T_' . uc $c_type;
 
         push @decl, "$c_type* $typemap_type";
