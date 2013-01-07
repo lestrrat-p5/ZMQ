@@ -1,7 +1,7 @@
 Changes
 =======
 
-1.04
+1.04 - Jan 07 2013
     - C binding has been Renamed to ZMQ::LibCZMQ1
     - ZMQ::CZMQ is now like ZMQ.pm, a pure-perl wrapper over ZMQ::LibCZMQ1
 
