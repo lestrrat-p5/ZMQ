@@ -98,7 +98,7 @@ if ( $target eq 'ZMQ-Constants' ) {
 } elsif ( $target eq 'ZMQ-CZMQ' ) {
     setup_libczmq();
     $ENV{CZMQ_HOME} = File::Spec->catdir($EXTDIR, "czmq-1.3.2");
-    cpanm(File::Spec->catdir($ROOT, "ZMQ-LibCZMQ1");
+    cpanm(File::Spec->catdir($ROOT, "ZMQ-LibCZMQ1"));
     test_binding("ZMQ-CZMQ");
 } elsif ( $target eq 'ZMQ-LibCZMQ1' ) {
     setup_czmq();
