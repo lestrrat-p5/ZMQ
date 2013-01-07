@@ -254,17 +254,12 @@ zframe_recv_nowait(socket)
         SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zframe", 0));
 
 int
-zframe_send(frame, socket, flags)
+zframe_send(frame, socket, flags = 0)
         PerlLibCZMQ1_zframe *frame;
         PerlLibCZMQ1_zsocket_raw *socket;
         int flags;
     CODE:
-#ifdef CZMQ_VOID_RETURN_VALUES
-        zframe_send( &frame, socket, flags );
-        RETVAL = 1;
-#else
         RETVAL = zframe_send( &frame, socket, flags );
-#endif
         /* frame should be destroyed now... */
         if (RETVAL == 0) {
             MAGIC *mg = PerlLibCZMQ1_zframe_mg_find(aTHX_ SvRV(ST(0)));
