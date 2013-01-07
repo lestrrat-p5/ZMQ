@@ -99,7 +99,7 @@ version()
 PerlLibCZMQ1_zctx *
 zctx_new()
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zctx", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zctx", 0));
 
 void
 zctx_destroy( ctx )
@@ -137,7 +137,7 @@ zsocket_new( ctx, type )
         PerlLibCZMQ1_zctx *ctx;
         int type
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zsocket", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zsocket", 0));
         void *socket;
     CODE:
         socket = zsocket_new( ctx, type );
@@ -231,7 +231,7 @@ zframe_new (data, size)
         const void *data;
         size_t      size;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zframe", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zframe", 0));
 
 void
 zframe_destroy(frame)
@@ -250,13 +250,13 @@ PerlLibCZMQ1_zframe *
 zframe_recv(socket)
         PerlLibCZMQ1_zsocket_raw *socket;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zframe", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zframe", 0));
 
 PerlLibCZMQ1_zframe *
 zframe_recv_nowait(socket)
         PerlLibCZMQ1_zsocket_raw *socket;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zframe", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zframe", 0));
 
 int
 zframe_send(frame, socket, flags)
@@ -293,7 +293,7 @@ PerlLibCZMQ1_zframe *
 zframe_dup(frame)
         PerlLibCZMQ1_zframe *frame;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zframe", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zframe", 0));
 
 char *
 zframe_strhex(frame)
@@ -346,7 +346,7 @@ zframe_zero_copy(frame)
 PerlLibCZMQ1_zmsg *
 zmsg_new()
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zmsg", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zmsg", 0));
 
 void
 zmsg_destroy(msg)
@@ -365,7 +365,7 @@ PerlLibCZMQ1_zmsg *
 zmsg_recv(socket)
         PerlLibCZMQ1_zsocket_raw *socket;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zmsg", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zmsg", 0));
 
 void
 zmsg_send(msg, socket)
@@ -409,7 +409,7 @@ PerlLibCZMQ1_zframe *
 zmsg_pop(msg)
         PerlLibCZMQ1_zmsg *msg;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zmsg", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zmsg", 0));
 
 #ifdef CZMQ_VOID_RETURN_VALUES
 
@@ -474,7 +474,7 @@ PerlLibCZMQ1_zframe *
 zmsg_unwrap(msg)
         PerlLibCZMQ1_zmsg *msg;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zmsg", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zmsg", 0));
 
 void
 zmsg_remove(msg, frame)
@@ -485,19 +485,19 @@ PerlLibCZMQ1_zframe *
 zmsg_first(msg)
         PerlLibCZMQ1_zmsg *msg;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zmsg", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zmsg", 0));
 
 PerlLibCZMQ1_zframe *
 zmsg_next(msg)
         PerlLibCZMQ1_zmsg *msg;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zmsg", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zmsg", 0));
 
 PerlLibCZMQ1_zframe *
 zmsg_last(msg)
         PerlLibCZMQ1_zmsg *msg;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zmsg", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zmsg", 0));
 
 int
 zmsg_save(msg, file)
@@ -509,7 +509,7 @@ zmsg_load(msg, file)
         PerlLibCZMQ1_zmsg *msg;
         FILE *file;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zmsg", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zmsg", 0));
 
 size_t
 zmsg_encode(msg, sv)
@@ -528,13 +528,13 @@ zmsg_decode(buffer, size)
         byte *buffer;
         size_t size;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zmsg", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zmsg", 0));
 
 PerlLibCZMQ1_zmsg *
 zmsg_dup(msg)
         PerlLibCZMQ1_zmsg *msg;
     PREINIT:
-        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::zmsg", 0));
+        SV *class_sv = sv_2mortal(newSVpv("ZMQ::LibCZMQ1::Zmsg", 0));
 
 void
 zmsg_dump(msg)
