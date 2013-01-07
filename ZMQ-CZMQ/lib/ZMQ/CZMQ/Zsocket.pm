@@ -142,4 +142,66 @@ ZMQ::CZMQ::Zsocket - Wrapper Around zsocket_t
     $sock->sndhwm()
     $sock->sndtimeo()
 
+=head1 METHODS
+
+=head2 affinity
+
+=head2 backlog
+
+=head2 bind
+
+=head2 connect
+
+=head2 destroy
+
+=head2 disconnect
+
+=head2 events
+
+=head2 fd
+
+=head2 identity
+
+=head2 ipv4only
+
+=head2 last_endpoint
+
+=head2 linger
+
+=head2 maxmsgsize
+
+=head2 multicast_hops
+
+=head2 poll
+
+=head2 rate
+
+=head2 rcvbuf
+
+=head2 rcvhwm
+
+=head2 rcvmore
+
+=head2 rcvtimeo
+
+=head2 reconnect_ivl
+
+=head2 reconnect_ivl_max
+
+=head2 recovery_ivl
+
+=head2 send
+
+=head2 sendm
+
+=head2 sndbuf
+
+=head2 sndhwm
+
+=head2 sndtimeo
+
+=head2 type
+
+=head2 type_str
+
 =cut

@@ -104,4 +104,48 @@ ZMQ::CZMQ::Zmsg - Wrapper Around zmsg_t
     $msg->push($frame);
     $msg->add($frame);
 
+=head1 METHODS
+
+=head2 add
+
+=head2 addmem
+
+=head2 addstr
+
+=head2 content_size
+
+=head2 dump
+
+=head2 dup
+
+=head2 first
+
+=head2 last
+
+=head2 load
+
+=head2 new
+
+=head2 next
+
+=head2 pop
+
+=head2 popstr
+
+=head2 push
+
+=head2 pushmem
+
+=head2 pushstr
+
+=head2 remove
+
+=head2 save
+
+=head2 size
+
+=head2 unwrap
+
+=head2 wrap
+
 =cut

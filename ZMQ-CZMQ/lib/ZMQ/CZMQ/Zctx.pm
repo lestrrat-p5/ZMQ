@@ -67,4 +67,24 @@ ZMQ::CZMQ::Ctx - Wrapper Around zctx_t
 
     my $sock = $ctx->socket(ZMQ_REQ);
 
+=head1 METHODS
+
+=head2 destroy
+
+=head2 new
+
+=head2 set_hwm
+
+=head2 set_io_threads
+
+=head2 set_linger
+
+=head2 shadow
+
+=head2 socket
+
+=head2 socket_destroy
+
+For now, internal use for ZMQ::CZMQ::Zctx.
+
 =cut

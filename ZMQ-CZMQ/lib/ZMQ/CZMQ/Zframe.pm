@@ -42,7 +42,7 @@ EOM
     }
 
 
-    foreach my $method (qw(destroy size data strhex strdup streq zero_copy more eq print reset)) {
+    foreach my $method (qw(destroy size data strhex strdup streq zero_copy eq more  print reset)) {
         eval <<EOM;
             sub $method {
                 my \$self = shift;
@@ -66,5 +66,39 @@ ZMQ::CZMQ::Zframe - Wrapper Around zframe_t
     use ZMQ::CZMQ;
 
     my $frame = zframe_new("foo", 3);
+
+=head1 METHODS
+
+=head2 data
+
+=head2 destroy
+
+=head2 dup
+
+=head2 eq
+
+=head2 more
+
+=head2 new
+
+=head2 print
+
+=head2 recv
+
+=head2 recv_nowait
+
+=head2 reset
+
+=head2 send
+
+=head2 size
+
+=head2 strdup
+
+=head2 streq
+
+=head2 strhex
+
+=head2 zero_copy
 
 =cut
