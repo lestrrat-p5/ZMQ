@@ -34,6 +34,37 @@ PerlLibCZMQ1_zsocket_mg_free(pTHX_ SV * const sv, MAGIC *const mg ) {
     return 0;
 }
 
+STATIC_INLINE
+int
+PerlLibCZMQ1_zframe_mg_free(pTHX_ SV * const sv, MAGIC *const mg) {
+    PerlLibCZMQ1_zframe *frame;
+    PERL_UNUSED_VAR(sv);
+
+    frame = (PerlLibCZMQ1_zframe *) mg->mg_ptr;
+    if (frame) {
+        zframe_destroy(&frame);
+        mg->mg_ptr = NULL;
+    }
+
+    return 0;
+}
+    
+STATIC_INLINE
+int
+PerlLibCZMQ1_zmsg_mg_free(pTHX_ SV * const sv, MAGIC *const mg) {
+    PerlLibCZMQ1_zmsg *msg;
+    PERL_UNUSED_VAR(sv);
+
+    msg = (PerlLibCZMQ1_zmsg *) mg->mg_ptr;
+    if (msg) {
+        zmsg_destroy(&msg);
+        mg->mg_ptr = NULL;
+    }
+
+    return 0;
+}
+    
+
 #include "mg-xs.inc"
 
 MODULE = ZMQ::LibCZMQ1  PACKAGE = ZMQ::LibCZMQ1 
@@ -272,6 +303,21 @@ zframe_reset(frame, data, size)
         const void *data;
         size_t size;
 
+int
+zframe_zero_copy(frame)
+        PerlLibCZMQ1_zframe *frame;
+    CODE:
+#ifdef zframe_zero_copy
+        RETVAL = zframe_zero_copy(frame);
+#else
+        PERL_UNUSED_VAR(frame);
+        {
+            croak("zframe_zero_copy is not available in this version of libczmq (%d.%d.%d)", CZMQ_VERSION_MAJOR, CZMQ_VERSION_MINOR, CZMQ_VERSION_PATCH);
+        }
+#endif
+    OUTPUT:
+        RETVAL
+
 PerlLibCZMQ1_zmsg *
 zmsg_new()
     PREINIT:
@@ -388,6 +434,16 @@ void
 zmsg_wrap(msg, frame)
         PerlLibCZMQ1_zmsg *msg;
         PerlLibCZMQ1_zframe *frame;
+    PREINIT:
+        MAGIC *mg;
+    CODE:
+        zmsg_wrap(msg, frame);
+        /* memory ownership is now on zmq side. */
+
+        mg = PerlLibCZMQ1_zframe_mg_find(aTHX_ SvRV(ST(1)));
+        if (mg) {
+            mg->mg_ptr = NULL;
+        }
 
 PerlLibCZMQ1_zframe *
 zmsg_unwrap(msg)

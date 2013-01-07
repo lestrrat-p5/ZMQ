@@ -194,6 +194,12 @@ The received message is an instance of ZMQ::LibZMQ3::Message object, and you can
 
     my $data = zmq_msg_data( $msg );
 
+=head1 WHEN IN DOUBT
+
+0MQ is a relatively large framework, and to use it you need to be comfortable
+with a lot of concepts. If you think this module is not behaving like you
+expect it to, I<please read the documents for the C API>
+
 =head1 ASYNCHRONOUS I/O WITH ZEROMQ
 
 By default 0MQ comes with its own zmq_poll() mechanism that can handle
