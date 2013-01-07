@@ -175,6 +175,12 @@ patches are welcome)
 
 =head1 FUNCTIONS
 
+=head2 version()
+
+In list context, returns 3 elements consisting of major version, minor version, and patch version.
+
+In scalar context returns dotted version string.
+
 =head2 zctx_destroy
 
 =head2 zctx_interrupted
