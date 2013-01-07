@@ -44,6 +44,12 @@ sub sendm {
     return ZMQ::CZMQ::call("zstr_sendm", $self->{_socket}, @_);
 }
 
+sub sockopt {
+    my $self = shift;
+    my $name = shift;
+
+    $self->
+
 1;
 
 __END__
@@ -68,5 +74,9 @@ __END__
     $sock->send($fmt, ...);
 
     $sock->sendm($fmt, ...);
+
+    # sockopts are very much dependent on the underlying
+    # libzmq version: don't just trust this list
+    $sock->sockopt($optname);
 
 =cut

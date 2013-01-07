@@ -16,19 +16,71 @@ our %EXPORT_TAGS = (
         zctx_set_linger
         zctx_interrupted
     ) ],
-    zsocket => [ qw(
+    zsocket => [
+        qw(
         zsocket_new
         zsocket_destroy
         zsocket_bind
         zsocket_connect
         zsocket_poll
-    ) ],
+        ),
+        # These functions originally were named zsockopt_*
+        # but have since been renamed in czmq. we now only
+        # support these newer functions
+        qw(
+        zsocket_type
+        zsocket_sndhwm
+        zsocket_set_sndhwm
+        zsocket_rcvhwm
+        zsocket_set_rcvhwm
+        zsocket_affinity
+        zsocket_set_affinity
+        zsocket_set_subscribe
+        zsocket_set_unsubscribe
+        zsocket_identity
+        zsocket_set_identity
+        zsocket_rate
+        zsocket_set_rate
+        zsocket_recovery_ivl
+        zsocket_set_recovery_ivl
+        zsocket_sndbuf
+        zsocket_set_sndbuf
+        zsocket_rcvbuf
+        zsocket_set_rcvbuf
+        zsocket_linger
+        zsocket_set_linger
+        zsocket_reconnect_ivl
+        zsocket_set_reconnect_ivl
+        zsocket_reconnect_ivl_max
+        zsocket_set_reconnect_ivl_max
+        zsocket_backlog
+        zsocket_set_backlog
+        zsocket_maxmsgsize
+        zsocket_set_maxmsgsize
+        zsocket_multicast_hops
+        zsocket_set_multicast_hops
+        zsocket_rcvtimeo
+        zsocket_set_rcvtimeo
+        zsocket_sndtimeo
+        zsocket_set_sndtimeo
+        zsocket_ipv4only
+        zsocket_set_ipv4only
+        zsocket_set_delay_attach_on_connect
+        zsocket_set_router_mandatory
+        zsocket_set_router_raw
+        zsocket_set_xpub_verbose
+        zsocket_rcvmore
+        zsocket_fd
+        zsocket_events
+        zsocket_last_endpoint
+        )
+    ],
     zstr => [ qw(
         zstr_send
         zstr_recv
         zstr_recv_nowait
+        zstr_send
         zstr_sendm
-        zstr_sendf
     ) ],
     zmsg => [ qw(
         zmsg_add
@@ -75,53 +127,15 @@ our %EXPORT_TAGS = (
         zframe_streq
         zframe_strhex
     ) ],
-    zsockopt => [ qw(
-        zsockopt_affinity
-        zsockopt_backlog
-        zsockopt_events
-        zsockopt_fd
-        zsockopt_hwm
-        zsockopt_linger
-        zsockopt_maxmsgsize
-        zsockopt_mcast_loop
-        zsockopt_rate
-        zsockopt_rcvbuf
-        zsockopt_rcvhwm
-        zsockopt_rcvmore
-        zsockopt_reconnect_ivl
-        zsockopt_reconnect_ivl_max
-        zsockopt_recovery_ivl
-        zsockopt_recovery_ivl_msec
-        zsockopt_set_affinity
-        zsockopt_set_backlog
-        zsockopt_set_hwm
-        zsockopt_set_identity
-        zsockopt_set_linger
-        zsockopt_set_maxmsgsize
-        zsockopt_set_mcast_loop
-        zsockopt_set_rate
-        zsockopt_set_rcvbuf
-        zsockopt_set_rcvhwm
-        zsockopt_set_reconnect_ivl
-        zsockopt_set_reconnect_ivl_max
-        zsockopt_set_recovery_ivl
-        zsockopt_set_recovery_ivl_msec
-        zsockopt_set_sndbuf
-        zsockopt_set_sndhwm
-        zsockopt_set_subscribe
-        zsockopt_set_swap
-        zsockopt_set_unsubscribe
-        zsockopt_sndbuf
-        zsockopt_sndhwm
-        zsockopt_swap
-        zsockopt_type
-    ) ],
 );
 our @EXPORT_OK = map { @$_ } values %EXPORT_TAGS;
 
-sub zstr_sendf {
-    my ($socket, $fmt, @args) = @_;
-    zstr_send( $socket, sprintf $fmt, @args );
+sub zstr_send {
+    my ($socket, $message, @args) = @_;
+    if (@args) {
+        $message = sprintf $message, @args;
+    }
+    _zstr_send( $socket, $message );
 }
 
 sub zsocket_bind {
@@ -287,91 +301,89 @@ In scalar context returns dotted version string.
 
 =head2 zsocket_type_str
 
-=head2 zsockopt_affinity
+=head2 zsocket_affinity
 
-=head2 zsockopt_backlog
+=head2 zsocket_backlog
 
-=head2 zsockopt_events
+=head2 zsocket_events
 
-=head2 zsockopt_fd
+=head2 zsocket_fd
 
-=head2 zsockopt_hwm
+=head2 zsocket_hwm
 
-=head2 zsockopt_linger
+=head2 zsocket_linger
 
-=head2 zsockopt_maxmsgsize
+=head2 zsocket_maxmsgsize
 
-=head2 zsockopt_mcast_loop (only in libzmq 2.x)
+=head2 zsocket_mcast_loop (only in libzmq 2.x)
 
-=head2 zsockopt_rate
+=head2 zsocket_rate
 
-=head2 zsockopt_rcvbuf
+=head2 zsocket_rcvbuf
 
-=head2 zsockopt_rcvhwm
+=head2 zsocket_rcvhwm
 
-=head2 zsockopt_rcvmore
+=head2 zsocket_rcvmore
 
-=head2 zsockopt_reconnect_ivl
+=head2 zsocket_reconnect_ivl
 
-=head2 zsockopt_reconnect_ivl_max
+=head2 zsocket_reconnect_ivl_max
 
-=head2 zsockopt_recovery_ivl
+=head2 zsocket_recovery_ivl
 
-=head2 zsockopt_recovery_ivl_msec
+=head2 zsocket_recovery_ivl_msec
 
-=head2 zsockopt_set_affinity
+=head2 zsocket_set_affinity
 
-=head2 zsockopt_set_backlog
+=head2 zsocket_set_backlog
 
-=head2 zsockopt_set_hwm (only for libzmq 2.x)
+=head2 zsocket_set_hwm (only for libzmq 2.x)
 
-=head2 zsockopt_set_identity
+=head2 zsocket_set_identity
 
-=head2 zsockopt_set_linger
+=head2 zsocket_set_linger
 
-=head2 zsockopt_set_maxmsgsize
+=head2 zsocket_set_maxmsgsize
 
-=head2 zsockopt_set_mcast_loop (only in libzmq 2.x)
+=head2 zsocket_set_mcast_loop (only in libzmq 2.x)
 
-=head2 zsockopt_set_rate
+=head2 zsocket_set_rate
 
-=head2 zsockopt_set_rcvbuf
+=head2 zsocket_set_rcvbuf
 
-=head2 zsockopt_set_rcvhwm
+=head2 zsocket_set_rcvhwm
 
-=head2 zsockopt_set_reconnect_ivl
+=head2 zsocket_set_reconnect_ivl
 
-=head2 zsockopt_set_reconnect_ivl_max
+=head2 zsocket_set_reconnect_ivl_max
 
-=head2 zsockopt_set_recovery_ivl (only in libzmq 2.x)
+=head2 zsocket_set_recovery_ivl (only in libzmq 2.x)
 
-=head2 zsockopt_set_recovery_ivl_msec (only in libzmq 2.x)
+=head2 zsocket_set_recovery_ivl_msec (only in libzmq 2.x)
 
-=head2 zsockopt_set_sndbuf
+=head2 zsocket_set_sndbuf
 
-=head2 zsockopt_set_sndhwm
+=head2 zsocket_set_sndhwm
 
-=head2 zsockopt_set_subscribe
+=head2 zsocket_set_subscribe
 
-=head2 zsockopt_set_swap (only in libzmq 2.x)
+=head2 zsocket_set_swap (only in libzmq 2.x)
 
-=head2 zsockopt_set_unsubscribe
+=head2 zsocket_set_unsubscribe
 
-=head2 zsockopt_sndbuf
+=head2 zsocket_sndbuf
 
-=head2 zsockopt_sndhwm
+=head2 zsocket_sndhwm
 
-=head2 zsockopt_swap (only in libzmq 2.x)
+=head2 zsocket_swap (only in libzmq 2.x)
 
-=head2 zsockopt_type
+=head2 zsocket_type
 
 =head2 zstr_recv
 
 =head2 zstr_recv_nowait
 
 =head2 zstr_send
-
-=head2 zstr_sendf
 
 =head2 zstr_sendm
 

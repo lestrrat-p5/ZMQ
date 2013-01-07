@@ -210,9 +210,13 @@ zstr_recv_nowait(socket)
         PerlLibCZMQ1_zsocket_raw *socket;
 
 int
-zstr_send(socket, string)
+_zstr_send(socket, string)
         PerlLibCZMQ1_zsocket_raw *socket;
         const char *string;
+    CODE:
+        RETVAL = zstr_send(socket, string);
+    OUTPUT:
+        RETVAL
 
 int
 zstr_sendm(socket, string)
