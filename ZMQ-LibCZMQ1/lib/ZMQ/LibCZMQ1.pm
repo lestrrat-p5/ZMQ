@@ -8,7 +8,7 @@ BEGIN {
     XSLoader::load(__PACKAGE__, $VERSION);
 }
 
-our %EXPORT_OK = (
+our %EXPORT_TAGS = (
     zctx => [ qw(
         zctx_new
         zctx_destroy
@@ -117,7 +117,7 @@ our %EXPORT_OK = (
         zsockopt_type
     ) ],
 );
-our @EXPORT = map { @$_ } values %EXPORT_OK;
+our @EXPORT_OK = map { @$_ } values %EXPORT_TAGS;
 
 sub zstr_sendf {
     my ($socket, $fmt, @args) = @_;

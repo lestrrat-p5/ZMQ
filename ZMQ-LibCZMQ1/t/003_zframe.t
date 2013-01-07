@@ -1,8 +1,9 @@
 use strict;
 use Test::More;
 
-use_ok "ZMQ::LibCZMQ1",
-    qw(zframe_new zframe_data zframe_streq);
+BEGIN {
+    use_ok "ZMQ::LibCZMQ1", qw(:zframe);
+}
 
 {
     my $frame = zframe_new("foo", 3);

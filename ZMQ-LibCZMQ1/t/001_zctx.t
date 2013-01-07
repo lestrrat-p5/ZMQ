@@ -1,7 +1,10 @@
 use strict;
 use Test::More;
 
-use_ok "ZMQ::LibCZMQ1";
+BEGIN {
+    use_ok "ZMQ::LibCZMQ1", qw(:zctx);
+}
+
 diag "Using czmq version " . scalar ZMQ::LibCZMQ1::version();
 
 subtest 'basic' => sub {

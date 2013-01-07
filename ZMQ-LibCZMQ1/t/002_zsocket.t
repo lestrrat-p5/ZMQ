@@ -3,7 +3,7 @@ use Test::More;
 use Test::TCP;
 BEGIN {
     use_ok "ZMQ::Constants", ":all";
-    use_ok "ZMQ::LibCZMQ1";
+    use_ok "ZMQ::LibCZMQ1", qw(:zctx :zsocket :zstr);
 }
 
 subtest 'basic' => sub {
