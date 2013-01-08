@@ -278,7 +278,7 @@ Returns undef upon error, and sets $!.
 Note: if your underlying libzmq has C<zmq_ctx_new()>, you can use that instead
 as this function is deprecated.
 
-=head2 $cxt = zmq_cxt_new( $threads );
+=head2 $cxt = zmq_ctx_new( $threads );
 
 Creates a new context object. C<$threads> argument is optional.
 Context objects can be reused across threads.
@@ -287,7 +287,7 @@ Returns undef upon error, and sets $!.
 
 Note: may not be available depending on your libzmq version.
 
-=head2 $rv = zmq_cxt_get( $cxt, $option )
+=head2 $rv = zmq_ctx_get( $cxt, $option )
 
 Gets the value for the given option.
 
@@ -295,7 +295,7 @@ Returns -1 status upon failure, and sets $!
 
 Note: may not be available depending on your libzmq version.
 
-=head2 $rv = zmq_cxt_set( $cxt, $option, $value )
+=head2 $rv = zmq_ctx_set( $cxt, $option, $value )
 
 Sets the value for the given option.
 
