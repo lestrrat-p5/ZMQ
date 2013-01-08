@@ -275,12 +275,52 @@ Context objects can be reused across threads.
 
 Returns undef upon error, and sets $!.
 
+Note: if your underlying libzmq has C<zmq_ctx_new()>, you can use that instead
+as this function is deprecated.
+
+=head2 $cxt = zmq_cxt_new( $threads );
+
+Creates a new context object. C<$threads> argument is optional.
+Context objects can be reused across threads.
+
+Returns undef upon error, and sets $!.
+
+Note: may not be available depending on your libzmq version.
+
+=head2 $rv = zmq_cxt_get( $cxt, $option )
+
+Gets the value for the given option.
+
+Returns -1 status upon failure, and sets $!
+
+Note: may not be available depending on your libzmq version.
+
+=head2 $rv = zmq_cxt_set( $cxt, $option, $value )
+
+Sets the value for the given option.
+
+Returns a non-zero status upon failure, and sets $!.
+
+Note: may not be available depending on your libzmq version.
+
 =head2 $rv = zmq_term( $cxt )
 
 Terminates the context. Be careful, as it might hang if you have pending socket
 operations. 
 
 Returns a non-zero status upon failure, and sets $!.
+
+Note: if your underlying libzmq has C<zmq_ctx_destroy()>, you can use that instead
+as this function is deprecated.
+
+=head2 $rv = zmq_ctx_destroy( $cxt )
+
+Terminates the context. Be careful, as it might hang if you have pending socket
+operations. 
+
+Returns a non-zero status upon failure, and sets $!.
+
+Note: may not be available depending on your libzmq version.
 
 =head2 $socket = zmq_socket( $cxt, $socket_type )
 
@@ -293,6 +333,14 @@ Returns undef upon error, and sets $!.
 Binds the socket to listen to specified C<$address>.
 
 Returns a non-zero status upon failure, and sets $!
+
+=head2 $rv = zmq_unbind( $sock, $address )
+
+Stops listening on this endpoint.
+
+Returns a non-zero status upon failure, and sets $!
+
+Note: may not be available depending on your libzmq version.
 
 =head2 $rv = zmq_connect( $sock, $address )
 
@@ -478,7 +526,7 @@ returns a 3-element list of the version numbers:
 
 Creates a new "device". See C<zmq_device> for details. zmq_device() will only return if/when the current context is closed. Therefore, the return value is always -1, and errno is always ETERM
 
-This function does not work on some versions, as certain early versions of libzmq3.x do not implement it.
+Note: may not be available depending on your libzmq version.
 
 =head2 zmq_proxy($frontend_sock, $backend_sock, $capture_sock)
 
@@ -487,7 +535,11 @@ WARNING: EXPERIMENTAL. Use at your own risk.
 Start a proxy in the current thread, which connects the frontend socket to a
 backend socket. The capture sock is optional, and is by default undef.
 
-This function does not work on some versions, as certain early versions of libzmq3.x do not implement it.
+Note: may not be available depending on your libzmq version.
+
+=head2 $rv = zmq_socket_monitor($socket, $addr, events)
+
+Note: may not be available depending on your libzmq version.
 
 =head1 FUNCTIONS PROVIDED BY ZMQ::LIBZMQ3
 
