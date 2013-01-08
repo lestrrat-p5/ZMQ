@@ -135,7 +135,10 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::XSUtil
         Module::Install::Repository
     ));
+
+    print STDERR "===\n\nTesting $target w/o optional dependencies...\n\n===\n";
     test_binding("ZMQ-LibZMQ3");
+    print STDERR "===\n\nTesting $target with optional dependencies...\n\n===\n";
     cpanm(qw(AnyEvent Proc::Guard));
     test_binding("ZMQ-LibZMQ3");
 } elsif ( $target eq 'ZMQ' ) {
