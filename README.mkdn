@@ -22,6 +22,7 @@ With cpanm, you can install the ZMQ perl bindings like so:
 Check for what's available on CPAN from the following links:
 
 * http://metacpan.org/release/ZMQ-Constants
+* http://metacpan.org/release/ZMQ-LibCZMQ1
 * http://metacpan.org/release/ZMQ-LibZMQ2
 * http://metacpan.org/release/ZMQ-LibZMQ3
 * http://metacpan.org/release/ZMQ
@@ -100,7 +101,7 @@ Pure Perl, but requires either ZMQ::LibZMQ2 or ZMQ::LibZMQ3.
     make test
     make install
 
-### ZMQ-CZMQ
+### ZMQ-LibCZMQ1
 
 Binding to the high-level C API library czmq (http://czmq.zeromq.org).
 Highly experimental. Your help/contribution is much appreciated.
@@ -122,6 +123,7 @@ installed libczmq:
     make test
     make install
 
-## TODO
+### ZMQ-CZMQ
 
-Refactor common scripts from ZMQ::LibZMQ2, ZMQ::LibZMQ3, ZMQ::CZMQ.
+Perl-ish libczmq wrapper. Uses ZMQ::LibCZMQ1 internally.
+
