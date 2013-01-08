@@ -138,7 +138,7 @@ if (-f "Makefile") {
         if ($^O eq 'darwin') {
             s/MACOSX_DEPLOYMENT_TARGET=(\d+\.\d+)/$1 < 10.5 ? "MACOSX_DEPLOYMENT_TARGET=$version" : "MACOSX_DEPLOYMENT_TARGET=$1"/e;
         }
-        s/OTHERLDFLAGS =\s*$/OTHERLDFLAGS = -Wl,-rpath\n/;
+        s/OTHERLDFLAGS =\s*$/OTHERLDFLAGS = -Wl,-rpath @libs\n/;
         print;
     }
 }
