@@ -11,7 +11,9 @@ my %functions = (
     zmq_ctx_set     => 'zmq_ctx_set(NULL, 0, 0);',
     zmq_device      => 'zmq_device(0, NULL, NULL);',
     zmq_proxy       => 'zmq_proxy(NULL, NULL, NULL);',
+    zmq_socket_monitor => 'zmq_socket_monitor(NULL, NULL, 0);',
     zmq_term        => 'zmq_term(NULL);',
+    zmq_unbind      => 'zmq_unbind(NULL, NULL);',
 );
 
 # Create files

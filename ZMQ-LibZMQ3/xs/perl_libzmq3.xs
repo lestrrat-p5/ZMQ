@@ -763,6 +763,21 @@ PerlLibzmq3_zmq_bind(socket, addr)
         RETVAL
 
 int
+PerlLibzmq3_zmq_unbind(socket, addr)
+        PerlLibzmq3_Socket *socket;
+        const char *addr;
+    CODE:
+#ifdef HAS_ZMQ_UNBIND
+        RETVAL = zmq_unbind(socket, addr);
+#else
+        PERL_UNUSED_VAR(socket);
+        PERL_UNUSED_VAR(addr);
+        PerlLibzmq3_function_unavailable("zmq_unbind");
+#endif
+    OUTPUT:
+        RETVAL
+
+int
 PerlLibzmq3_zmq_recv(socket, buf_sv, len, flags = 0)
         PerlLibzmq3_Socket *socket;
         SV *buf_sv;
@@ -1063,6 +1078,23 @@ PerlLibzmq3_zmq_proxy(frontend, backend, capture = NULL)
         PERL_UNUSED_VAR(backend);
         PERL_UNUSED_VAR(capture);
         PerlLibzmq3_function_unavailable("zmq_proxy");
+#endif
+    OUTPUT:
+        RETVAL
+
+int
+PerlLibzmq3_zmq_socket_monitor(socket, addr, events)
+        PerlLibzmq3_Socket *socket;
+        char *addr;
+        int events;
+    CODE:
+#ifdef HAS_ZMQ_SOCKET_MONITOR
+        RETVAL = zmq_socket_monitor(socket, addr, events);
+#else
+        PERL_UNUSED_VAR(socket);
+        PERL_UNUSED_VAR(addr);
+        PERL_UNUSED_VAR(events);
+        PerlLibzmq3_function_unavailable("zmq_socket_monitor");
 #endif
     OUTPUT:
         RETVAL
