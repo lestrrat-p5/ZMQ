@@ -1087,7 +1087,13 @@ PerlLibzmq3_zmq_proxy(frontend, backend, capture = NULL)
         PerlLibzmq3_Socket *capture;
     CODE:
 #ifdef HAS_ZMQ_PROXY
-        RETVAL = zmq_proxy(frontend, backend, capture);
+        if (capture) {
+          capture = capture->socket;
+        }
+        RETVAL = zmq_proxy(frontend->socket, backend->socket, capture);
+        if (RETVAL != 0) {
+            SET_BANG;
+        }
 #else
         PERL_UNUSED_VAR(frontend);
         PERL_UNUSED_VAR(backend);
