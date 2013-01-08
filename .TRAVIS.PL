@@ -21,6 +21,7 @@ if (! -d $target) {
 }
 
 sub mysystem(@) {
+    print STDERR "===> @_\n";
     system(@_) == 0 or die "Failed to execute @_: $!";
 }
 
