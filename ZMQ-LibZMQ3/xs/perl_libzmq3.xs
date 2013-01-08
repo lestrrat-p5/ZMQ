@@ -1,6 +1,12 @@
 #include "perl_libzmq3.h"
 #include "xshelper.h"
 
+#define PerlLibzmq3_function_unavailable(name) \
+    { \
+        int major, minor, patch; \
+        zmq_version(&major, &minor, &patch); \
+        croak("%s is not available in this version of libzmq (%d.%d.%d)", name, major, minor, patch ); \
+    }
 #if (PERLZMQ_TRACE > 0)
 #define PerlLibzmq3_trace(...) \
     { \
@@ -446,6 +452,23 @@ PerlLibzmq3_zmq_term( ctxt )
     OUTPUT:
         RETVAL
 
+int
+PerlLibzmq3_zmq_ctx_set(ctxt, option_name, option_value)
+        PerlLibzmq3_Context *ctxt;
+        int option_name;
+        int option_value;
+    CODE:
+#ifdef HAS_ZMQ_CTX_SET
+        RETVAL = zmq_ctx_set(ctxt->ctxt, option_name, option_value);
+#else
+        PERL_UNUSED_VAR(ctxt);
+        PERL_UNUSED_VAR(option_name);
+        PERL_UNUSED_VAR(option_value);
+        PerlLibzmq3_function_unavailable("zmq_ctx_set");
+#endif
+    OUTPUT:
+        RETVAL
+
 PerlLibzmq3_Message *
 PerlLibzmq3_zmq_msg_init()
     PREINIT:
@@ -817,7 +840,7 @@ PerlLibzmq3_zmq_setsockopt_string(sock, option, value)
     OUTPUT:
         RETVAL
 
-int
+void
 PerlLibzmq3_zmq_poll( list, timeout = 0 )
         AV *list;
         long timeout;
@@ -946,11 +969,7 @@ PerlLibzmq3_zmq_device( device, insocket, outsocket )
         RETVAL = zmq_device( device, insocket->socket, outsocket->socket );
 #else
         PERL_UNUSED_VAR(device);
-        {
-            int major, minor, patch;
-            zmq_version(&major, &minor, &patch);
-            croak("zmq_device is not available in this version of libzmq (%d.%d.%d)", major, minor, patch );
-        }
+        PerlLibzmq3_function_unavailable("zmq_device");
 #endif
     OUTPUT:
         RETVAL
@@ -967,11 +986,7 @@ PerlLibzmq3_zmq_proxy(frontend, backend, capture = NULL)
         PERL_UNUSED_VAR(frontend);
         PERL_UNUSED_VAR(backend);
         PERL_UNUSED_VAR(capture);
-        {
-            int major, minor, patch;
-            zmq_version(&major, &minor, &patch);
-            croak("zmq_proxy is not available in this version of libzmq (%d.%d.%d)", major, minor, patch );
-        }
+        PerlLibzmq3_function_unavailable("zmq_proxy");
 #endif
     OUTPUT:
         RETVAL
