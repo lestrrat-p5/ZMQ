@@ -529,6 +529,21 @@ PerlLibzmq3_zmq_ctx_destroy( ctxt )
         RETVAL
 
 int
+PerlLibzmq3_zmq_ctx_get(ctxt, option_name)
+        PerlLibzmq3_Context *ctxt;
+        int option_name;
+    CODE:
+#ifdef HAS_ZMQ_CTX_GET
+        RETVAL = zmq_ctx_get(ctxt->ctxt, option_name);
+#else
+        PERL_UNUSED_VAR(ctxt);
+        PERL_UNUSED_VAR(option_name);
+        PerlLibzmq3_function_unavailable("zmq_ctx_get");
+#endif
+    OUTPUT:
+        RETVAL
+
+int
 PerlLibzmq3_zmq_ctx_set(ctxt, option_name, option_value)
         PerlLibzmq3_Context *ctxt;
         int option_name;
