@@ -600,7 +600,7 @@ PerlLibzmq3_zmq_socket (ctxt, type)
             RETVAL->assoc_ctxt = ST(0);
             RETVAL->socket = sock;
             RETVAL->pid = getpid();
-            SvREFCNT_inc(RETVAL->assoc_ctxt);
+            (void) SvREFCNT_inc(RETVAL->assoc_ctxt);
             PerlLibzmq3_trace( " + created socket %p", RETVAL );
         }
         PerlLibzmq3_trace( "END zmq_socket" );
@@ -942,7 +942,7 @@ PerlLibzmq3_zmq_device( device, insocket, outsocket )
         PerlLibzmq3_Socket *insocket;
         PerlLibzmq3_Socket *outsocket;
     CODE:
-#ifdef zmq_device
+#ifdef HAS_ZMQ_DEVICE
         RETVAL = zmq_device( device, insocket->socket, outsocket->socket );
 #else
         PERL_UNUSED_VAR(device);
@@ -961,7 +961,7 @@ PerlLibzmq3_zmq_proxy(frontend, backend, capture = NULL)
         PerlLibzmq3_Socket *backend;
         PerlLibzmq3_Socket *capture;
     CODE:
-#ifdef zmq_proxy
+#ifdef HAS_ZMQ_PROXY
         RETVAL = zmq_proxy(frontend, backend, capture);
 #else
         PERL_UNUSED_VAR(frontend);

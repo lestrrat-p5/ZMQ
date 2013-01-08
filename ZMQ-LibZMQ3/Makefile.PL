@@ -70,21 +70,57 @@ use_xshelper '-clean';
 use_ppport;
 cc_warnings;
 cc_include_paths split/\s+/, $ENV{ZMQ_INCLUDES};
-cc_libs $ENV{ZMQ_LIBS};
 cc_include_paths 'xs';
 cc_src_paths 'xs';
 cc_assert_lib 'zmq';
+
+my @libs = split /\s+/, $ENV{ZMQ_LIBS};
 if ($^O eq 'cygwin') {
-    cc_libs 'zmq', 'uuid'; # uuid for cygwin, but can't hurt
+    push @libs, '-lzmq', '-luuid'; # uuid for cygwin, but can't hurt
 } else {
-    cc_libs 'zmq';
+    push @libs, '-lzmq';
 }
+cc_libs @libs;
+$ENV{ZMQ_LIBS} = join ' ', @libs;
 if ($ENV{ZMQ_TRACE}) {
     cc_define qq|-DPERLZMQ_TRACE=$ENV{ZMQ_TRACE}|;
 }
 
+sub myguard (&) {
+    bless [ $_[0] ], 'myguard';
+}
+sub myguard::DESTROY {
+    $_[0]->[0]->();
+}
+
+my @clean = qw(xs/*.inc xs/typemap);
+my $zmqcheck_dir = "tools/zmqcheck";
+{
+    my $pwd = Cwd::abs_path();
+    my $guard = myguard { chdir $pwd };
+    chdir $zmqcheck_dir;
+    if (system($^X, "Makefile.PL") != 0) {
+        die "Failed to execute $zmqcheck_dir/Makefile.PL";
+    }
+
+    foreach my $file (glob("*.c")) {
+        my $name = $file;
+        $name =~ s/\.c$//;
+        push @clean, "$zmqcheck_dir/$name";
+        print STDERR "Checking $name...\n";
+
+        my $ok = (system("make", $name) == 0);
+        print STDERR " -> Your zmq seems to @{[$ok ? '' : 'not ']}have $name\n";
+        if ($ok) {
+            cc_define sprintf "-DHAS_%s", uc $name;
+        }
+    }
+    print STDERR "Cleaning up $zmqcheck_dir...\n";
+    system "make", "clean";
+}
+
 author_tests 'xt';
-clean_files "xs/*.inc xs/typemap";
+clean_files join " ", @clean;
 
 repository "https://github.com/lestrrat/p5-ZMQ";
 
