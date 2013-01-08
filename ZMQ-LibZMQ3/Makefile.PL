@@ -107,10 +107,10 @@ my $zmqcheck_dir = "tools/zmqcheck";
         my $name = $file;
         $name =~ s/\.c$//;
         push @clean, "$zmqcheck_dir/$name";
-        print STDERR "Checking $name...\n";
+        print STDERR "CHECK: Does your zmq have $name...";
 
         my $ok = (system("make", $name) == 0);
-        print STDERR " -> Your zmq seems to @{[$ok ? '' : 'not ']}have $name\n";
+        print STDERR " @{[$ok ? 'YES' : 'NO']}\n";
         if ($ok) {
             cc_define sprintf "-DHAS_%s", uc $name;
         }
@@ -138,7 +138,7 @@ if (-f "Makefile") {
         if ($^O eq 'darwin') {
             s/MACOSX_DEPLOYMENT_TARGET=(\d+\.\d+)/$1 < 10.5 ? "MACOSX_DEPLOYMENT_TARGET=$version" : "MACOSX_DEPLOYMENT_TARGET=$1"/e;
         }
-        s/OTHERLDFLAGS =\s*$/OTHERLDFLAGS = -Wl,-rpath,@{[ join ",", @libs]}\n/;
+        s/OTHERLDFLAGS =\s*$/OTHERLDFLAGS = -Wl,-rpath\n/;
         print;
     }
 }
