@@ -221,8 +221,13 @@ PerlLibzmq3_Context_invalidate( PerlLibzmq3_Context *ctxt ) {
     }
 #endif
     if (close) {
+#ifdef HAS_ZMQ_CTX_DESTROY
+        PerlLibzmq3_trace( " + calling actual zmq_ctx_destroy()");
+        rv = zmq_ctx_destroy( ctxt->ctxt );
+#else
         PerlLibzmq3_trace( " + calling actual zmq_term()");
         rv = zmq_term( ctxt->ctxt );
+#endif
         if ( rv != 0 ) {
             SET_BANG;
         } else {
@@ -410,6 +415,7 @@ PerlLibzmq3_zmq_init( nthreads = 5 )
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Context", 20 ));
         void *cxt;
     CODE:
+#ifdef HAS_ZMQ_INIT
         PerlLibzmq3_trace( "START zmq_init" );
         cxt = zmq_init( nthreads );
         if (cxt == NULL) {
@@ -427,6 +433,44 @@ PerlLibzmq3_zmq_init( nthreads = 5 )
             PerlLibzmq3_trace( " + zmq context %p", RETVAL->ctxt );
         }
         PerlLibzmq3_trace( "END zmq_init");
+#else /* HAS_ZMQ_INIT */
+        PERL_UNUSED_VAR(cxt);
+        PERL_UNUSED_VAR(nthreads);
+        PerlLibzmq3_function_unavailable("zmq_init");
+#endif
+    OUTPUT:
+        RETVAL
+
+PerlLibzmq3_Context *
+PerlLibzmq3_zmq_ctx_new( nthreads = 5 )
+        int nthreads;
+    PREINIT:
+        SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Context", 20 ));
+        void *cxt;
+    CODE:
+#ifdef HAS_ZMQ_CTX_NEW
+        PerlLibzmq3_trace( "START zmq_ctx_new" );
+        cxt = zmq_init( nthreads );
+        if (cxt == NULL) {
+            SET_BANG;
+            RETVAL = NULL;
+        } else {
+            Newxz( RETVAL, 1, PerlLibzmq3_Context );
+            PerlLibzmq3_trace( " + created context wrapper %p", RETVAL );
+            RETVAL->pid    = getpid();
+            RETVAL->ctxt   = cxt;
+#ifdef USE_ITHREADS
+            PerlLibzmq3_trace( " + threads enabled, aTHX %p", aTHX );
+            RETVAL->interp = aTHX;
+#endif
+            PerlLibzmq3_trace( " + zmq context %p", RETVAL->ctxt );
+        }
+        PerlLibzmq3_trace( "END zmq_ctx_new");
+#else /* HAS_ZMQ_CTX_NEW */
+        PERL_UNUSED_VAR(cxt);
+        PERL_UNUSED_VAR(nthreads);
+        PerlLibzmq3_function_unavailable("zmq_ctx_new");
+#endif
     OUTPUT:
         RETVAL
 
@@ -434,6 +478,7 @@ int
 PerlLibzmq3_zmq_term( ctxt )
         PerlLibzmq3_Context *ctxt;
     CODE:
+#ifdef HAS_ZMQ_TERM
         RETVAL = PerlLibzmq3_Context_invalidate( ctxt );
 
         if (RETVAL == 0) {
@@ -449,6 +494,37 @@ PerlLibzmq3_zmq_term( ctxt )
                 }
             }
         }
+#else /* HAS_ZMQ_TERM */
+        PERL_UNUSED_VAR(ctxt);
+        PerlLibzmq3_function_unavailable("zmq_term");
+#endif
+    OUTPUT:
+        RETVAL
+
+int
+PerlLibzmq3_zmq_ctx_destroy( ctxt )
+        PerlLibzmq3_Context *ctxt;
+    CODE:
+#ifdef HAS_ZMQ_CTX_DESTROY
+        RETVAL = PerlLibzmq3_Context_invalidate( ctxt );
+
+        if (RETVAL == 0) {
+            /* Cancel the SV's mg attr so to not call zmq_ctx_destroy automatically */
+            MAGIC *mg =
+                PerlLibzmq3_Context_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq3_Context_vtbl );
+            mg->mg_ptr = NULL;
+            /* mark the original SV's _closed flag as true */
+            {
+                SV *svr = SvRV(ST(0));
+                if (hv_stores( (HV *) svr, "_closed", &PL_sv_yes ) == NULL) {
+                    croak("PANIC: Failed to store closed flag on blessed reference");
+                }
+            }
+        }
+#else /* HAS_ZMQ_CTX_DESTROY */
+        PERL_UNUSED_VAR(ctxt);
+        PerlLibzmq3_function_unavailable("zmq_ctx_destroy");
+#endif
     OUTPUT:
         RETVAL
 

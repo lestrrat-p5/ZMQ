@@ -4,9 +4,14 @@ use ExtUtils::MakeMaker;
 my $postamble = '';
 my @functions = map { s/\.c$//; $_ } glob("*.c");
 my %functions = (
-    zmq_proxy   => 'zmq_proxy(NULL, NULL, NULL);',
-    zmq_device  => 'zmq_device(0, NULL, NULL);',
-    zmq_cxt_set => 'zmq_cxt_set(NULL, 0, 0);',
+    zmq_init        => 'zmq_init(0);',
+    zmq_ctx_destroy => 'zmq_ctx_destroy(NULL);',
+    zmq_ctx_get     => 'zmq_ctx_get(NULL, 0);',
+    zmq_ctx_new     => 'zmq_ctx_new();',
+    zmq_ctx_set     => 'zmq_ctx_set(NULL, 0, 0);',
+    zmq_device      => 'zmq_device(0, NULL, NULL);',
+    zmq_proxy       => 'zmq_proxy(NULL, NULL, NULL);',
+    zmq_term        => 'zmq_term(NULL);',
 );
 
 # Create files
@@ -41,6 +46,6 @@ my @libs = map {
 WriteMakefile(
     LIBS => \@libs,
     clean => {
-        FILES => join(' ', map { ($_, "$_.c") } @functions),
+        FILES => join(' ', "zmqcheck.out", map { ($_, "$_.c") } @functions),
     }
 );
