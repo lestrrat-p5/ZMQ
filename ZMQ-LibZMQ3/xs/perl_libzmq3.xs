@@ -535,6 +535,9 @@ PerlLibzmq3_zmq_ctx_get(ctxt, option_name)
     CODE:
 #ifdef HAS_ZMQ_CTX_GET
         RETVAL = zmq_ctx_get(ctxt->ctxt, option_name);
+        if (RETVAL == -1) {
+            SET_BANG;
+        }
 #else
         PERL_UNUSED_VAR(ctxt);
         PERL_UNUSED_VAR(option_name);
@@ -551,6 +554,9 @@ PerlLibzmq3_zmq_ctx_set(ctxt, option_name, option_value)
     CODE:
 #ifdef HAS_ZMQ_CTX_SET
         RETVAL = zmq_ctx_set(ctxt->ctxt, option_name, option_value);
+        if (RETVAL == -1) {
+            SET_BANG;
+        }
 #else
         PERL_UNUSED_VAR(ctxt);
         PERL_UNUSED_VAR(option_name);
@@ -784,6 +790,9 @@ PerlLibzmq3_zmq_unbind(socket, addr)
     CODE:
 #ifdef HAS_ZMQ_UNBIND
         RETVAL = zmq_unbind(socket, addr);
+        if (RETVAL == -1) {
+            SET_BANG;
+        }
 #else
         PERL_UNUSED_VAR(socket);
         PERL_UNUSED_VAR(addr);
@@ -1073,6 +1082,9 @@ PerlLibzmq3_zmq_device( device, insocket, outsocket )
     CODE:
 #ifdef HAS_ZMQ_DEVICE
         RETVAL = zmq_device( device, insocket->socket, outsocket->socket );
+        if (RETVAL != 0) {
+            SET_BANG;
+        }
 #else
         PERL_UNUSED_VAR(device);
         PerlLibzmq3_function_unavailable("zmq_device");
@@ -1111,6 +1123,9 @@ PerlLibzmq3_zmq_socket_monitor(socket, addr, events)
     CODE:
 #ifdef HAS_ZMQ_SOCKET_MONITOR
         RETVAL = zmq_socket_monitor(socket, addr, events);
+        if (RETVAL != 0) {
+            SET_BANG;
+        }
 #else
         PERL_UNUSED_VAR(socket);
         PERL_UNUSED_VAR(addr);
