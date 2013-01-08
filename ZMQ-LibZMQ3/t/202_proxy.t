@@ -1,6 +1,6 @@
 use strict;
 use Test::More;
-use Test::Request qw(Test::TCP Proc::Guard);
+use Test::Requires qw(Test::TCP Proc::Guard);
 use ZMQ::LibZMQ3;
 use ZMQ::Constants ':all';
 
