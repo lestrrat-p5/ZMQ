@@ -15,7 +15,6 @@ EOM
     return $postamble;
 }
 
-use Data::Dumper::Concise;
 my @libs = map { 
     !/^-[Ll]/ ? "-l$_" : $_
 } split /\s+/, $ENV{ZMQ_LIBS};
