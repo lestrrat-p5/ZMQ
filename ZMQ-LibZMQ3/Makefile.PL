@@ -51,13 +51,15 @@ EOM
 # XXX As of Devel::CheckLib 0.93, it seems like LIBS = "-L/path/to/foo"
 # gets ignored (unlike what the docs say). So we manually strip and
 # re-arrange the paths here
-my @libs = grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS};
-assertlibs
-    lib => 'zmq',
-    header => 'zmq.h',
-    incpath => [ split /\s+/, $ENV{ZMQ_INCLUDES} ],
-    libpath => \@libs,
-;
+{
+    my @libs = grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS};
+    assertlibs
+        lib => 'zmq',
+        header => 'zmq.h',
+        incpath => [ split /\s+/, $ENV{ZMQ_INCLUDES} ],
+        libpath => \@libs,
+    ;
+}
 
 requires 'Task::Weaken';
 requires 'ZMQ::Constants';
@@ -74,14 +76,17 @@ cc_include_paths 'xs';
 cc_src_paths 'xs';
 cc_assert_lib 'zmq';
 
-my @libs = split /\s+/, $ENV{ZMQ_LIBS};
-if ($^O eq 'cygwin') {
-    push @libs, '-lzmq', '-luuid'; # uuid for cygwin, but can't hurt
-} else {
-    push @libs, '-lzmq';
+{
+    my @libs = split /\s+/, $ENV{ZMQ_LIBS};
+    if ($^O eq 'cygwin') {
+        push @libs, '-lzmq', '-luuid'; # uuid for cygwin, but can't hurt
+    } else {
+        push @libs, '-lzmq';
+    }
+    cc_libs @libs;
+    $ENV{ZMQ_LIBS} = join ' ', @libs;
 }
-cc_libs @libs;
-$ENV{ZMQ_LIBS} = join ' ', @libs;
+
 if ($ENV{ZMQ_TRACE}) {
     cc_define qq|-DPERLZMQ_TRACE=$ENV{ZMQ_TRACE}|;
 }
@@ -127,7 +132,7 @@ repository "https://github.com/lestrrat/p5-ZMQ";
 do 'tools/genfiles.pl';
 WriteAll;
 
-if (-f "Makefile") {
+if ($^O eq 'darwin' && -f "Makefile") {
     my $version = `sw_vers -productVersion`;
     chomp $version;
     $version =~ s/\.\d+$//;
@@ -138,7 +143,7 @@ if (-f "Makefile") {
         if ($^O eq 'darwin') {
             s/MACOSX_DEPLOYMENT_TARGET=(\d+\.\d+)/$1 < 10.5 ? "MACOSX_DEPLOYMENT_TARGET=$version" : "MACOSX_DEPLOYMENT_TARGET=$1"/e;
         }
-        s/OTHERLDFLAGS =\s*$/OTHERLDFLAGS = -Wl,-rpath @libs\n/;
+        s/OTHERLDFLAGS =\s*$/OTHERLDFLAGS = -Wl,-rpath $ENV{ZMQ_LIBS}\n/;
         print;
     }
 }

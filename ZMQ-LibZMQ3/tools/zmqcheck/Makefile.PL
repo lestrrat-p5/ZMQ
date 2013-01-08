@@ -35,19 +35,19 @@ EOM
     
     $postamble .= sprintf <<'EOM', ($func) x 3;
 %s:
-	@$(CC) $(PASTHRU_INC) $(INC) $(CCFLAGS) $(OPTIMIZE) $(PERLTYPE) $(MPOLLUTE) $(DEFINE_VERSION)  $(CCCDLFLAGS) "-I$(PERL_INC)" $(PASTHRU_DEFINE) $(DEFINE) $(EXTRALIBS) %s.c -o %s >> zmqcheck.out 2>&1
+
+	@$(CC) -c $(PASTHRU_INC) $(INC) $(CCFLAGS) $(OPTIMIZE) $(CCCDLFLAGS) "-I$(PERL_INC)" $(PASTHRU_DEFINE) $(DEFINE) $(EXTRALIBS) %s.c -o %s.o >> zmqcheck.out 2>&1
 
 EOM
 }
 
 sub MY::postamble { $postamble }
 
-my @libs = map { 
-    !/^-[Ll]/ ? "-l$_" : $_
-} split /\s+/, $ENV{ZMQ_LIBS};
 WriteMakefile(
-    LIBS => \@libs,
+    VERSION => '0.01',
+    INC  => join(' ', map { !/^-/ ? "-I$_" : $_ } split /\s+/, $ENV{ZMQ_INCLUDES}),
+    LIBS => $ENV{ZMQ_LIBS},
     clean => {
-        FILES => join(' ', "zmqcheck.out", map { ($_, "$_.c") } @functions),
+        FILES => join(' ', "zmqcheck.out", map { ("$_.o", "$_.c") } @functions),
     }
 );
