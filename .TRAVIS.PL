@@ -140,7 +140,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     print STDERR "===\n\nTesting $target w/o optional dependencies...\n\n===\n";
     test_binding("ZMQ-LibZMQ3");
     print STDERR "===\n\nTesting $target with optional dependencies...\n\n===\n";
-    cpanm(qw(AnyEvent Proc::Guard));
+    cpanm(qw(AnyEvent Test::TCP Proc::Guard));
     test_binding("ZMQ-LibZMQ3");
 } elsif ( $target eq 'ZMQ' ) {
     cpanm(qw(
