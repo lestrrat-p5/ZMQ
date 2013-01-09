@@ -1,6 +1,49 @@
 Changes
 =======
 
+1.04 Jan 09 2013
+    - zmq_proxy(), zmq_device() should now be usable (if your underlying
+      libzmq has them). Thanks for @melo and @domm for testing.
+    - Added mechanism to check if deprecated/new functions are available.
+      Currently these functions are checked:
+        zmq_init
+        zmq_ctx_destroy
+        zmq_ctx_get
+        zmq_ctx_new
+        zmq_ctx_set
+        zmq_device
+        zmq_msg_recv
+        zmq_msg_send
+        zmq_proxy
+        zmq_recvmsg
+        zmq_socket_monitor
+        zmq_sendmsg
+        zmq_term
+        zmq_unbind
+    - Of the above functions, zmq_init, zmq_term, zmq_sendmsg, zmq_recmsg
+      are marked as deprecated by recent libzmq3.
+      ZMQ::LibZMQ3 being a Perl module, we'll try to be backwards compatible
+      as much as possible, so it will silently fallback to using the
+      right replacement, i.e.:
+        zmq_init    -> zmq_ctx_new
+        zmq_term    -> zmq_ctx_destroy
+        zmq_sendmsg -> zmq_msg_send
+        zmq_recvmsg -> zmq_msg_recv
+      However, we may decide to start complaining in the future versions.
+      You have been warned.
+    - Of the above functions, the following functions are newly added,
+      AS LONG AS THE UNDERLYING libzmq SUPPORTS IT:
+        zmq_ctx_new
+        zmq_ctx_destroy
+        zmq_ctx_get
+        zmq_ctx_set
+        zmq_msg_recv
+        zmq_msg_send
+        zmq_socket_monitor
+        zmq_unbind
+      If the underlying libzmq does not support any of these functions,
+      it will croak.
+
 1.03 - Jan 05 2013
     - Update docs
 
