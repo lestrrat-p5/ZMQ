@@ -302,7 +302,7 @@ zsocket_sndhwm (socket)
     CODE:
 #ifndef HAS_ZSOCKET_SNDHWM
         PERL_UNUSED_VAR(socket);
-        PerlLibczmq1_funciton_unavailable("zsocket_sndhwm");
+        PerlLibczmq1_function_unavailable("zsocket_sndhwm");
 #else
         RETVAL = zsocket_sndhwm(socket);
 #endif
@@ -323,7 +323,7 @@ zsocket_set_sndhwm (socket, sndhwm)
 #ifndef HAS_ZSOCKET_SET_SNDHWM
         PERL_UNUSED_VAR(socket);
         PERL_UNUSED_VAR(sndhwm);
-        PerlLibczmq1_funciton_unavailable("zsocket_set_sndhwm");
+        PerlLibczmq1_function_unavailable("zsocket_set_sndhwm");
 #else
         zsocket_set_sndhwm(socket, sndhwm);
 #endif
@@ -336,7 +336,7 @@ zsocket_set_rcvhwm (socket, rcvhwm)
 #ifndef HAS_ZSOCKET_SET_RCVHWM
         PERL_UNUSED_VAR(socket);
         PERL_UNUSED_VAR(rcvhwm);
-        PerlLibczmq1_funciton_unavailable("zsocket_set_rcvhwm");
+        PerlLibczmq1_function_unavailable("zsocket_set_rcvhwm");
 #else
         zsocket_set_rcvhwm(socket, rcvhwm);
 #endif
