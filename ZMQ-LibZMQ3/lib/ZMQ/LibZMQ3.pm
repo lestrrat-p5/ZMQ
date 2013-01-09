@@ -12,6 +12,10 @@ BEGIN {
 our @EXPORT = qw(
     zmq_init
     zmq_term
+    zmq_ctx_new
+    zmq_ctx_destroy
+    zmq_ctx_set
+    zmq_ctx_get
 
     zmq_msg_send
     zmq_msg_recv
@@ -26,6 +30,7 @@ our @EXPORT = qw(
     zmq_msg_move
 
     zmq_bind
+    zmq_unbind
     zmq_close
     zmq_connect
     zmq_getsockopt
@@ -35,6 +40,7 @@ our @EXPORT = qw(
     zmq_sendmsg
     zmq_setsockopt
     zmq_socket
+    zmq_socket_monitor
 
     zmq_poll
 
@@ -655,6 +661,11 @@ This is an early release. Proceed with caution, please report
 This module has been tested againt B<zeromq 3.2.2>. Semantics of this
 module rely heavily on the underlying zeromq version. Make sure
 you know which version of zeromq you're working with.
+
+As of 1.04 some new constants have been added, but they are not really
+meant to be used by consumers of this module. If you find yourself
+looking at these, please let us know why you need to use it -- we'll see
+if we can find a workaround, or make these constants public.
 
 =head1 SEE ALSO
 
