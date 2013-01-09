@@ -109,6 +109,7 @@ my $zmqcheck_dir = "tools/zmqcheck";
         die "Failed to execute $zmqcheck_dir/Makefile.PL";
     }
 
+    my $found = 0;
     foreach my $file (glob("*.c")) {
         my $name = $file;
         $name =~ s/\.c$//;
@@ -119,10 +120,38 @@ my $zmqcheck_dir = "tools/zmqcheck";
         print STDERR " @{[$ok ? 'YES' : 'NO']}\n";
         my $constname = sprintf "HAS_%s", uc $name;
         if ($ok) {
+            $found++;
             cc_define "-D$constname";
         }
         push @constants, $constname;
     }
+
+    if (! $found) {
+        print STDERR <<EOM;
+
+WHOA!
+
+We were not able to compile any of the auto-detected functions.
+It is very likely that there's some sort of problem in the compilation
+options, and it is very likely that even if you are able to compile
+this module, you will not be able to make any use of it.
+
+Here's the output from the compilation:
+
+EOM
+        if (! open my $fh, '<', 'zmqcheck.out') {
+            print STDERR <<EOM;
+
+WHOA! No logs generated! You have some SERIOUS problem!
+
+EOM
+        } else {
+            print STDERR "=== START zmqcheck.out ===\n";
+            while (<$fh>) { print STDERR $_ }
+            print STDERR "=== END zmqcheck.out ===\n";
+        }
+    }
+
     print STDERR "Cleaning up $zmqcheck_dir...\n";
     system "make", "clean";
 }
