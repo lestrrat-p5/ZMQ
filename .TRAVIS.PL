@@ -44,7 +44,6 @@ sub install_libzmq(@) {
     mysystem("make");
     mysystem("make", "install");
 
-    $ENV{ZMQ_HOME} = $prefix;
     return $prefix;
 }
 
@@ -76,7 +75,7 @@ sub install_libczmq {
     my $zmq_version = shift;
 
     print STDERR "===> Installing libczmq against zeromq-$zmq_version\n";
-    install_libzmq("zeromq-$zmq_version");
+    $ENV{ZMQ_HOME} = install_libzmq("zeromq-$zmq_version");
     install_libzmq("czmq-1.3.2", {
         extra_configure_args => [
             sprintf('--with-libzmq=%s', File::Spec->catdir($EXTDIR, "zeromq-$zmq_version")),
@@ -101,8 +100,7 @@ if ( $target eq 'ZMQ-Constants' ) {
         Test::TCP
     ));
     foreach my $zmq_version( qw(2.2.0 3.2.2) ) {
-        install_libczmq($zmq_version);
-        $ENV{CZMQ_HOME} = File::Spec->catdir($EXTDIR, "czmq-1.3.2");
+        $ENV{CZMQ_HOME} = install_libczmq($zmq_version);
         cpanm(File::Spec->catdir($ROOT, "ZMQ-LibCZMQ1"));
         test_binding("ZMQ-CZMQ");
     }
@@ -116,12 +114,11 @@ if ( $target eq 'ZMQ-Constants' ) {
         Test::TCP
     ));
     foreach my $zmq_version ( qw(2.2.0 3.2.2) ) {
-        install_libczmq($zmq_version);
-        $ENV{CZMQ_HOME} = File::Spec->catdir($EXTDIR, "czmq-1.3.2");
+        $ENV{CZMQ_HOME} = install_libczmq($zmq_version);
         test_binding("ZMQ-LibCZMQ1");
     }
 } elsif ( $target eq 'ZMQ-LibZMQ2' ) {
-    install_libzmq("zeromq-2.2.0");
+    $ENV{ZMQ_HOME} = install_libzmq("zeromq-2.2.0");
     cpanm(qw(
         inc::Module::Install
         Module::Install::AuthorTests
@@ -133,7 +130,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     cpanm(qw(AnyEvent Proc::Guard));
     test_binding("ZMQ-LibZMQ2");
 } elsif ( $target eq 'ZMQ-LibZMQ3' ) {
-    install_libzmq("zeromq-3.2.2");
+    $ENV{ZMQ_HOME} = install_libzmq("zeromq-3.2.2");
     cpanm(qw(
         inc::Module::Install
         Module::Install::AuthorTests
