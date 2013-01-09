@@ -160,7 +160,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     ));
 
     foreach my $zmq_version(qw(2.2.0 3.2.2)) {
-        my $backend = sprintf 'LibZMQ%d', ($zmq_version =~ /^zeromq-(\d)/);
+        my $backend = sprintf 'LibZMQ%d', substr($zmq_version, 0, 1);
         $ENV{ZMQ_HOME} = install_libzmq("zeromq-$zmq_version");
         cpanm(File::Spec->catdir($ROOT, "ZMQ-$backend"));
         $ENV{PERL_ZMQ_BACKEND} = "ZMQ::$backend";
