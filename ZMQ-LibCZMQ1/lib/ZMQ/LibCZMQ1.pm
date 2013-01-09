@@ -128,7 +128,7 @@ our %EXPORT_TAGS = (
         zframe_strhex
     ) ],
 );
-our @EXPORT_OK = map { @$_ } values %EXPORT_TAGS;
+our @EXPORT = map { @$_ } values %EXPORT_TAGS;
 
 sub zstr_send {
     my ($socket, $message, @args) = @_;
@@ -194,7 +194,17 @@ requests if you have problems.
 
 =head1 FUNCTIONS
 
+=head2 zmq_version()
+
+Returns the version of libzmq this czmq (and hence this module) is built against.
+
+In list context, returns 3 elements consisting of major version, minor version, and patch version.
+
+In scalar context returns dotted version string.
+
 =head2 czmq_version()
+
+Returns the version of czmq this module is built against.
 
 In list context, returns 3 elements consisting of major version, minor version, and patch version.
 
@@ -326,7 +336,7 @@ In scalar context returns dotted version string.
 
 =head2 zsocket_rcvbuf
 
-=head2 zsocket_rcvhwm
+=head2 zsocket_rcvhwm (only for libzmq 3.x)
 
 =head2 zsocket_rcvmore
 
@@ -336,7 +346,7 @@ In scalar context returns dotted version string.
 
 =head2 zsocket_recovery_ivl
 
-=head2 zsocket_recovery_ivl_msec
+=head2 zsocket_recovery_ivl_msec (only for libzmq 2.x)
 
 =head2 zsocket_set_affinity
 
@@ -348,7 +358,7 @@ In scalar context returns dotted version string.
 
 =head2 zsocket_set_linger
 
-=head2 zsocket_set_maxmsgsize
+=head2 zsocket_set_maxmsgsize (only for libzmq 3.x)
 
 =head2 zsocket_set_mcast_loop (only in libzmq 2.x)
 
@@ -356,7 +366,7 @@ In scalar context returns dotted version string.
 
 =head2 zsocket_set_rcvbuf
 
-=head2 zsocket_set_rcvhwm
+=head2 zsocket_set_rcvhwm (only for libzmq 3.x)
 
 =head2 zsocket_set_reconnect_ivl
 

@@ -249,8 +249,18 @@ int  zsocket_fd (socket)
 int  zsocket_linger (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
 
-int  zsocket_maxmsgsize (socket)
+int
+zsocket_maxmsgsize (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
+    CODE:
+#ifndef HAS_ZSOCKET_MAXMSGSIZE
+        PERL_UNUSED_VAR(socket);
+        PerlLibczmq1_function_unavailable("zsocket_maxmsgsize");
+#else
+        RETVAL = zsocket_maxmsgsize(socket);
+#endif
+    OUTPUT:
+        RETVAL
 
 int  zsocket_rate (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
@@ -258,8 +268,18 @@ int  zsocket_rate (socket)
 int  zsocket_rcvbuf (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
 
-int  zsocket_rcvhwm (socket)
+int
+zsocket_rcvhwm (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
+    CODE:
+#ifndef HAS_ZSOCKET_RCVHWM
+        PERL_UNUSED_VAR(socket);
+        PerlLibczmq1_function_unavailable("zsocket_rcvhwm");
+#else
+        RETVAL = zsocket_rcvhwm(socket);
+#endif
+    OUTPUT:
+        RETVAL
 
 int  zsocket_rcvmore (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
@@ -276,8 +296,18 @@ int  zsocket_recovery_ivl (socket)
 int  zsocket_sndbuf (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
 
-int  zsocket_sndhwm (socket)
+int
+zsocket_sndhwm (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
+    CODE:
+#ifndef HAS_ZSOCKET_SNDHWM
+        PERL_UNUSED_VAR(socket);
+        PerlLibczmq1_funciton_unavailable("zsocket_sndhwm");
+#else
+        RETVAL = zsocket_sndhwm(socket);
+#endif
+    OUTPUT:
+        RETVAL
 
 int  zsocket_type (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
@@ -285,13 +315,31 @@ int  zsocket_type (socket)
 int  zsocket_events (socket)
         PerlLibCZMQ1_zsocket_raw *socket;
 
-void zsocket_set_sndhwm (socket, sndhwm)
+void
+zsocket_set_sndhwm (socket, sndhwm)
         PerlLibCZMQ1_zsocket_raw *socket;
         int sndhwm;
+    CODE:
+#ifndef HAS_ZSOCKET_SET_SNDHWM
+        PERL_UNUSED_VAR(socket);
+        PERL_UNUSED_VAR(sndhwm);
+        PerlLibczmq1_funciton_unavailable("zsocket_set_sndhwm");
+#else
+        zsocket_set_sndhwm(socket, sndhwm);
+#endif
 
-void zsocket_set_rcvhwm (socket, rcvhwm)
+void
+zsocket_set_rcvhwm (socket, rcvhwm)
         PerlLibCZMQ1_zsocket_raw *socket;
         int rcvhwm;
+    CODE:
+#ifndef HAS_ZSOCKET_SET_RCVHWM
+        PERL_UNUSED_VAR(socket);
+        PERL_UNUSED_VAR(rcvhwm);
+        PerlLibczmq1_funciton_unavailable("zsocket_set_rcvhwm");
+#else
+        zsocket_set_rcvhwm(socket, rcvhwm);
+#endif
 
 void zsocket_set_affinity (socket, affinity)
         PerlLibCZMQ1_zsocket_raw *socket;
@@ -333,9 +381,18 @@ void zsocket_set_reconnect_ivl_max (socket, reconnect_ivl_max)
         PerlLibCZMQ1_zsocket_raw *socket;
         int reconnect_ivl_max;
 
-void zsocket_set_maxmsgsize (socket, maxmsgsize)
+void
+zsocket_set_maxmsgsize (socket, maxmsgsize)
         PerlLibCZMQ1_zsocket_raw *socket;
         int maxmsgsize;
+    CODE:
+#ifndef HAS_ZSOCKET_SET_MAXMSGSIZE
+        PERL_UNUSED_VAR(socket);
+        PERL_UNUSED_VAR(maxmsgsize);
+        PerlLibczmq1_function_unavailable("zsocket_set_maxmsgsize");
+#else
+        zsocket_set_maxmsgsize(socket, maxmsgsize);
+#endif
 
 void zsocket_set_subscribe (socket, subscribe)
         PerlLibCZMQ1_zsocket_raw *socket;
