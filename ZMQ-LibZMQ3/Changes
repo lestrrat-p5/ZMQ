@@ -1,6 +1,13 @@
 Changes
 =======
 
+1.05 Jan 09 2013
+    - Make sure to specify c99 in zmqcheck.
+    - Make sure to specify -pedantic-errors in zmqcheck.
+    - Makefile.PL now warns if zmqcheck fails to compile everything,
+      which is most certainly wrong.
+    - Minor test cleanup.
+
 1.04 Jan 09 2013
     - zmq_proxy(), zmq_device() should now be usable (if your underlying
       libzmq has them). Thanks for @melo and @domm for testing.
