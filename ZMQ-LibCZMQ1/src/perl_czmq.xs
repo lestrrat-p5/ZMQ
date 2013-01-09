@@ -83,6 +83,31 @@ MODULE = ZMQ::LibCZMQ1  PACKAGE = ZMQ::LibCZMQ1
 PROTOTYPES: DISABLE
 
 void
+zmq_version()
+    PREINIT:
+        I32 gimme;
+    PPCODE:
+        gimme = GIMME_V;
+        if (gimme == G_VOID) {
+            XSRETURN(0);
+        }
+
+        if (gimme == G_SCALAR) {
+            XPUSHs(sv_2mortal(newSVpvf(
+                "%d.%d.%d",
+                ZMQ_VERSION_MAJOR,
+                ZMQ_VERSION_MINOR,
+                ZMQ_VERSION_PATCH
+            )));
+            XSRETURN(1);
+        } else {
+            mXPUSHi(ZMQ_VERSION_MAJOR);
+            mXPUSHi(ZMQ_VERSION_MINOR);
+            mXPUSHi(ZMQ_VERSION_PATCH);
+            XSRETURN(3);
+        }
+
+void
 czmq_version()
     PREINIT:
         I32 gimme;
