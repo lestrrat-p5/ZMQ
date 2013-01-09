@@ -44,7 +44,7 @@ my $zmqcheck_dir = "tools/zmqcheck";
         }
     }
     print STDERR "Cleaning up $zmqcheck_dir...\n";
-#    system "make", "clean";
+    system "make", "clean";
 }
 
 
