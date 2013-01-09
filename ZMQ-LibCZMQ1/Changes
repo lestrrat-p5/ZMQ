@@ -1,6 +1,17 @@
 Changes
 =======
 
+0.02 - Jan 09 2013
+    - Now ZMQ_HOME as well as CZMQ_HOME is honored during compilation
+    - Now use ZMQ::LibCZMQ1 will export all the functions,
+      unless you explicitly specify what you want.
+    - Actually check for existance of functions. You should now be
+      able to actually compile this module regardless of the underlying
+      libzmq version.
+    - Functions that are no available for the underlying library
+      version will now croak.
+    - Made many Travis CI tweaks.
+
 0.01
     - Rename from ZMQ::CZMQ to ZMQ::LibCZMQ1
 
