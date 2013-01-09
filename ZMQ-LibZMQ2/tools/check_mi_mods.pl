@@ -5,7 +5,6 @@ my @modules = qw(
     inc::Module::Install
     Module::Install::AuthorTests
     Module::Install::CheckLib
-    Module::Install::ReadmeFromPod
     Module::Install::XSUtil
     Module::Install::Repository
 );
