@@ -26,9 +26,9 @@ sub mysystem(@) {
 }
 
 sub install_libzmq(@) {
-    my ($basename, %opts) = @_;
+    my ($basename, $opts) = @_;
 
-    my $tail = $opts{tail} || '';
+    my $tail = $opts->{tail} || '';
     my $prefix = File::Spec->catdir($EXTDIR, $basename);
     my $file   = "$basename$tail.tar.gz";
     if (! -e $file) {
@@ -40,7 +40,7 @@ sub install_libzmq(@) {
     my $cwd = Cwd::abs_path();
     my $guard = myguard { chdir $cwd };
     chdir $basename;
-    mysystem("./configure", "--prefix", $prefix, @{$opts{extra_configure_args} ||[]});
+    mysystem("./configure", "--prefix", $prefix, @{$opts->{extra_configure_args} ||[]});
     mysystem("make");
     mysystem("make", "install");
 
@@ -126,7 +126,6 @@ if ( $target eq 'ZMQ-Constants' ) {
         inc::Module::Install
         Module::Install::AuthorTests
         Module::Install::CheckLib
-        Module::Install::ReadmeFromPod
         Module::Install::XSUtil
         Module::Install::Repository
     ));
@@ -139,7 +138,6 @@ if ( $target eq 'ZMQ-Constants' ) {
         inc::Module::Install
         Module::Install::AuthorTests
         Module::Install::CheckLib
-        Module::Install::ReadmeFromPod
         Module::Install::XSUtil
         Module::Install::Repository
     ));
@@ -154,7 +152,6 @@ if ( $target eq 'ZMQ-Constants' ) {
         inc::Module::Install
         Module::Install::AuthorTests
         Module::Install::CheckLib
-        Module::Install::ReadmeFromPod
         Module::Install::XSUtil
         Module::Install::Repository
     ));
