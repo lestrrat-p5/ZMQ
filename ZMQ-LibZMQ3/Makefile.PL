@@ -98,6 +98,7 @@ sub myguard::DESTROY {
     $_[0]->[0]->();
 }
 
+my @constants;
 my @clean = qw(xs/*.inc xs/typemap);
 my $zmqcheck_dir = "tools/zmqcheck";
 {
@@ -116,14 +117,38 @@ my $zmqcheck_dir = "tools/zmqcheck";
 
         my $ok = (system("make", $name) == 0);
         print STDERR " @{[$ok ? 'YES' : 'NO']}\n";
+        my $constname = sprintf "HAS_%s", uc $name;
         if ($ok) {
-            cc_define sprintf "-DHAS_%s", uc $name;
+            cc_define "-D$constname";
         }
+        push @constants, $constname;
     }
     print STDERR "Cleaning up $zmqcheck_dir...\n";
     system "make", "clean";
 }
 
+{ # Create constants-xs.inc
+    my $file = 'xs/constants-xs.inc';
+    open my $fh, '>', $file
+        or die "Failed to create $file: $!";
+    print $fh <<EOM;
+        {
+            HV *stash = gv_stashpv("ZMQ::LibZMQ3", TRUE);
+EOM
+    foreach my $const (@constants) {
+        print $fh <<EOM;
+#ifdef $const
+            newCONSTSUB(stash, "$const", &PL_sv_yes);
+#else
+            newCONSTSUB(stash, "$const", &PL_sv_no);
+#endif
+EOM
+    }
+    print $fh <<EOM;
+        }
+EOM
+    close $fh;
+}
 author_tests 'xt';
 clean_files join " ", @clean;
 

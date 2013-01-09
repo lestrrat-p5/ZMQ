@@ -10,8 +10,12 @@ my %functions = (
     zmq_ctx_new     => 'zmq_ctx_new();',
     zmq_ctx_set     => 'zmq_ctx_set(NULL, 0, 0);',
     zmq_device      => 'zmq_device(0, NULL, NULL);',
+    zmq_msg_recv    => 'zmq_msg_recv(NULL, NULL, 0);',
+    zmq_msg_send    => 'zmq_msg_send(NULL, NULL, 0);',
     zmq_proxy       => 'zmq_proxy(NULL, NULL, NULL);',
+    zmq_recvmsg     => 'zmq_recvmsg(NULL, NULL, 0);',
     zmq_socket_monitor => 'zmq_socket_monitor(NULL, NULL, 0);',
+    zmq_sendmsg     => 'zmq_sendmsg(NULL, NULL, 0);',
     zmq_term        => 'zmq_term(NULL);',
     zmq_unbind      => 'zmq_unbind(NULL, NULL);',
 );

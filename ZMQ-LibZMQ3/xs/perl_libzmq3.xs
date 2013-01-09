@@ -376,7 +376,9 @@ PROTOTYPES: DISABLED
 BOOT:
     {
         PerlLibzmq3_trace( "Booting ZMQ::LibZMQ3" );
+#include "constants-xs.inc"
     }
+
 
 int
 zmq_errno()
@@ -825,6 +827,27 @@ PerlLibzmq3_zmq_recv(socket, buf_sv, len, flags = 0)
     OUTPUT:
         RETVAL
         
+int
+PerlLibzmq3_zmq_msg_recv(msg, socket, flags = 0)
+        PerlLibzmq3_Message *msg;
+        PerlLibzmq3_Socket *socket;
+        int flags;
+    CODE:
+#ifndef HAS_ZMQ_MSG_RECV
+        PerlLibzmq3_function_unavailable("zmq_msg_recv");
+#else
+        PerlLibzmq3_trace( "START zmq_msg_recv" );
+        RETVAL = zmq_msg_recv(msg, socket->socket, flags);
+        PerlLibzmq3_trace(" + zmq_msg_recv returned with rv '%d'", RETVAL);
+        if (RETVAL == -1) {
+            SET_BANG;
+            PerlLibzmq3_trace(" + zmq_msg_recv got bad status");
+        }
+        PerlLibzmq3_trace( "END zmq_msg_recv" );
+#endif /* HAS_ZMQ_RCVMSG */
+    OUTPUT:
+        RETVAL
+
 PerlLibzmq3_Message *
 PerlLibzmq3_zmq_recvmsg(socket, flags = 0)
         PerlLibzmq3_Socket *socket;
@@ -833,6 +856,9 @@ PerlLibzmq3_zmq_recvmsg(socket, flags = 0)
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Message", 20 ));
         int rv;
     CODE:
+#ifndef HAS_ZMQ_RECVMSG
+        PerlLibzmq3_function_unavailable("zmq_recvmsg");
+#else
         PerlLibzmq3_trace( "START zmq_recvmsg" );
         Newxz(RETVAL, 1, PerlLibzmq3_Message);
         rv = zmq_msg_init(RETVAL);
@@ -852,6 +878,7 @@ PerlLibzmq3_zmq_recvmsg(socket, flags = 0)
             XSRETURN_EMPTY;
         }
         PerlLibzmq3_trace( "END zmq_recvmsg" );
+#endif /* HAS_ZMQ_RCVMSG */
     OUTPUT:
         RETVAL
 
@@ -886,11 +913,35 @@ PerlLibzmq3_zmq_send(socket, message, size = -1, flags = 0)
         RETVAL
 
 int
+PerlLibzmq3__zmq_msg_send(message, socket, flags = 0)
+        PerlLibzmq3_Message *message;
+        PerlLibzmq3_Socket *socket;
+        int flags;
+    CODE:
+#ifndef HAS_ZMQ_MSG_SEND
+        PerlLibzmq3_function_unavailable("zmq_msg_send");
+#else
+        PerlLibzmq3_trace( "START zmq_msg_send" );
+        RETVAL = zmq_msg_send(message, socket->socket, flags);
+        PerlLibzmq3_trace( " + zmq_msg_send returned with rv '%d'", RETVAL );
+        if ( RETVAL == -1 ) {
+            PerlLibzmq3_trace( " ! zmq_msg_send error %s", zmq_strerror( zmq_errno() ) );
+            SET_BANG;
+        }
+        PerlLibzmq3_trace( "END zmq_msg_send" );
+#endif
+    OUTPUT:
+        RETVAL
+
+int
 PerlLibzmq3__zmq_sendmsg(socket, message, flags = 0)
         PerlLibzmq3_Socket *socket;
         PerlLibzmq3_Message *message;
         int flags;
     CODE:
+#ifndef HAS_ZMQ_SENDMSG
+        PerlLibzmq3_function_unavailable("zmq_sendmsg");
+#else
         PerlLibzmq3_trace( "START zmq_sendmsg" );
         RETVAL = zmq_sendmsg(socket->socket, message, flags);
         PerlLibzmq3_trace( " + zmq_sendmsg returned with rv '%d'", RETVAL );
@@ -899,6 +950,7 @@ PerlLibzmq3__zmq_sendmsg(socket, message, flags = 0)
             SET_BANG;
         }
         PerlLibzmq3_trace( "END zmq_sendmsg" );
+#endif
     OUTPUT:
         RETVAL
 

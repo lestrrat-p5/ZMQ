@@ -13,6 +13,9 @@ our @EXPORT = qw(
     zmq_init
     zmq_term
 
+    zmq_msg_send
+    zmq_msg_recv
+
     zmq_msg_close
     zmq_msg_data
     zmq_msg_init
@@ -39,9 +42,16 @@ our @EXPORT = qw(
     zmq_proxy
 );
 
-sub zmq_sendmsg {
-    my $sock = shift;
+if (HAS_ZMQ_CTX_NEW) {
+    *zmq_init = \&zmq_ctx_new;
+}
+if (HAS_ZMQ_CTX_DESTROY) {
+    *zmq_term = \&zmq_ctx_destroy;
+}
+
+sub zmq_msg_send {
     my $msg  = shift;
+    my $sock = shift;
     if (!ref $msg) {
         my $wrap = zmq_msg_init_data($msg);
         if (! $wrap) {
@@ -50,8 +60,29 @@ sub zmq_sendmsg {
         $msg = $wrap;
     }
 
-    @_ = ($sock, $msg, @_);
-    goto \&_zmq_sendmsg;
+    @_ = ($msg, $sock, @_);
+    goto \&_zmq_msg_send;
+}
+
+sub zmq_sendmsg {
+    my $sock = shift;
+    my $msg  = shift;
+    if (HAS_ZMQ_MSG_SEND) {
+        # Delegate to zmq_msg_send
+        @_ = ($msg, $sock, @_);
+        goto \&zmq_msg_send;
+    } else {
+        if (!ref $msg) {
+            my $wrap = zmq_msg_init_data($msg);
+            if (! $wrap) {
+                return ();
+            }
+            $msg = $wrap;
+        }
+
+        @_ = ($sock, $msg, @_);
+        goto \&_zmq_sendmsg;
+    }
 }
 
 sub zmq_getsockopt {
@@ -275,8 +306,8 @@ Context objects can be reused across threads.
 
 Returns undef upon error, and sets $!.
 
-Note: if your underlying libzmq has C<zmq_ctx_new()>, you can use that instead
-as this function is deprecated.
+Note: Deprecated in libzmq, but the Perl binding will silently fallback to
+using C<zmq_ctx_new()>, if available.
 
 =head2 $cxt = zmq_ctx_new( $threads );
 
@@ -310,8 +341,8 @@ operations.
 
 Returns a non-zero status upon failure, and sets $!.
 
-Note: if your underlying libzmq has C<zmq_ctx_destroy()>, you can use that instead
-as this function is deprecated.
+Note: Deprecated in libzmq, but the Perl binding will silently fallback to
+using C<zmq_ctx_destroy()>, if available.
 
 =head2 $rv = zmq_ctx_destroy( $cxt )
 
@@ -413,6 +444,20 @@ Returns the number of bytes sent on success (which should be exact C<$size>)
 
 Returns -1 upon failure, and sets $!.
 
+Note: Deprecated in favor of C<zmq_msg_send()>, and may not be available depending on your libzmq version.
+
+=head2 $rv = zmq_msg_send($message, $sock, $flags)
+
+Queues C<$message> to be sent via C<$sock>. Argument C<$flags> may be omitted.
+
+If C<$message> is a non-ref, creates a new ZMQ::LibZMQ3::Message object via C<zmq_msg_init_data()>, and uses that to pass to the underlying C layer..
+
+Returns the number of bytes sent on success (which should be exact C<$size>)
+
+Returns -1 upon failure, and sets $!.
+
+Note: may not be available depending on your libzmq version.
+
 =head2 $rv = zmq_recv($sock, $buffer, $len, $flags)
 
 Receives a new message from C<$sock>, and store the message payload in C<$buffer>, up to C<$len> bytes. Argument C<$flags> may be omitted.
@@ -427,6 +472,29 @@ Receives a new message from C<$sock>. Argument C<$flags> may be omitted.
 Returns the message object.
 
 Returns undef upon failure, and sets $!.
+
+Note: Although this function is marked as deprecated in libzmq3, it will
+stay in the Perl binding as the official short-circuit version of
+C<zmq_msg_recv()>, so that you don't have to create a message object
+every time.
+
+=head2 $rv = zmq_msg_recv($msg, $sock, $flags)
+
+Receives a new message from C<$sock>, and writes the new content to C<$msg>.
+Argument C<$flags> may be omitted. Returns 0 upon succes, -1 on failure and
+sets $!.
+
+Other than the fact that libzmq has deprecated C<zmq_recvmsg()>, this
+construct is useful if you don't want to allocate a message struct for
+every recv call:
+
+    my $msg = zmq_msg_init();
+    while (1) {
+        my $rv = zmq_msg_recv($msg, $sock, $flags);
+        ...
+    }
+
+Note: may not be available depending on your libzmq version
 
 =head2 $msg = zmq_msg_init()
 
