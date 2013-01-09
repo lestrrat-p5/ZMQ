@@ -5,10 +5,16 @@ my $postamble = '';
 my @functions = map { s/\.c$//; $_ } glob("*.c");
 my %functions = (
     zsocket_hwm                   => 'zsocket_hwm(NULL);',
+    zsocket_maxmsgsize            => 'zsocket_maxmsgsize(NULL);',
     zsocket_mcast_loop            => 'zsocket_mcast_loop(NULL);',
+    zsocket_rcvhwm                => 'zsocket_rcvhwm(NULL);',
     zsocket_recovery_ivl_msec     => 'zsocket_recovery_ivl_msec(NULL);',
+    zsocket_sndhwm                => 'zsocket_sndhwm(NULL);',
+    zsocket_set_maxmsgsize        => 'zsocket_set_maxmsgsize(NULL, 0);',
     zsocket_set_mcast_loop        => 'zsocket_set_mcast_loop(NULL, 0);',
+    zsocket_set_rcvhwm            => 'zsocket_set_rcvhwm(NULL, 0);',
     zsocket_set_recovery_ivl_msec => 'zsocket_set_recovery_ivl_msec(NULL, 0);',
+    zsocket_set_sndhwm            => 'zsocket_set_sndhwm(NULL, 0);',
     zsocket_set_swap              => 'zsocket_set_swap(NULL, 0);',
     zsocket_swap                  => 'zsocket_swap(NULL);',
 );
