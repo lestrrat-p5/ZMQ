@@ -79,7 +79,7 @@ sub install_libczmq {
     install_libzmq("zeromq-$zmq_version");
     install_libzmq("czmq-1.3.2", {
         extra_configure_args => [
-            '--with-libzmq' => File::Spec->catdir($EXTDIR, "zeromq-$zmq_version")
+            sprintf('--with-libzmq=%s', File::Spec->catdir($EXTDIR, "zeromq-$zmq_version")),
         ]
     });
 }
