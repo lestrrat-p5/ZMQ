@@ -1,12 +1,24 @@
 use inc::Module::Install;
 
-do "tools/detect.pl";
+do "tools/detect_zmq.pl";
+do "tools/detect_czmq.pl";
 
 name 'ZMQ-LibCZMQ1';
 all_from 'lib/ZMQ/LibCZMQ1.pm';
 
 use_xshelper '-clean';
 cc_warnings;
+
+if ($ENV{ZMQ_INCLUDES}) {
+    $ENV{CZMQ_INCLUDES} =
+        join " ", $ENV{ZMQ_INCLUDES}, $ENV{CZMQ_INCLUDES};
+}
+
+if ($ENV{ZMQ_LIBS}) {
+    $ENV{CZMQ_LIBS} =
+        join " ", $ENV{ZMQ_LIBS}, $ENV{CZMQ_LIBS};
+}
+
 cc_include_paths split/\s+/, $ENV{CZMQ_INCLUDES};
 cc_libs "$ENV{CZMQ_LIBS} -lzmq -lczmq";
 cc_include_paths 'src';

@@ -192,6 +192,27 @@ patches are welcome)
 This module is still in heavey development. Please send issues, patches and pull 
 requests if you have problems.
 
+=head1 INSTALLATION
+
+You need to make sure that BOTH libzmq and libczmq files are searchable when
+the compilation happens: Consider this case: you have zeromq-2.x in 
+/usr/local, but you want to build against a custom zeromq-3.x in /path/to/app.
+If you don't specify anything, your compiler will look find zeromq-2.x in the
+standard location (/usr/local) and not the custom one.
+
+If you installed your libraries with pkg-config data, then our scripts should
+be able to detect them automatically (but of course, you still need to
+make sure that zeromq-3.x files are found before zeromq-2.x files in the
+above scenario). Otherwise, use ZMQ_HOME and CZMQ_HOME environment
+variables:
+
+    ZMQ_HOME=/path/to/zeromq \
+    CZMQ_HOME=/path/to/czmq \
+        perl Makefile.PL
+    make
+    make test
+    make install
+
 =head1 FUNCTIONS
 
 =head2 zmq_version()
