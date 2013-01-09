@@ -158,13 +158,15 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::XSUtil
         Module::Install::Repository
     ));
-    $ENV{ZMQ_HOME} = install_libzmq("zeromq-2.2.0");
-    cpanm(File::Spec->catdir($ROOT, "ZMQ-LibZMQ2"));
-    $ENV{ZMQ_HOME} = install_libzmq("zeromq-3.2.2");
-    cpanm(File::Spec->catdir($ROOT, "ZMQ-LibZMQ3"));
 
-    $ENV{PERL_ZMQ_BACKEND} = "ZMQ::LibZMQ2";
-    test_binding("ZMQ");
-    $ENV{PERL_ZMQ_BACKEND} = "ZMQ::LibZMQ3";
-    test_binding("ZMQ");
+    foreach my $zmq_version(qw(2.2.0 3.2.2)) {
+        my $backend = sprintf 'LibZMQ%d', ($zmq_version =~ /^zeromq-(\d)/);
+        $ENV{ZMQ_HOME} = install_libzmq("zeromq-$zmq_version");
+        cpanm(File::Spec->catdir($ROOT, "ZMQ-$backend"));
+        $ENV{PERL_ZMQ_BACKEND} = "ZMQ::$backend";
+        test_binding("ZMQ");
+        if ($ENV{ZMQ_HOME} && -d $ENV{ZMQ_HOME}) {
+            mysystem("rm", "-rf", $ENV{ZMQ_HOME});
+        }
+    }
 }
