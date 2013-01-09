@@ -258,8 +258,8 @@ hashrefs:
 
 Unfortunately this custom polling scheme doesn't play too well with AnyEvent.
 
-As of zeromq2-2.1.0, you can use getsockopt to retrieve the underlying file
-descriptor, so use that to integrate ZMQ::LibZMQ3 and AnyEvent:
+Fortunately you can use getsockopt to retrieve the underlying file descriptor,
+so use that to integrate ZMQ::LibZMQ3 and AnyEvent:
 
     my $socket = zmq_socket( $ctxt, ZMQ_REP );
     my $fh = zmq_getsockopt( $socket, ZMQ_FD );
