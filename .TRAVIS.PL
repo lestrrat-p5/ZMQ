@@ -103,6 +103,9 @@ if ( $target eq 'ZMQ-Constants' ) {
         $ENV{CZMQ_HOME} = install_libczmq($zmq_version);
         cpanm(File::Spec->catdir($ROOT, "ZMQ-LibCZMQ1"));
         test_binding("ZMQ-CZMQ");
+        if ($ENV{ZMQ_HOME} && -d $ENV{ZMQ_HOME}) {
+            mysystem("rm", "-rf", $ENV{ZMQ_HOME});
+        }
     }
 } elsif ( $target eq 'ZMQ-LibCZMQ1' ) {
     cpanm(qw(
@@ -116,6 +119,9 @@ if ( $target eq 'ZMQ-Constants' ) {
     foreach my $zmq_version ( qw(2.2.0 3.2.2) ) {
         $ENV{CZMQ_HOME} = install_libczmq($zmq_version);
         test_binding("ZMQ-LibCZMQ1");
+        if ($ENV{ZMQ_HOME} && -d $ENV{ZMQ_HOME}) {
+            mysystem("rm", "-rf", $ENV{ZMQ_HOME});
+        }
     }
 } elsif ( $target eq 'ZMQ-LibZMQ2' ) {
     $ENV{ZMQ_HOME} = install_libzmq("zeromq-2.2.0");
