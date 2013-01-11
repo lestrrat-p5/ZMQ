@@ -4,7 +4,8 @@ perl:
   - "5.14"
   - "5.12"
   - "5.10"
-install: "perl ./.TRAVIS.PL"
+install: "perl -e 1" # dummy
+script: "perl ./.TRAVIS.PL"
 env:
   - PERL_ZMQ_TEST_TARGET=ZMQ-Constants
   - PERL_ZMQ_TEST_TARGET=ZMQ-CZMQ
