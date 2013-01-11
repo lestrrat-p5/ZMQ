@@ -1,6 +1,9 @@
 use strict;
 use warnings;
-use File::Spec;
+use POSIX ();
+BEGIN {
+    POSIX::setlocale(&POSIX::LC_MESSAGES, "en_GB.UTF-8");
+}
 
 use Test::More;
 use ZMQ::LibZMQ3;
