@@ -1,3 +1,7 @@
+# Let's start with the basics. If we detect that this is git clone,
+# then it's very likely that we don't have all the Module::Install
+# plugins and such, so run a separate script to detect it.
+# Otherwise, do the usual.
 BEGIN {
     if (-e '.git') {
         do 'tools/check_mi_mods.pl';
@@ -8,9 +12,11 @@ BEGIN {
     }
 }
 
+# Usual boilder plate...
 name 'ZMQ-LibZMQ3';
 all_from 'lib/ZMQ/LibZMQ3.pm';
 
+# Detect libzmq, and display it for sanity
 do 'tools/detect_zmq.pl';
 print "Detected the following ZMQ settings:\n";
 foreach my $env (qw(ZMQ_HOME ZMQ_H ZMQ_INCLUDES ZMQ_LIBS ZMQ_TRACE)) {
@@ -38,7 +44,7 @@ if (-f $ENV{ZMQ_H}) {
 *** WHAO THERE! ***
 
 We have detected that you have libzmq version lower than 3.1.x.
-ZMQ.pm only works with libzmq versions >= 3.1.0
+ZMQ::LibZMQ3 only works with libzmq versions >= 3.1.0
 
 Make sure to set your ZMQ paths correctly, e.g.:
 
