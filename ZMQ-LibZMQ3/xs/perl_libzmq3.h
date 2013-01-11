@@ -13,7 +13,7 @@
 #define PERLZMQ_TRACE 0
 #endif
 #define _ERRNO        errno
-#define SET_BANG      PerlLibzmq3_set_bang(aTHX_ _ERRNO)
+#define SET_BANG      P5ZMQ3_set_bang(aTHX_ _ERRNO)
 
 typedef struct {
 #ifdef tTHX /* tTHX doesn't exist in older perls */
@@ -23,15 +23,15 @@ typedef struct {
 #endif
     pid_t   pid;
     void   *ctxt;
-} PerlLibzmq3_Context;
+} P5ZMQ3_Context;
 
 typedef struct {
     void  *socket;
     SV    *assoc_ctxt; /* keep context around with sockets so we know */
     pid_t  pid;
-} PerlLibzmq3_Socket;
+} P5ZMQ3_Socket;
 
-typedef zmq_msg_t PerlLibzmq3_Message;
+typedef zmq_msg_t P5ZMQ3_Message;
 
 typedef struct {
     int bucket_size;
@@ -53,7 +53,7 @@ typedef struct {
 #define ZMQ_PUSH ZMQ_DOWNSTREAM
 #endif
 
-#define P5ZMQ3_function_unavailable(name) \
+#define P5ZMQ3_FUNCTION_UNAVAILABLE(name) \
     { \
         int major, minor, patch; \
         zmq_version(&major, &minor, &patch); \
@@ -61,15 +61,40 @@ typedef struct {
     }
 
 #if (PERLZMQ_TRACE > 0)
-#define PerlLibzmq3_trace(...) \
+#define P5ZMQ3_TRACE(...) \
     { \
         PerlIO_printf(PerlIO_stderr(), "[perlzmq (%d)] ", PerlProc_getpid() ); \
         PerlIO_printf(PerlIO_stderr(), __VA_ARGS__); \
         PerlIO_printf(PerlIO_stderr(), "\n"); \
     }
 #else
-#define PerlLibzmq3_trace(...)
+#define P5ZMQ3_TRACE(...)
 #endif /* if PERLZMQ_TRACE */
+
+#ifdef MGf_LOCAL
+#define P5ZMQ3_DECL_VTBL(klass, get_cb, set_cb, len_cb, clear_cb, free_cb, copy_cb, dup_cb, local_cb) \
+static MGVTBL klass##_vtbl = { /* for identity */ \
+    get_cb, /* get */ \
+    set_cb, /* set */ \
+    len_cb, /* len */ \
+    clear_cb, /* clear */ \
+    free_cb, /* free */ \
+    copy_cb, /* copy */ \
+    dup_cb, /* dup */ \
+    local_cb  /* local */ \
+};
+#else /* MGf_LOCAL */
+#define P5ZMQ3_DECL_VTBL(klass, get_cb, set_cb, len_cb, clear_cb, free_cb, copy_cb, dup_cb) \
+static MGVTBL klass##_vtbl = { /* for identity */ \
+    get_cb, /* get */ \
+    set_cb, /* set */ \
+    len_cb, /* len */ \
+    clear_cb, /* clear */ \
+    free_cb, /* free */ \
+    copy_cb, /* copy */ \
+    dup_cb /* dup */ \
+};
+#endif /* MGf_LOCAL */
 
 #define P5ZMQ3_STRUCT2SV(arg, var, klass, type) \
     { \
@@ -122,7 +147,7 @@ typedef struct {
             closed = hv_fetchs( (HV *) svr, "_closed", 0 ); \
             if (closed != NULL && SvTRUE(*closed)) { \
                 /* if it's already closed, just return */ \
-                PerlLibzmq3_set_bang( aTHX_ errcode); \
+                P5ZMQ3_set_bang( aTHX_ errcode); \
                 XSRETURN_EMPTY; \
             } \
         } \

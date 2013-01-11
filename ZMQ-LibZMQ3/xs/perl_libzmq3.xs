@@ -2,9 +2,9 @@
 
 STATIC_INLINE
 void
-PerlLibzmq3_set_bang(pTHX_ int err) {
+P5ZMQ3_set_bang(pTHX_ int err) {
     SV *errsv = get_sv("!", GV_ADD);
-    PerlLibzmq3_trace(" + Set ERRSV ($!) to %d", err);
+    P5ZMQ3_TRACE(" + Set ERRSV ($!) to %d", err);
     sv_setiv(errsv, err);
     sv_setpv(errsv, zmq_strerror(err));
     errno = err;
@@ -12,7 +12,7 @@ PerlLibzmq3_set_bang(pTHX_ int err) {
 
 STATIC_INLINE
 SV *
-PerlLibzmq3_zmq_getsockopt_int(PerlLibzmq3_Socket *sock, int option) {
+P5ZMQ3_zmq_getsockopt_int(P5ZMQ3_Socket *sock, int option) {
     size_t len;
     int    status;
     I32    i32;
@@ -30,7 +30,7 @@ PerlLibzmq3_zmq_getsockopt_int(PerlLibzmq3_Socket *sock, int option) {
 
 STATIC_INLINE
 SV *
-PerlLibzmq3_zmq_getsockopt_int64(PerlLibzmq3_Socket *sock, int option) {
+P5ZMQ3_zmq_getsockopt_int64(P5ZMQ3_Socket *sock, int option) {
     size_t  len;
     int     status;
     int64_t i64;
@@ -48,7 +48,7 @@ PerlLibzmq3_zmq_getsockopt_int64(PerlLibzmq3_Socket *sock, int option) {
 
 STATIC_INLINE
 SV *
-PerlLibzmq3_zmq_getsockopt_uint64(PerlLibzmq3_Socket *sock, int option) {
+P5ZMQ3_zmq_getsockopt_uint64(P5ZMQ3_Socket *sock, int option) {
     size_t len;
     int    status;
     uint64_t u64;
@@ -66,7 +66,7 @@ PerlLibzmq3_zmq_getsockopt_uint64(PerlLibzmq3_Socket *sock, int option) {
 
 STATIC_INLINE
 SV *
-PerlLibzmq3_zmq_getsockopt_string(PerlLibzmq3_Socket *sock, int option, size_t len) {
+P5ZMQ3_zmq_getsockopt_string(P5ZMQ3_Socket *sock, int option, size_t len) {
     int    status;
     char   *string;
     SV     *sv = newSV(0);
@@ -86,7 +86,7 @@ PerlLibzmq3_zmq_getsockopt_string(PerlLibzmq3_Socket *sock, int option, size_t l
 
 STATIC_INLINE
 int
-PerlLibzmq3_zmq_setsockopt_int( PerlLibzmq3_Socket *sock, int option, int val) {
+P5ZMQ3_zmq_setsockopt_int( P5ZMQ3_Socket *sock, int option, int val) {
     int status;
     status = zmq_setsockopt(sock->socket, option, &val, sizeof(int));
     if (status != 0) {
@@ -97,7 +97,7 @@ PerlLibzmq3_zmq_setsockopt_int( PerlLibzmq3_Socket *sock, int option, int val) {
 
 STATIC_INLINE
 int
-PerlLibzmq3_zmq_setsockopt_int64( PerlLibzmq3_Socket *sock, int option, int64_t val) {
+P5ZMQ3_zmq_setsockopt_int64( P5ZMQ3_Socket *sock, int option, int64_t val) {
     int status;
     status = zmq_setsockopt(sock->socket, option, &val, sizeof(int64_t));
     if (status != 0) {
@@ -108,7 +108,7 @@ PerlLibzmq3_zmq_setsockopt_int64( PerlLibzmq3_Socket *sock, int option, int64_t 
 
 STATIC_INLINE
 int
-PerlLibzmq3_zmq_setsockopt_uint64(PerlLibzmq3_Socket *sock, int option, uint64_t val) {
+P5ZMQ3_zmq_setsockopt_uint64(P5ZMQ3_Socket *sock, int option, uint64_t val) {
     int status;
     status = zmq_setsockopt(sock->socket, option, &val, sizeof(uint64_t));
     if (status != 0) {
@@ -119,7 +119,7 @@ PerlLibzmq3_zmq_setsockopt_uint64(PerlLibzmq3_Socket *sock, int option, uint64_t
     
 STATIC_INLINE
 int
-PerlLibzmq3_zmq_setsockopt_string(PerlLibzmq3_Socket *sock, int option, const char *ptr, size_t len) {
+P5ZMQ3_zmq_setsockopt_string(P5ZMQ3_Socket *sock, int option, const char *ptr, size_t len) {
     int status;
     status = zmq_setsockopt(sock->socket, option, ptr, len);
     if (status != 0) {
@@ -130,14 +130,14 @@ PerlLibzmq3_zmq_setsockopt_string(PerlLibzmq3_Socket *sock, int option, const ch
 
 STATIC_INLINE
 int
-PerlLibzmq3_Message_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param) {
-    PerlLibzmq3_Message *const src = (PerlLibzmq3_Message *) mg->mg_ptr;
-    PerlLibzmq3_Message *dest;
+P5ZMQ3_Message_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param) {
+    P5ZMQ3_Message *const src = (P5ZMQ3_Message *) mg->mg_ptr;
+    P5ZMQ3_Message *dest;
 
-    PerlLibzmq3_trace("Message -> dup");
+    P5ZMQ3_TRACE("Message -> dup");
     PERL_UNUSED_VAR( param );
  
-    Newxz( dest, 1, PerlLibzmq3_Message );
+    Newxz( dest, 1, P5ZMQ3_Message );
     zmq_msg_init( dest );
     zmq_msg_copy ( dest, src );
     mg->mg_ptr = (char *) dest;
@@ -146,23 +146,23 @@ PerlLibzmq3_Message_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param) {
 
 STATIC_INLINE
 int
-PerlLibzmq3_Message_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
-    PerlLibzmq3_Message* const msg = (PerlLibzmq3_Message *) mg->mg_ptr;
+P5ZMQ3_Message_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
+    P5ZMQ3_Message* const msg = (P5ZMQ3_Message *) mg->mg_ptr;
 
     PERL_UNUSED_VAR(sv);
-    PerlLibzmq3_trace( "START mg_free (Message)" );
+    P5ZMQ3_TRACE( "START mg_free (Message)" );
     if ( msg != NULL ) {
-        PerlLibzmq3_trace( " + zmq message %p", msg );
+        P5ZMQ3_TRACE( " + zmq message %p", msg );
         zmq_msg_close( msg );
         Safefree( msg );
     }
-    PerlLibzmq3_trace( "END mg_free (Message)" );
+    P5ZMQ3_TRACE( "END mg_free (Message)" );
     return 1;
 }
 
 STATIC_INLINE
 MAGIC*
-PerlLibzmq3_Message_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
+P5ZMQ3_Message_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
     MAGIC* mg;
 
     assert(sv   != NULL);
@@ -175,39 +175,39 @@ PerlLibzmq3_Message_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
         }
     }
 
-    PerlLibzmq3_trace( "mg_find (Message)" );
-    PerlLibzmq3_trace( " + SV %p", sv )
+    P5ZMQ3_TRACE( "mg_find (Message)" );
+    P5ZMQ3_TRACE( " + SV %p", sv )
     croak("ZMQ::LibZMQ3::Message: Invalid ZMQ::LibZMQ3::Message object was passed to mg_find");
     return NULL; /* not reached */
 }
 
 STATIC_INLINE
 int
-PerlLibzmq3_Context_invalidate( PerlLibzmq3_Context *ctxt ) {
+P5ZMQ3_Context_invalidate( P5ZMQ3_Context *ctxt ) {
     int rv = -1;
     int close = 1;
     if (ctxt->ctxt == NULL) {
         close = 0;
-        PerlLibzmq3_trace( " + context already seems to be freed");
+        P5ZMQ3_TRACE( " + context already seems to be freed");
     }
 
     if (ctxt->pid != getpid()) {
         close = 0;
-        PerlLibzmq3_trace( " + context was not created in this process");
+        P5ZMQ3_TRACE( " + context was not created in this process");
     }
 
 #ifdef USE_ITHREADS
     if (ctxt->interp != aTHX) {
         close = 0;
-        PerlLibzmq3_trace( " + context was not created in this thread");
+        P5ZMQ3_TRACE( " + context was not created in this thread");
     }
 #endif
     if (close) {
 #ifdef HAS_ZMQ_CTX_DESTROY
-        PerlLibzmq3_trace( " + calling actual zmq_ctx_destroy()");
+        P5ZMQ3_TRACE( " + calling actual zmq_ctx_destroy()");
         rv = zmq_ctx_destroy( ctxt->ctxt );
 #else
-        PerlLibzmq3_trace( " + calling actual zmq_term()");
+        P5ZMQ3_TRACE( " + calling actual zmq_term()");
         rv = zmq_term( ctxt->ctxt );
 #endif
         if ( rv != 0 ) {
@@ -226,22 +226,22 @@ PerlLibzmq3_Context_invalidate( PerlLibzmq3_Context *ctxt ) {
 
 STATIC_INLINE
 int
-PerlLibzmq3_Context_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
-    PerlLibzmq3_Context* const ctxt = (PerlLibzmq3_Context *) mg->mg_ptr;
+P5ZMQ3_Context_mg_free( pTHX_ SV * const sv, MAGIC *const mg ) {
+    P5ZMQ3_Context* const ctxt = (P5ZMQ3_Context *) mg->mg_ptr;
     PERL_UNUSED_VAR(sv);
 
-    PerlLibzmq3_trace("START mg_free (Context)");
+    P5ZMQ3_TRACE("START mg_free (Context)");
     if (ctxt != NULL) {
-        PerlLibzmq3_Context_invalidate( ctxt );
+        P5ZMQ3_Context_invalidate( ctxt );
         mg->mg_ptr = NULL;
     }
-    PerlLibzmq3_trace("END mg_free (Context)");
+    P5ZMQ3_TRACE("END mg_free (Context)");
     return 1;
 }
 
 STATIC_INLINE
 MAGIC*
-PerlLibzmq3_Context_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
+P5ZMQ3_Context_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
     MAGIC* mg;
 
     assert(sv   != NULL);
@@ -260,7 +260,7 @@ PerlLibzmq3_Context_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
 
 STATIC_INLINE
 int
-PerlLibzmq3_Context_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param){
+P5ZMQ3_Context_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param){
     PERL_UNUSED_VAR(mg);
     PERL_UNUSED_VAR(param);
     return 0;
@@ -268,50 +268,50 @@ PerlLibzmq3_Context_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param){
 
 STATIC_INLINE
 int
-PerlLibzmq3_Socket_invalidate( PerlLibzmq3_Socket *sock )
+P5ZMQ3_Socket_invalidate( P5ZMQ3_Socket *sock )
 {
     SV *ctxt_sv = sock->assoc_ctxt;
     int rv;
 
-    PerlLibzmq3_trace("START socket_invalidate");
+    P5ZMQ3_TRACE("START socket_invalidate");
     if (sock->pid != getpid()) {
         return 0;
     }
 
-    PerlLibzmq3_trace(" + zmq socket %p", sock->socket);
+    P5ZMQ3_TRACE(" + zmq socket %p", sock->socket);
     rv = zmq_close( sock->socket );
 
     if ( SvOK(ctxt_sv) ) {
-        PerlLibzmq3_trace(" + associated context: %p", ctxt_sv);
+        P5ZMQ3_TRACE(" + associated context: %p", ctxt_sv);
         SvREFCNT_dec(ctxt_sv);
         sock->assoc_ctxt = NULL;
     }
 
     Safefree(sock);
 
-    PerlLibzmq3_trace("END socket_invalidate");
+    P5ZMQ3_TRACE("END socket_invalidate");
     return rv;
 }
 
 STATIC_INLINE
 int
-PerlLibzmq3_Socket_mg_free(pTHX_ SV* const sv, MAGIC* const mg)
+P5ZMQ3_Socket_mg_free(pTHX_ SV* const sv, MAGIC* const mg)
 {
-    PerlLibzmq3_Socket* const sock = (PerlLibzmq3_Socket *) mg->mg_ptr;
+    P5ZMQ3_Socket* const sock = (P5ZMQ3_Socket *) mg->mg_ptr;
     PERL_UNUSED_VAR(sv);
-    PerlLibzmq3_trace("START mg_free (Socket)");
+    P5ZMQ3_TRACE("START mg_free (Socket)");
     if (sock) {
-        PerlLibzmq3_Socket_invalidate( sock );
+        P5ZMQ3_Socket_invalidate( sock );
         mg->mg_ptr = NULL;
     }
-    PerlLibzmq3_trace("END mg_free (Socket)");
+    P5ZMQ3_TRACE("END mg_free (Socket)");
     return 1;
 }
 
 STATIC_INLINE
 int
-PerlLibzmq3_Socket_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param){
-    PerlLibzmq3_trace("START mg_dup (Socket)");
+P5ZMQ3_Socket_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param){
+    P5ZMQ3_TRACE("START mg_dup (Socket)");
 #ifdef USE_ITHREADS /* single threaded perl has no "xxx_dup()" APIs */
     mg->mg_ptr = NULL;
     PERL_UNUSED_VAR(param);
@@ -319,13 +319,13 @@ PerlLibzmq3_Socket_mg_dup(pTHX_ MAGIC* const mg, CLONE_PARAMS* const param){
     PERL_UNUSED_VAR(mg);
     PERL_UNUSED_VAR(param);
 #endif
-    PerlLibzmq3_trace("END mg_dup (Socket)");
+    P5ZMQ3_TRACE("END mg_dup (Socket)");
     return 0;
 }
 
 STATIC_INLINE
 MAGIC*
-PerlLibzmq3_Socket_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
+P5ZMQ3_Socket_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
     MAGIC* mg;
 
     assert(sv   != NULL);
@@ -351,13 +351,13 @@ PerlZMQ_free_string(void *data, void *hint) {
 
 #include "mg-xs.inc"
 
-MODULE = ZMQ::LibZMQ3    PACKAGE = ZMQ::LibZMQ3   PREFIX = PerlLibzmq3_
+MODULE = ZMQ::LibZMQ3    PACKAGE = ZMQ::LibZMQ3   PREFIX = P5ZMQ3_
 
 PROTOTYPES: DISABLED
 
 BOOT:
     {
-        PerlLibzmq3_trace( "Booting ZMQ::LibZMQ3" );
+        P5ZMQ3_TRACE( "Booting ZMQ::LibZMQ3" );
 #include "constants-xs.inc"
     }
 
@@ -370,7 +370,7 @@ zmq_strerror(num)
         int num;
 
 void
-PerlLibzmq3_zmq_version()
+P5ZMQ3_zmq_version()
     PREINIT:
         int major, minor, patch;
         I32 gimme;
@@ -392,83 +392,83 @@ PerlLibzmq3_zmq_version()
             XSRETURN(3);
         }
 
-PerlLibzmq3_Context *
-PerlLibzmq3_zmq_init( nthreads = 5 )
+P5ZMQ3_Context *
+P5ZMQ3_zmq_init( nthreads = 5 )
         int nthreads;
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Context", 20 ));
         void *cxt;
     CODE:
 #ifdef HAS_ZMQ_INIT
-        PerlLibzmq3_trace( "START zmq_init" );
+        P5ZMQ3_TRACE( "START zmq_init" );
         cxt = zmq_init( nthreads );
         if (cxt == NULL) {
             SET_BANG;
             RETVAL = NULL;
         } else {
-            Newxz( RETVAL, 1, PerlLibzmq3_Context );
-            PerlLibzmq3_trace( " + created context wrapper %p", RETVAL );
+            Newxz( RETVAL, 1, P5ZMQ3_Context );
+            P5ZMQ3_TRACE( " + created context wrapper %p", RETVAL );
             RETVAL->pid    = getpid();
             RETVAL->ctxt   = cxt;
 #ifdef USE_ITHREADS
-            PerlLibzmq3_trace( " + threads enabled, aTHX %p", aTHX );
+            P5ZMQ3_TRACE( " + threads enabled, aTHX %p", aTHX );
             RETVAL->interp = aTHX;
 #endif
-            PerlLibzmq3_trace( " + zmq context %p", RETVAL->ctxt );
+            P5ZMQ3_TRACE( " + zmq context %p", RETVAL->ctxt );
         }
-        PerlLibzmq3_trace( "END zmq_init");
+        P5ZMQ3_TRACE( "END zmq_init");
 #else /* HAS_ZMQ_INIT */
         PERL_UNUSED_VAR(cxt);
         PERL_UNUSED_VAR(nthreads);
-        P5ZMQ3_function_unavailable("zmq_init");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_init");
 #endif
     OUTPUT:
         RETVAL
 
-PerlLibzmq3_Context *
-PerlLibzmq3_zmq_ctx_new( nthreads = 5 )
+P5ZMQ3_Context *
+P5ZMQ3_zmq_ctx_new( nthreads = 5 )
         int nthreads;
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Context", 20 ));
         void *cxt;
     CODE:
 #ifdef HAS_ZMQ_CTX_NEW
-        PerlLibzmq3_trace( "START zmq_ctx_new" );
+        P5ZMQ3_TRACE( "START zmq_ctx_new" );
         cxt = zmq_init( nthreads );
         if (cxt == NULL) {
             SET_BANG;
             RETVAL = NULL;
         } else {
-            Newxz( RETVAL, 1, PerlLibzmq3_Context );
-            PerlLibzmq3_trace( " + created context wrapper %p", RETVAL );
+            Newxz( RETVAL, 1, P5ZMQ3_Context );
+            P5ZMQ3_TRACE( " + created context wrapper %p", RETVAL );
             RETVAL->pid    = getpid();
             RETVAL->ctxt   = cxt;
 #ifdef USE_ITHREADS
-            PerlLibzmq3_trace( " + threads enabled, aTHX %p", aTHX );
+            P5ZMQ3_TRACE( " + threads enabled, aTHX %p", aTHX );
             RETVAL->interp = aTHX;
 #endif
-            PerlLibzmq3_trace( " + zmq context %p", RETVAL->ctxt );
+            P5ZMQ3_TRACE( " + zmq context %p", RETVAL->ctxt );
         }
-        PerlLibzmq3_trace( "END zmq_ctx_new");
+        P5ZMQ3_TRACE( "END zmq_ctx_new");
 #else /* HAS_ZMQ_CTX_NEW */
         PERL_UNUSED_VAR(cxt);
         PERL_UNUSED_VAR(nthreads);
-        P5ZMQ3_function_unavailable("zmq_ctx_new");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_ctx_new");
 #endif
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_term( ctxt )
-        PerlLibzmq3_Context *ctxt;
+P5ZMQ3_zmq_term( ctxt )
+        P5ZMQ3_Context *ctxt;
     CODE:
 #ifdef HAS_ZMQ_TERM
-        RETVAL = PerlLibzmq3_Context_invalidate( ctxt );
+        RETVAL = P5ZMQ3_Context_invalidate( ctxt );
 
         if (RETVAL == 0) {
             /* Cancel the SV's mg attr so to not call zmq_term automatically */
             MAGIC *mg =
-                PerlLibzmq3_Context_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq3_Context_vtbl );
+                P5ZMQ3_Context_mg_find( aTHX_ SvRV(ST(0)), &P5ZMQ3_Context_vtbl );
             mg->mg_ptr = NULL;
             /* mark the original SV's _closed flag as true */
             {
@@ -480,22 +480,22 @@ PerlLibzmq3_zmq_term( ctxt )
         }
 #else /* HAS_ZMQ_TERM */
         PERL_UNUSED_VAR(ctxt);
-        P5ZMQ3_function_unavailable("zmq_term");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_term");
 #endif
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_ctx_destroy( ctxt )
-        PerlLibzmq3_Context *ctxt;
+P5ZMQ3_zmq_ctx_destroy( ctxt )
+        P5ZMQ3_Context *ctxt;
     CODE:
 #ifdef HAS_ZMQ_CTX_DESTROY
-        RETVAL = PerlLibzmq3_Context_invalidate( ctxt );
+        RETVAL = P5ZMQ3_Context_invalidate( ctxt );
 
         if (RETVAL == 0) {
             /* Cancel the SV's mg attr so to not call zmq_ctx_destroy automatically */
             MAGIC *mg =
-                PerlLibzmq3_Context_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq3_Context_vtbl );
+                P5ZMQ3_Context_mg_find( aTHX_ SvRV(ST(0)), &P5ZMQ3_Context_vtbl );
             mg->mg_ptr = NULL;
             /* mark the original SV's _closed flag as true */
             {
@@ -507,14 +507,14 @@ PerlLibzmq3_zmq_ctx_destroy( ctxt )
         }
 #else /* HAS_ZMQ_CTX_DESTROY */
         PERL_UNUSED_VAR(ctxt);
-        P5ZMQ3_function_unavailable("zmq_ctx_destroy");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_ctx_destroy");
 #endif
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_ctx_get(ctxt, option_name)
-        PerlLibzmq3_Context *ctxt;
+P5ZMQ3_zmq_ctx_get(ctxt, option_name)
+        P5ZMQ3_Context *ctxt;
         int option_name;
     CODE:
 #ifdef HAS_ZMQ_CTX_GET
@@ -525,14 +525,14 @@ PerlLibzmq3_zmq_ctx_get(ctxt, option_name)
 #else
         PERL_UNUSED_VAR(ctxt);
         PERL_UNUSED_VAR(option_name);
-        P5ZMQ3_function_unavailable("zmq_ctx_get");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_ctx_get");
 #endif
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_ctx_set(ctxt, option_name, option_value)
-        PerlLibzmq3_Context *ctxt;
+P5ZMQ3_zmq_ctx_set(ctxt, option_name, option_value)
+        P5ZMQ3_Context *ctxt;
         int option_name;
         int option_value;
     CODE:
@@ -545,18 +545,18 @@ PerlLibzmq3_zmq_ctx_set(ctxt, option_name, option_value)
         PERL_UNUSED_VAR(ctxt);
         PERL_UNUSED_VAR(option_name);
         PERL_UNUSED_VAR(option_value);
-        P5ZMQ3_function_unavailable("zmq_ctx_set");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_ctx_set");
 #endif
     OUTPUT:
         RETVAL
 
-PerlLibzmq3_Message *
-PerlLibzmq3_zmq_msg_init()
+P5ZMQ3_Message *
+P5ZMQ3_zmq_msg_init()
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Message", 20 ));
         int rc;
     CODE:
-        Newxz( RETVAL, 1, PerlLibzmq3_Message );
+        Newxz( RETVAL, 1, P5ZMQ3_Message );
         rc = zmq_msg_init( RETVAL );
         if ( rc != 0 ) {
             SET_BANG;
@@ -566,14 +566,14 @@ PerlLibzmq3_zmq_msg_init()
     OUTPUT:
         RETVAL
 
-PerlLibzmq3_Message *
-PerlLibzmq3_zmq_msg_init_size( size )
+P5ZMQ3_Message *
+P5ZMQ3_zmq_msg_init_size( size )
         IV size;
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Message", 20 ));
         int rc;
     CODE: 
-        Newxz( RETVAL, 1, PerlLibzmq3_Message );
+        Newxz( RETVAL, 1, P5ZMQ3_Message );
         rc = zmq_msg_init_size(RETVAL, size);
         if ( rc != 0 ) {
             SET_BANG;
@@ -583,8 +583,8 @@ PerlLibzmq3_zmq_msg_init_size( size )
     OUTPUT:
         RETVAL
 
-PerlLibzmq3_Message *
-PerlLibzmq3_zmq_msg_init_data( data, size = -1)
+P5ZMQ3_Message *
+P5ZMQ3_zmq_msg_init_data( data, size = -1)
         SV *data;
         IV size;
     PREINIT:
@@ -594,11 +594,11 @@ PerlLibzmq3_zmq_msg_init_data( data, size = -1)
         char *x_data;
         int rc;
     CODE: 
-        PerlLibzmq3_trace("START zmq_msg_init_data");
+        P5ZMQ3_TRACE("START zmq_msg_init_data");
         if (size >= 0) {
             x_data_len = size;
         }
-        Newxz( RETVAL, 1, PerlLibzmq3_Message );
+        Newxz( RETVAL, 1, P5ZMQ3_Message );
         Newxz( x_data, x_data_len, char );
         Copy( sv_data, x_data, x_data_len, char );
         rc = zmq_msg_init_data(RETVAL, x_data, x_data_len, PerlZMQ_free_string, Perl_get_context());
@@ -608,38 +608,38 @@ PerlLibzmq3_zmq_msg_init_data( data, size = -1)
             RETVAL = NULL;
         }
         else {
-            PerlLibzmq3_trace(" + zmq_msg_init_data created message %p", RETVAL);
+            P5ZMQ3_TRACE(" + zmq_msg_init_data created message %p", RETVAL);
         }
-        PerlLibzmq3_trace("END zmq_msg_init_data");
+        P5ZMQ3_TRACE("END zmq_msg_init_data");
     OUTPUT:
         RETVAL
 
 SV *
-PerlLibzmq3_zmq_msg_data(message)
-        PerlLibzmq3_Message *message;
+P5ZMQ3_zmq_msg_data(message)
+        P5ZMQ3_Message *message;
     CODE:
-        PerlLibzmq3_trace( "START zmq_msg_data" );
-        PerlLibzmq3_trace( " + message content '%s'", (char *) zmq_msg_data(message) );
-        PerlLibzmq3_trace( " + message size '%d'", (int) zmq_msg_size(message) );
+        P5ZMQ3_TRACE( "START zmq_msg_data" );
+        P5ZMQ3_TRACE( " + message content '%s'", (char *) zmq_msg_data(message) );
+        P5ZMQ3_TRACE( " + message size '%d'", (int) zmq_msg_size(message) );
         RETVAL = newSV(0);
         sv_setpvn( RETVAL, (char *) zmq_msg_data(message), (STRLEN) zmq_msg_size(message) );
-        PerlLibzmq3_trace( "END zmq_msg_data" );
+        P5ZMQ3_TRACE( "END zmq_msg_data" );
     OUTPUT:
         RETVAL
 
 size_t
-PerlLibzmq3_zmq_msg_size(message)
-        PerlLibzmq3_Message *message;
+P5ZMQ3_zmq_msg_size(message)
+        P5ZMQ3_Message *message;
     CODE:
         RETVAL = zmq_msg_size(message);
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_msg_close(message)
-        PerlLibzmq3_Message *message;
+P5ZMQ3_zmq_msg_close(message)
+        P5ZMQ3_Message *message;
     CODE:
-        PerlLibzmq3_trace("START zmq_msg_close");
+        P5ZMQ3_TRACE("START zmq_msg_close");
         RETVAL = zmq_msg_close(message);
         Safefree(message);
         if (RETVAL != 0) {
@@ -648,7 +648,7 @@ PerlLibzmq3_zmq_msg_close(message)
 
         {
             MAGIC *mg =
-                 PerlLibzmq3_Message_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq3_Message_vtbl );
+                 P5ZMQ3_Message_mg_find( aTHX_ SvRV(ST(0)), &P5ZMQ3_Message_vtbl );
              mg->mg_ptr = NULL;
         }
         /* mark the original SV's _closed flag as true */
@@ -658,14 +658,14 @@ PerlLibzmq3_zmq_msg_close(message)
                 croak("PANIC: Failed to store closed flag on blessed reference");
             }
         }
-        PerlLibzmq3_trace("END zmq_msg_close");
+        P5ZMQ3_TRACE("END zmq_msg_close");
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_msg_move(dest, src)
-        PerlLibzmq3_Message *dest;
-        PerlLibzmq3_Message *src;
+P5ZMQ3_zmq_msg_move(dest, src)
+        P5ZMQ3_Message *dest;
+        P5ZMQ3_Message *src;
     CODE:
         RETVAL = zmq_msg_move( dest, src );
         if (RETVAL != 0) {
@@ -675,9 +675,9 @@ PerlLibzmq3_zmq_msg_move(dest, src)
         RETVAL
 
 int
-PerlLibzmq3_zmq_msg_copy (dest, src);
-        PerlLibzmq3_Message *dest;
-        PerlLibzmq3_Message *src;
+P5ZMQ3_zmq_msg_copy (dest, src);
+        P5ZMQ3_Message *dest;
+        P5ZMQ3_Message *src;
     CODE:
         RETVAL = zmq_msg_copy( dest, src );
         if (RETVAL != 0) {
@@ -686,42 +686,42 @@ PerlLibzmq3_zmq_msg_copy (dest, src);
     OUTPUT:
         RETVAL
 
-PerlLibzmq3_Socket *
-PerlLibzmq3_zmq_socket (ctxt, type)
-        PerlLibzmq3_Context *ctxt;
+P5ZMQ3_Socket *
+P5ZMQ3_zmq_socket (ctxt, type)
+        P5ZMQ3_Context *ctxt;
         IV type;
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Socket", 19 ));
         void *sock = NULL;
     CODE:
-        PerlLibzmq3_trace( "START zmq_socket" );
+        P5ZMQ3_TRACE( "START zmq_socket" );
         sock = zmq_socket( ctxt->ctxt, type );
         if (sock == NULL) {
             RETVAL = NULL;
             SET_BANG;
         } else {
-            Newxz( RETVAL, 1, PerlLibzmq3_Socket );
+            Newxz( RETVAL, 1, P5ZMQ3_Socket );
             RETVAL->assoc_ctxt = ST(0);
             RETVAL->socket = sock;
             RETVAL->pid = getpid();
             (void) SvREFCNT_inc(RETVAL->assoc_ctxt);
-            PerlLibzmq3_trace( " + created socket %p", RETVAL );
+            P5ZMQ3_TRACE( " + created socket %p", RETVAL );
         }
-        PerlLibzmq3_trace( "END zmq_socket" );
+        P5ZMQ3_TRACE( "END zmq_socket" );
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_close(socket)
-        PerlLibzmq3_Socket *socket;
+P5ZMQ3_zmq_close(socket)
+        P5ZMQ3_Socket *socket;
     CODE:
-        RETVAL = PerlLibzmq3_Socket_invalidate( socket );
+        RETVAL = P5ZMQ3_Socket_invalidate( socket );
         /* Cancel the SV's mg attr so to not call socket_invalidate again
            during Socket_mg_free
         */
         {
             MAGIC *mg =
-                 PerlLibzmq3_Socket_mg_find( aTHX_ SvRV(ST(0)), &PerlLibzmq3_Socket_vtbl );
+                 P5ZMQ3_Socket_mg_find( aTHX_ SvRV(ST(0)), &P5ZMQ3_Socket_vtbl );
              mg->mg_ptr = NULL;
         }
 
@@ -736,40 +736,40 @@ PerlLibzmq3_zmq_close(socket)
         RETVAL
 
 int
-PerlLibzmq3_zmq_connect(socket, addr)
-        PerlLibzmq3_Socket *socket;
+P5ZMQ3_zmq_connect(socket, addr)
+        P5ZMQ3_Socket *socket;
         char *addr;
     CODE:
-        PerlLibzmq3_trace( "START zmq_connect" );
-        PerlLibzmq3_trace( " + socket %p", socket );
+        P5ZMQ3_TRACE( "START zmq_connect" );
+        P5ZMQ3_TRACE( " + socket %p", socket );
         RETVAL = zmq_connect( socket->socket, addr );
-        PerlLibzmq3_trace(" + zmq_connect returned with rv '%d'", RETVAL);
+        P5ZMQ3_TRACE(" + zmq_connect returned with rv '%d'", RETVAL);
         if (RETVAL != 0) {
             SET_BANG;
         }
-        PerlLibzmq3_trace( "END zmq_connect" );
+        P5ZMQ3_TRACE( "END zmq_connect" );
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_bind(socket, addr)
-        PerlLibzmq3_Socket *socket;
+P5ZMQ3_zmq_bind(socket, addr)
+        P5ZMQ3_Socket *socket;
         char *addr;
     CODE:
-        PerlLibzmq3_trace( "START zmq_bind" );
-        PerlLibzmq3_trace( " + socket %p", socket );
+        P5ZMQ3_TRACE( "START zmq_bind" );
+        P5ZMQ3_TRACE( " + socket %p", socket );
         RETVAL = zmq_bind( socket->socket, addr );
-        PerlLibzmq3_trace(" + zmq_bind returned with rv '%d'", RETVAL);
+        P5ZMQ3_TRACE(" + zmq_bind returned with rv '%d'", RETVAL);
         if (RETVAL != 0) {
             SET_BANG;
         }
-        PerlLibzmq3_trace( "END zmq_bind" );
+        P5ZMQ3_TRACE( "END zmq_bind" );
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_unbind(socket, addr)
-        PerlLibzmq3_Socket *socket;
+P5ZMQ3_zmq_unbind(socket, addr)
+        P5ZMQ3_Socket *socket;
         const char *addr;
     CODE:
 #ifdef HAS_ZMQ_UNBIND
@@ -780,93 +780,93 @@ PerlLibzmq3_zmq_unbind(socket, addr)
 #else
         PERL_UNUSED_VAR(socket);
         PERL_UNUSED_VAR(addr);
-        P5ZMQ3_function_unavailable("zmq_unbind");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_unbind");
 #endif
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_recv(socket, buf_sv, len, flags = 0)
-        PerlLibzmq3_Socket *socket;
+P5ZMQ3_zmq_recv(socket, buf_sv, len, flags = 0)
+        P5ZMQ3_Socket *socket;
         SV *buf_sv;
         size_t len;
         int flags;
     PREINIT:
         char *buf;
     CODE:
-        PerlLibzmq3_trace( "START zmq_recv" );
+        P5ZMQ3_TRACE( "START zmq_recv" );
         Newxz( buf, len, char );
 
         RETVAL = zmq_recv( socket->socket, buf, len, flags );
-        PerlLibzmq3_trace(" + zmq_recv returned with rv '%d'", RETVAL);
+        P5ZMQ3_TRACE(" + zmq_recv returned with rv '%d'", RETVAL);
         if ( RETVAL == -1 ) {
             SET_BANG;
             Safefree(buf);
         } else {
             sv_setpvn( buf_sv, buf, len );
         }
-        PerlLibzmq3_trace( "END zmq_recv" );
+        P5ZMQ3_TRACE( "END zmq_recv" );
     OUTPUT:
         RETVAL
         
 int
-PerlLibzmq3_zmq_msg_recv(msg, socket, flags = 0)
-        PerlLibzmq3_Message *msg;
-        PerlLibzmq3_Socket *socket;
+P5ZMQ3_zmq_msg_recv(msg, socket, flags = 0)
+        P5ZMQ3_Message *msg;
+        P5ZMQ3_Socket *socket;
         int flags;
     CODE:
 #ifndef HAS_ZMQ_MSG_RECV
-        P5ZMQ3_function_unavailable("zmq_msg_recv");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_msg_recv");
 #else
-        PerlLibzmq3_trace( "START zmq_msg_recv" );
+        P5ZMQ3_TRACE( "START zmq_msg_recv" );
         RETVAL = zmq_msg_recv(msg, socket->socket, flags);
-        PerlLibzmq3_trace(" + zmq_msg_recv returned with rv '%d'", RETVAL);
+        P5ZMQ3_TRACE(" + zmq_msg_recv returned with rv '%d'", RETVAL);
         if (RETVAL == -1) {
             SET_BANG;
-            PerlLibzmq3_trace(" + zmq_msg_recv got bad status");
+            P5ZMQ3_TRACE(" + zmq_msg_recv got bad status");
         }
-        PerlLibzmq3_trace( "END zmq_msg_recv" );
+        P5ZMQ3_TRACE( "END zmq_msg_recv" );
 #endif /* HAS_ZMQ_RCVMSG */
     OUTPUT:
         RETVAL
 
-PerlLibzmq3_Message *
-PerlLibzmq3_zmq_recvmsg(socket, flags = 0)
-        PerlLibzmq3_Socket *socket;
+P5ZMQ3_Message *
+P5ZMQ3_zmq_recvmsg(socket, flags = 0)
+        P5ZMQ3_Socket *socket;
         int flags;
     PREINIT:
         SV *class_sv = sv_2mortal(newSVpvn( "ZMQ::LibZMQ3::Message", 20 ));
         int rv;
     CODE:
 #ifndef HAS_ZMQ_RECVMSG
-        P5ZMQ3_function_unavailable("zmq_recvmsg");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_recvmsg");
 #else
-        PerlLibzmq3_trace( "START zmq_recvmsg" );
-        Newxz(RETVAL, 1, PerlLibzmq3_Message);
+        P5ZMQ3_TRACE( "START zmq_recvmsg" );
+        Newxz(RETVAL, 1, P5ZMQ3_Message);
         rv = zmq_msg_init(RETVAL);
         if (rv != 0) {
             SET_BANG;
-            PerlLibzmq3_trace("zmq_msg_init failed (%d)", rv);
+            P5ZMQ3_TRACE("zmq_msg_init failed (%d)", rv);
             XSRETURN_EMPTY;
         }
         rv = zmq_recvmsg(socket->socket, RETVAL, flags);
-        PerlLibzmq3_trace(" + zmq_recvmsg with flags %d", flags);
-        PerlLibzmq3_trace(" + zmq_recvmsg returned with rv '%d'", rv);
+        P5ZMQ3_TRACE(" + zmq_recvmsg with flags %d", flags);
+        P5ZMQ3_TRACE(" + zmq_recvmsg returned with rv '%d'", rv);
         if (rv == -1) {
             SET_BANG;
-            PerlLibzmq3_trace(" + zmq_recvmsg got bad status, closing temporary message");
+            P5ZMQ3_TRACE(" + zmq_recvmsg got bad status, closing temporary message");
             zmq_msg_close(RETVAL);
             Safefree(RETVAL);
             XSRETURN_EMPTY;
         }
-        PerlLibzmq3_trace( "END zmq_recvmsg" );
+        P5ZMQ3_TRACE( "END zmq_recvmsg" );
 #endif /* HAS_ZMQ_RCVMSG */
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_send(socket, message, size = -1, flags = 0)
-        PerlLibzmq3_Socket *socket;
+P5ZMQ3_zmq_send(socket, message, size = -1, flags = 0)
+        P5ZMQ3_Socket *socket;
         SV *message;
         int size;
         int flags;
@@ -874,7 +874,7 @@ PerlLibzmq3_zmq_send(socket, message, size = -1, flags = 0)
         char *message_buf;
         STRLEN usize;
     CODE:
-        PerlLibzmq3_trace( "START zmq_send" );
+        P5ZMQ3_TRACE( "START zmq_send" );
         if (! SvOK(message))
             croak("ZMQ::LibZMQ3::zmq_send(): NULL message passed");
 
@@ -882,102 +882,102 @@ PerlLibzmq3_zmq_send(socket, message, size = -1, flags = 0)
         if ( size != -1 && (STRLEN)size < usize )
             usize = (STRLEN)size;
 
-        PerlLibzmq3_trace( " + buffer '%s' (%zu)", message_buf, usize );
-        PerlLibzmq3_trace( " + flags %d", flags);
+        P5ZMQ3_TRACE( " + buffer '%s' (%zu)", message_buf, usize );
+        P5ZMQ3_TRACE( " + flags %d", flags);
         RETVAL = zmq_send( socket->socket, message_buf, usize, flags );
-        PerlLibzmq3_trace( " + zmq_send returned with rv '%d'", RETVAL );
+        P5ZMQ3_TRACE( " + zmq_send returned with rv '%d'", RETVAL );
         if ( RETVAL == -1 ) {
-            PerlLibzmq3_trace( " ! zmq_send error %s", zmq_strerror( zmq_errno() ) );
+            P5ZMQ3_TRACE( " ! zmq_send error %s", zmq_strerror( zmq_errno() ) );
             SET_BANG;
         }
-        PerlLibzmq3_trace( "END zmq_send" );
+        P5ZMQ3_TRACE( "END zmq_send" );
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3__zmq_msg_send(message, socket, flags = 0)
-        PerlLibzmq3_Message *message;
-        PerlLibzmq3_Socket *socket;
+P5ZMQ3__zmq_msg_send(message, socket, flags = 0)
+        P5ZMQ3_Message *message;
+        P5ZMQ3_Socket *socket;
         int flags;
     CODE:
 #ifndef HAS_ZMQ_MSG_SEND
-        P5ZMQ3_function_unavailable("zmq_msg_send");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_msg_send");
 #else
-        PerlLibzmq3_trace( "START zmq_msg_send" );
+        P5ZMQ3_TRACE( "START zmq_msg_send" );
         RETVAL = zmq_msg_send(message, socket->socket, flags);
-        PerlLibzmq3_trace( " + zmq_msg_send returned with rv '%d'", RETVAL );
+        P5ZMQ3_TRACE( " + zmq_msg_send returned with rv '%d'", RETVAL );
         if ( RETVAL == -1 ) {
-            PerlLibzmq3_trace( " ! zmq_msg_send error %s", zmq_strerror( zmq_errno() ) );
+            P5ZMQ3_TRACE( " ! zmq_msg_send error %s", zmq_strerror( zmq_errno() ) );
             SET_BANG;
         }
-        PerlLibzmq3_trace( "END zmq_msg_send" );
+        P5ZMQ3_TRACE( "END zmq_msg_send" );
 #endif
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3__zmq_sendmsg(socket, message, flags = 0)
-        PerlLibzmq3_Socket *socket;
-        PerlLibzmq3_Message *message;
+P5ZMQ3__zmq_sendmsg(socket, message, flags = 0)
+        P5ZMQ3_Socket *socket;
+        P5ZMQ3_Message *message;
         int flags;
     CODE:
 #ifndef HAS_ZMQ_SENDMSG
-        P5ZMQ3_function_unavailable("zmq_sendmsg");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_sendmsg");
 #else
-        PerlLibzmq3_trace( "START zmq_sendmsg" );
+        P5ZMQ3_TRACE( "START zmq_sendmsg" );
         RETVAL = zmq_sendmsg(socket->socket, message, flags);
-        PerlLibzmq3_trace( " + zmq_sendmsg returned with rv '%d'", RETVAL );
+        P5ZMQ3_TRACE( " + zmq_sendmsg returned with rv '%d'", RETVAL );
         if ( RETVAL == -1 ) {
-            PerlLibzmq3_trace( " ! zmq_sendmsg error %s", zmq_strerror( zmq_errno() ) );
+            P5ZMQ3_TRACE( " ! zmq_sendmsg error %s", zmq_strerror( zmq_errno() ) );
             SET_BANG;
         }
-        PerlLibzmq3_trace( "END zmq_sendmsg" );
+        P5ZMQ3_TRACE( "END zmq_sendmsg" );
 #endif
     OUTPUT:
         RETVAL
 
 SV *
-PerlLibzmq3_zmq_getsockopt_int(sock, option)
-        PerlLibzmq3_Socket *sock;
+P5ZMQ3_zmq_getsockopt_int(sock, option)
+        P5ZMQ3_Socket *sock;
         int option;
 
 SV *
-PerlLibzmq3_zmq_getsockopt_int64(sock, option)
-        PerlLibzmq3_Socket *sock;
+P5ZMQ3_zmq_getsockopt_int64(sock, option)
+        P5ZMQ3_Socket *sock;
         int option;
 
 SV *
-PerlLibzmq3_zmq_getsockopt_uint64(sock, option)
-        PerlLibzmq3_Socket *sock;
+P5ZMQ3_zmq_getsockopt_uint64(sock, option)
+        P5ZMQ3_Socket *sock;
         int option;
 
 SV *
-PerlLibzmq3_zmq_getsockopt_string(sock, option, len = 1024)
-        PerlLibzmq3_Socket *sock;
+P5ZMQ3_zmq_getsockopt_string(sock, option, len = 1024)
+        P5ZMQ3_Socket *sock;
         int option;
         size_t len;
 
 int
-PerlLibzmq3_zmq_setsockopt_int(sock, option, val)
-        PerlLibzmq3_Socket *sock;
+P5ZMQ3_zmq_setsockopt_int(sock, option, val)
+        P5ZMQ3_Socket *sock;
         int option;
         int val;
 
 int
-PerlLibzmq3_zmq_setsockopt_int64(sock, option, val)
-        PerlLibzmq3_Socket *sock;
+P5ZMQ3_zmq_setsockopt_int64(sock, option, val)
+        P5ZMQ3_Socket *sock;
         int option;
         int64_t val;
 
 int
-PerlLibzmq3_zmq_setsockopt_uint64(sock, option, val)
-        PerlLibzmq3_Socket *sock;
+P5ZMQ3_zmq_setsockopt_uint64(sock, option, val)
+        P5ZMQ3_Socket *sock;
         int option;
         uint64_t val;
 
 int
-PerlLibzmq3_zmq_setsockopt_string(sock, option, value)
-        PerlLibzmq3_Socket *sock;
+P5ZMQ3_zmq_setsockopt_string(sock, option, value)
+        P5ZMQ3_Socket *sock;
         int option;
         SV *value;
     PREINIT:
@@ -985,12 +985,12 @@ PerlLibzmq3_zmq_setsockopt_string(sock, option, value)
         const char *string;
     CODE:
         string = SvPV( value, len );
-        RETVAL = PerlLibzmq3_zmq_setsockopt_string(sock, option, string, len);
+        RETVAL = P5ZMQ3_zmq_setsockopt_string(sock, option, string, len);
     OUTPUT:
         RETVAL
 
 void
-PerlLibzmq3_zmq_poll( list, timeout = 0 )
+P5ZMQ3_zmq_poll( list, timeout = 0 )
         AV *list;
         long timeout;
     PREINIT:
@@ -1001,7 +1001,7 @@ PerlLibzmq3_zmq_poll( list, timeout = 0 )
         int rv;
         int eventfired;
     PPCODE:
-        PerlLibzmq3_trace( "START zmq_poll" );
+        P5ZMQ3_TRACE( "START zmq_poll" );
 
         list_len = av_len( list ) + 1;
         if (list_len <= 0) {
@@ -1016,7 +1016,7 @@ PerlLibzmq3_zmq_poll( list, timeout = 0 )
             SV **svr = av_fetch( list, i, 0 );
             HV  *elm;
 
-            PerlLibzmq3_trace( " + processing element %d", i );
+            P5ZMQ3_TRACE( " + processing element %d", i );
             if (svr == NULL || ! SvOK(*svr) || ! SvROK(*svr) || SvTYPE(SvRV(*svr)) != SVt_PVHV) {
                 Safefree( pollitems );
                 Safefree( callbacks );
@@ -1038,9 +1038,9 @@ PerlLibzmq3_zmq_poll( list, timeout = 0 )
                     Safefree( callbacks );
                     croak("Invalid 'socket' given for index %d", i);
                 }
-                mg = PerlLibzmq3_Socket_mg_find( aTHX_ SvRV(*svr), &PerlLibzmq3_Socket_vtbl );
-                pollitems[i].socket = ((PerlLibzmq3_Socket *) mg->mg_ptr)->socket;
-                PerlLibzmq3_trace( " + via pollitem[%d].socket = %p", i, pollitems[i].socket );
+                mg = P5ZMQ3_Socket_mg_find( aTHX_ SvRV(*svr), &P5ZMQ3_Socket_vtbl );
+                pollitems[i].socket = ((P5ZMQ3_Socket *) mg->mg_ptr)->socket;
+                P5ZMQ3_TRACE( " + via pollitem[%d].socket = %p", i, pollitems[i].socket );
             } else {
                 svr = hv_fetch( elm, "fd", 2, NULL );
                 if (svr == NULL || ! SvOK(*svr) || SvTYPE(*svr) != SVt_IV) {
@@ -1049,7 +1049,7 @@ PerlLibzmq3_zmq_poll( list, timeout = 0 )
                     croak("Invalid 'fd' given for index %d", i);
                 }
                 pollitems[i].fd = SvIV( *svr );
-                PerlLibzmq3_trace( " + via pollitem[%d].fd = %d", i, pollitems[i].fd );
+                P5ZMQ3_TRACE( " + via pollitem[%d].fd = %d", i, pollitems[i].fd );
             }
 
             svr = hv_fetch( elm, "events", 6, NULL );
@@ -1059,7 +1059,7 @@ PerlLibzmq3_zmq_poll( list, timeout = 0 )
                 croak("Invalid 'events' given for index %d", i);
             }
             pollitems[i].events = SvIV( *svr );
-            PerlLibzmq3_trace( " + going to poll events %d", pollitems[i].events );
+            P5ZMQ3_TRACE( " + going to poll events %d", pollitems[i].events );
 
             svr = hv_fetch( elm, "callback", 8, NULL );
             if (svr == NULL || ! SvOK(*svr) || ! SvROK(*svr) || SvTYPE(SvRV(*svr)) != SVt_PVCV) {
@@ -1073,11 +1073,11 @@ PerlLibzmq3_zmq_poll( list, timeout = 0 )
         /* now call zmq_poll */
         rv = zmq_poll( pollitems, list_len, timeout );
         SET_BANG;
-        PerlLibzmq3_trace( " + zmq_poll returned with rv '%d'", RETVAL );
+        P5ZMQ3_TRACE( " + zmq_poll returned with rv '%d'", RETVAL );
 
         if (rv != -1 ) {
             for ( i = 0; i < list_len; i++ ) {
-                PerlLibzmq3_trace( " + checking events for %d", i );
+                P5ZMQ3_TRACE( " + checking events for %d", i );
                 eventfired = 
                     (pollitems[i].revents & pollitems[i].events) ? 1 : 0;
                 if (GIMME_V == G_ARRAY) {
@@ -1106,13 +1106,13 @@ PerlLibzmq3_zmq_poll( list, timeout = 0 )
         }
         Safefree(pollitems);
         Safefree(callbacks);
-        PerlLibzmq3_trace( "END zmq_poll" );
+        P5ZMQ3_TRACE( "END zmq_poll" );
 
 int
-PerlLibzmq3_zmq_device( device, insocket, outsocket )
+P5ZMQ3_zmq_device( device, insocket, outsocket )
         int device;
-        PerlLibzmq3_Socket *insocket;
-        PerlLibzmq3_Socket *outsocket;
+        P5ZMQ3_Socket *insocket;
+        P5ZMQ3_Socket *outsocket;
     CODE:
 #ifdef HAS_ZMQ_DEVICE
         RETVAL = zmq_device( device, insocket->socket, outsocket->socket );
@@ -1121,16 +1121,16 @@ PerlLibzmq3_zmq_device( device, insocket, outsocket )
         }
 #else
         PERL_UNUSED_VAR(device);
-        P5ZMQ3_function_unavailable("zmq_device");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_device");
 #endif
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_proxy(frontend, backend, capture = NULL)
-        PerlLibzmq3_Socket *frontend;
-        PerlLibzmq3_Socket *backend;
-        PerlLibzmq3_Socket *capture;
+P5ZMQ3_zmq_proxy(frontend, backend, capture = NULL)
+        P5ZMQ3_Socket *frontend;
+        P5ZMQ3_Socket *backend;
+        P5ZMQ3_Socket *capture;
     CODE:
 #ifdef HAS_ZMQ_PROXY
         if (capture) {
@@ -1144,14 +1144,14 @@ PerlLibzmq3_zmq_proxy(frontend, backend, capture = NULL)
         PERL_UNUSED_VAR(frontend);
         PERL_UNUSED_VAR(backend);
         PERL_UNUSED_VAR(capture);
-        P5ZMQ3_function_unavailable("zmq_proxy");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_proxy");
 #endif
     OUTPUT:
         RETVAL
 
 int
-PerlLibzmq3_zmq_socket_monitor(socket, addr, events)
-        PerlLibzmq3_Socket *socket;
+P5ZMQ3_zmq_socket_monitor(socket, addr, events)
+        P5ZMQ3_Socket *socket;
         char *addr;
         int events;
     CODE:
@@ -1164,7 +1164,7 @@ PerlLibzmq3_zmq_socket_monitor(socket, addr, events)
         PERL_UNUSED_VAR(socket);
         PERL_UNUSED_VAR(addr);
         PERL_UNUSED_VAR(events);
-        P5ZMQ3_function_unavailable("zmq_socket_monitor");
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_socket_monitor");
 #endif
     OUTPUT:
         RETVAL

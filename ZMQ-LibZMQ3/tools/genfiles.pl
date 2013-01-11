@@ -42,7 +42,7 @@ EOM
     foreach my $perl_type (@perl_types) {
         my $c_type = $perl_type;
         $c_type =~ s/::/_/g;
-        $c_type =~ s/^ZMQ_LibZMQ3/PerlLibzmq3/;
+        $c_type =~ s/^ZMQ_LibZMQ3/P5ZMQ3/;
         my $vtablename = sprintf '%s_vtbl', $c_type;
 
         # check if we have a function named ${c_type}_free and ${c_type}_mg_dup
@@ -56,18 +56,11 @@ EOM
         my $free = $has_free ? "${c_type}_mg_free" : "PerlZMQ_mg_free";
         my $dup  = $has_dup  ? "${c_type}_mg_dup"  : "PerlZMQ_mg_dup";
         print $fh <<EOM
-static MGVTBL $vtablename = { /* for identity */
-    NULL, /* get */
-    NULL, /* set */
-    NULL, /* len */
-    NULL, /* clear */
-    $free, /* free */
-    NULL, /* copy */
-    $dup, /* dup */
 #ifdef MGf_LOCAL
-    NULL  /* local */
+P5ZMQ3_DECL_VTBL($c_type, 0, 0, 0, 0, $free, 0, $dup, 0);
+#else
+P5ZMQ3_DECL_VTBL($c_type, 0, 0, 0, 0, $free, 0, $dup);
 #endif
-};
 
 EOM
     }
@@ -94,7 +87,7 @@ sub write_typemap {
     foreach my $perl_type (@perl_types) {
         my $c_type = $perl_type;
         $c_type =~ s/::/_/g;
-        $c_type =~ s/^ZMQ_LibZMQ3_/PerlLibzmq3_/;
+        $c_type =~ s/^ZMQ_LibZMQ3_/P5ZMQ3_/;
         my $typemap_type = 'T_' . uc $c_type;
 
         my $closed_error = 
