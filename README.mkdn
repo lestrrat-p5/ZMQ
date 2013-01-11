@@ -65,6 +65,10 @@ installed libzmq:
     make test
     make install
 
+If you have multiple libzmq's installed and for some reason this module finds
+the wrong libzmq, you might need to tweak the generated Makefile.
+See CAVEATS for details.
+
 ### ZMQ-LibZMQ3
 
 Binding to the libzmq (3.x) library
@@ -85,6 +89,10 @@ installed libzmq:
     make
     make test
     make install
+
+If you have multiple libzmq's installed and for some reason this module finds
+the wrong libzmq, you might need to tweak the generated Makefile.
+See CAVEATS for details.
 
 ### ZMQ
 
@@ -123,7 +131,34 @@ installed libczmq:
     make test
     make install
 
+If you have multiple libzmq's installed and for some reason this module finds
+the wrong libzmq, you might need to tweak the generated Makefile.
+See CAVEATS for details.
+
 ### ZMQ-CZMQ
 
 Perl-ish libczmq wrapper. Uses ZMQ::LibCZMQ1 internally.
+
+## CAVEATS
+
+### Tweaking the Makefile 
+
+I've seen cases where generated Makefile contains something like:
+
+    LDDLFLAGS = .... -L/usr/local/lib
+    (snip)
+    EXTRALIBS = -L/path/to/other-zmq -lzmq
+    LDLOADLIBS = -L/path/to/other-zmq -lzmq
+
+What happens is that LDDLFLAGS is used BEFORE the other variables, and
+many compilers searches for libraries in that order, so if you have
+old libzmq in /usr/local/lib, then we might find that one first.
+
+What you can do is first remove the -L/usr/local/lib, and see if that works.
+If that fails, you might want to try moving -L/usr/local/lib from 
+LDDLFLAGS and **append** it to EXTRALIBS and LDLOADLIBS.
+
+These details vary greatly depending on your system, so if this doesn't
+work and you must file an issue, make sure to put as much as detail as
+possible.
 
