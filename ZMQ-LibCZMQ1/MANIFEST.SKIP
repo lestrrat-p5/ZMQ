@@ -1,6 +1,6 @@
 # Avoid archives of this distribution
-\bZMQ-CZMQ-\d+\.\d+(?:_\d+)?
-\bZMQ-CZMQ-\d+\.\d+(?:_\d+)?\.tar\.gz$
+\bZMQ-LibCZMQ1-\d+\.\d+(?:_\d+)?
+\bZMQ-LibCZMQ1-\d+\.\d+(?:_\d+)?\.tar\.gz$
 
 # Avoid version control files.
 \bRCS\b
@@ -51,11 +51,10 @@
 ^MYMETA.yml$
 ^MANIFEST.SKIP$
 
-^xs/mg-xs.inc$
-^xs/const-xs.inc$
-^xs/versioned-xs.inc$
-^xs/typemap$
-^xs/perl_czmq.c$
+^src/mg-xs.inc$
+^src/typemap$
+^src/perl_czmq.c$
+^tools/zmqcheck/.*\.c$
 ^xshelper.h$
 ^ppport.h$
 ^build\b
@@ -63,4 +62,3 @@
 ^install\b
 ^extlib\b
 ^autobuild
-^zmqinfo$
