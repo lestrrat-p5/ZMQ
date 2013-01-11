@@ -1,6 +1,9 @@
 use strict;
 use warnings;
-use File::Spec;
+use POSIX ();
+BEGIN {
+    POSIX::setlocale(&POSIX::LC_MESSAGES, "en_GB.UTF-8");
+}
 
 use Test::More;
 use ZMQ::LibZMQ2;
@@ -13,7 +16,6 @@ subtest 'connect before server socket is bound (should fail)' => sub {
 
     # too early, server socket not created:
     my $client = zmq_socket($cxt, ZMQ_PAIR);
-    local $ENV{LC_ALL} = 'C';
     my $status = zmq_connect($client, "inproc://myPrivateSocket");
     isnt $status, 0, "zmq_connect should fail";
     like $!, qr/Connection refused/;
@@ -68,7 +70,6 @@ subtest 'basic inproc communication' => sub {
 subtest 'invalid bind' => sub {
     my $cxt = zmq_init(0); # must be 0 theads for in-process bind
     my $sock = zmq_socket($cxt, ZMQ_REP); # server like reply socket
-    local $ENV{LC_ALL} = 'C';
     my $status = zmq_bind($sock, "bulls***");
     isnt $status, 0, "bind failed";
     like $!, qr/Invalid argument/;
