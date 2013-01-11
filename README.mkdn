@@ -1,9 +1,24 @@
 # README
 
+## OVERVIEW
+
 This repository contains various modules for the libzmq Perl binding
 
 * http://zeromq.org
 * http://czmq.zeromq.org
+
+## INDEX
+
+* [TRAVIS CI](#travis-ci)
+* [MODULES IN THIS REPOSITORY](#modules-in-this-repository)
+ * [ZMQ-Constants](#zmq-constnats)
+ * [ZMQ-LibZMQ2](#zmq-libzmq2)
+ * [ZMQ-LibZMQ3](#zmq-libzmq3)
+ * [ZMQ](#zmq)
+ * [ZMQ-LibCZMQ1](#zmq-libczmq1)
+ * [ZMQ-CZMQ](#zmq-czmq)
+* [CAVEATS](#caveats)
+ * [Tweaking the Makefile](#tweaking-the-makefile)
 
 ## TRAVIS CI
 
