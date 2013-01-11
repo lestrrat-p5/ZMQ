@@ -4,6 +4,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "xshelper.h"
 #include <zmq.h>
 #include <errno.h>
 #include <unistd.h>
@@ -52,7 +53,25 @@ typedef struct {
 #define ZMQ_PUSH ZMQ_DOWNSTREAM
 #endif
 
-#define P5ZMQ3_STRUCT2SV (arg, var, klass, type) \
+#define P5ZMQ3_function_unavailable(name) \
+    { \
+        int major, minor, patch; \
+        zmq_version(&major, &minor, &patch); \
+        croak("%s is not available in this version of libzmq (%d.%d.%d)", name, major, minor, patch ); \
+    }
+
+#if (PERLZMQ_TRACE > 0)
+#define PerlLibzmq3_trace(...) \
+    { \
+        PerlIO_printf(PerlIO_stderr(), "[perlzmq (%d)] ", PerlProc_getpid() ); \
+        PerlIO_printf(PerlIO_stderr(), __VA_ARGS__); \
+        PerlIO_printf(PerlIO_stderr(), "\n"); \
+    }
+#else
+#define PerlLibzmq3_trace(...)
+#endif /* if PERLZMQ_TRACE */
+
+#define P5ZMQ3_STRUCT2SV(arg, var, klass, type) \
     { \
         if (!var)          /* if null */ \
             SvOK_off(arg); /* then return as undef instead of reaf to undef */ \
@@ -64,7 +83,7 @@ typedef struct {
             /* take (sub)class name to use from class_sv if appropriate */ \
             if (SvMAGICAL(class_sv)) \
                 mg_get(class_sv); \
-    \            if (SvOK( class_sv ) && sv_derived_from(class_sv, classname ) ) { \
+                if (SvOK( class_sv ) && sv_derived_from(class_sv, classname ) ) { \
                 if(SvROK(class_sv) && SvOBJECT(SvRV(class_sv))) { \
                     classname = sv_reftype(SvRV(class_sv), TRUE); \
                 } else { \
@@ -103,8 +122,7 @@ typedef struct {
             closed = hv_fetchs( (HV *) svr, "_closed", 0 ); \
             if (closed != NULL && SvTRUE(*closed)) { \
                 /* if it's already closed, just return */ \
-                err = errcode; \
-                PerlLibzmq3_set_bang( aTHX_ err); \
+                PerlLibzmq3_set_bang( aTHX_ errcode); \
                 XSRETURN_EMPTY; \
             } \
         } \

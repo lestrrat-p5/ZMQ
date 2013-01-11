@@ -105,11 +105,11 @@ sub write_typemap {
         push @decl, "$c_type* $typemap_type";
         push @input, <<EOM;
 $typemap_type
-    P5ZMQ3_STRUCT2SV(\$arg, \$var, $perl_type, $c_type, $closed_error);
+    P5ZMQ3_SV2STRUCT(\$arg, \$var, $perl_type, $c_type, $closed_error);
 EOM
         push @output, <<EOM;
 $typemap_type
-    P5ZMQ3_SV2STRUCT(\$arg, \$var, $perl_type, $c_type);
+    P5ZMQ3_STRUCT2SV(\$arg, \$var, $perl_type, $c_type);
 EOM
     }
 

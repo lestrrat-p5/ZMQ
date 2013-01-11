@@ -1,22 +1,4 @@
 #include "perl_libzmq3.h"
-#include "xshelper.h"
-
-#define PerlLibzmq3_function_unavailable(name) \
-    { \
-        int major, minor, patch; \
-        zmq_version(&major, &minor, &patch); \
-        croak("%s is not available in this version of libzmq (%d.%d.%d)", name, major, minor, patch ); \
-    }
-#if (PERLZMQ_TRACE > 0)
-#define PerlLibzmq3_trace(...) \
-    { \
-        PerlIO_printf(PerlIO_stderr(), "[perlzmq (%d)] ", PerlProc_getpid() ); \
-        PerlIO_printf(PerlIO_stderr(), __VA_ARGS__); \
-        PerlIO_printf(PerlIO_stderr(), "\n"); \
-    }
-#else
-#define PerlLibzmq3_trace(...)
-#endif
 
 STATIC_INLINE
 void
@@ -438,7 +420,7 @@ PerlLibzmq3_zmq_init( nthreads = 5 )
 #else /* HAS_ZMQ_INIT */
         PERL_UNUSED_VAR(cxt);
         PERL_UNUSED_VAR(nthreads);
-        PerlLibzmq3_function_unavailable("zmq_init");
+        P5ZMQ3_function_unavailable("zmq_init");
 #endif
     OUTPUT:
         RETVAL
@@ -471,7 +453,7 @@ PerlLibzmq3_zmq_ctx_new( nthreads = 5 )
 #else /* HAS_ZMQ_CTX_NEW */
         PERL_UNUSED_VAR(cxt);
         PERL_UNUSED_VAR(nthreads);
-        PerlLibzmq3_function_unavailable("zmq_ctx_new");
+        P5ZMQ3_function_unavailable("zmq_ctx_new");
 #endif
     OUTPUT:
         RETVAL
@@ -498,7 +480,7 @@ PerlLibzmq3_zmq_term( ctxt )
         }
 #else /* HAS_ZMQ_TERM */
         PERL_UNUSED_VAR(ctxt);
-        PerlLibzmq3_function_unavailable("zmq_term");
+        P5ZMQ3_function_unavailable("zmq_term");
 #endif
     OUTPUT:
         RETVAL
@@ -525,7 +507,7 @@ PerlLibzmq3_zmq_ctx_destroy( ctxt )
         }
 #else /* HAS_ZMQ_CTX_DESTROY */
         PERL_UNUSED_VAR(ctxt);
-        PerlLibzmq3_function_unavailable("zmq_ctx_destroy");
+        P5ZMQ3_function_unavailable("zmq_ctx_destroy");
 #endif
     OUTPUT:
         RETVAL
@@ -543,7 +525,7 @@ PerlLibzmq3_zmq_ctx_get(ctxt, option_name)
 #else
         PERL_UNUSED_VAR(ctxt);
         PERL_UNUSED_VAR(option_name);
-        PerlLibzmq3_function_unavailable("zmq_ctx_get");
+        P5ZMQ3_function_unavailable("zmq_ctx_get");
 #endif
     OUTPUT:
         RETVAL
@@ -563,7 +545,7 @@ PerlLibzmq3_zmq_ctx_set(ctxt, option_name, option_value)
         PERL_UNUSED_VAR(ctxt);
         PERL_UNUSED_VAR(option_name);
         PERL_UNUSED_VAR(option_value);
-        PerlLibzmq3_function_unavailable("zmq_ctx_set");
+        P5ZMQ3_function_unavailable("zmq_ctx_set");
 #endif
     OUTPUT:
         RETVAL
@@ -798,7 +780,7 @@ PerlLibzmq3_zmq_unbind(socket, addr)
 #else
         PERL_UNUSED_VAR(socket);
         PERL_UNUSED_VAR(addr);
-        PerlLibzmq3_function_unavailable("zmq_unbind");
+        P5ZMQ3_function_unavailable("zmq_unbind");
 #endif
     OUTPUT:
         RETVAL
@@ -834,7 +816,7 @@ PerlLibzmq3_zmq_msg_recv(msg, socket, flags = 0)
         int flags;
     CODE:
 #ifndef HAS_ZMQ_MSG_RECV
-        PerlLibzmq3_function_unavailable("zmq_msg_recv");
+        P5ZMQ3_function_unavailable("zmq_msg_recv");
 #else
         PerlLibzmq3_trace( "START zmq_msg_recv" );
         RETVAL = zmq_msg_recv(msg, socket->socket, flags);
@@ -857,7 +839,7 @@ PerlLibzmq3_zmq_recvmsg(socket, flags = 0)
         int rv;
     CODE:
 #ifndef HAS_ZMQ_RECVMSG
-        PerlLibzmq3_function_unavailable("zmq_recvmsg");
+        P5ZMQ3_function_unavailable("zmq_recvmsg");
 #else
         PerlLibzmq3_trace( "START zmq_recvmsg" );
         Newxz(RETVAL, 1, PerlLibzmq3_Message);
@@ -919,7 +901,7 @@ PerlLibzmq3__zmq_msg_send(message, socket, flags = 0)
         int flags;
     CODE:
 #ifndef HAS_ZMQ_MSG_SEND
-        PerlLibzmq3_function_unavailable("zmq_msg_send");
+        P5ZMQ3_function_unavailable("zmq_msg_send");
 #else
         PerlLibzmq3_trace( "START zmq_msg_send" );
         RETVAL = zmq_msg_send(message, socket->socket, flags);
@@ -940,7 +922,7 @@ PerlLibzmq3__zmq_sendmsg(socket, message, flags = 0)
         int flags;
     CODE:
 #ifndef HAS_ZMQ_SENDMSG
-        PerlLibzmq3_function_unavailable("zmq_sendmsg");
+        P5ZMQ3_function_unavailable("zmq_sendmsg");
 #else
         PerlLibzmq3_trace( "START zmq_sendmsg" );
         RETVAL = zmq_sendmsg(socket->socket, message, flags);
@@ -1139,7 +1121,7 @@ PerlLibzmq3_zmq_device( device, insocket, outsocket )
         }
 #else
         PERL_UNUSED_VAR(device);
-        PerlLibzmq3_function_unavailable("zmq_device");
+        P5ZMQ3_function_unavailable("zmq_device");
 #endif
     OUTPUT:
         RETVAL
@@ -1162,7 +1144,7 @@ PerlLibzmq3_zmq_proxy(frontend, backend, capture = NULL)
         PERL_UNUSED_VAR(frontend);
         PERL_UNUSED_VAR(backend);
         PERL_UNUSED_VAR(capture);
-        PerlLibzmq3_function_unavailable("zmq_proxy");
+        P5ZMQ3_function_unavailable("zmq_proxy");
 #endif
     OUTPUT:
         RETVAL
@@ -1182,7 +1164,7 @@ PerlLibzmq3_zmq_socket_monitor(socket, addr, events)
         PERL_UNUSED_VAR(socket);
         PERL_UNUSED_VAR(addr);
         PERL_UNUSED_VAR(events);
-        PerlLibzmq3_function_unavailable("zmq_socket_monitor");
+        P5ZMQ3_function_unavailable("zmq_socket_monitor");
 #endif
     OUTPUT:
         RETVAL
