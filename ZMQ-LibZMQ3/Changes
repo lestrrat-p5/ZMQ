@@ -1,6 +1,14 @@
 Changes
 =======
 
+1.06 Jan 12 2013
+    - t/100_basic.t uses POSIX::setlocale() to force $! stringification
+      (rt #82613, reported by Konstantin A. Pustovalov)
+    - struct -> object, object -> struct conversion has now been
+      converted to a generic macro.
+    - Doc updates
+    - House cleaning (shouldn't be visible to users)
+
 1.05 Jan 09 2013
     - Make sure to specify c99 in zmqcheck.
     - Make sure to specify -pedantic-errors in zmqcheck.
