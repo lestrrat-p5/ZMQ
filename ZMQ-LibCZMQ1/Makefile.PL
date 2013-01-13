@@ -69,7 +69,10 @@ do 'tools/genfiles.pl';
 
 clean_files @clean;
 
-auto_set_repository;
+repository "git://github.com/lestrrat/p5-ZMQ.git";
+homepage "https://github.com/lestrrat/p5-ZMQ";
+bugtracker "https://github.com/lestrrat/p5-ZMQ/issues";
+
 requires 'ZMQ::Constants';
 
 WriteAll;

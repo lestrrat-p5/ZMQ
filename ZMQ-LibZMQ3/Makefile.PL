@@ -187,7 +187,9 @@ EOM
 author_tests 'xt';
 clean_files join " ", @clean;
 
-repository "https://github.com/lestrrat/p5-ZMQ";
+repository "git://github.com/lestrrat/p5-ZMQ.git";
+homepage "https://github.com/lestrrat/p5-ZMQ";
+bugtracker "https://github.com/lestrrat/p5-ZMQ/issues";
 
 do 'tools/genfiles.pl';
 WriteAll;

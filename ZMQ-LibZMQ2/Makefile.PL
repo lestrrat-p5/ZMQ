@@ -37,7 +37,6 @@ assertlibs
     libpath => [ grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS} ]
 ;
 
-auto_set_repository;
 requires 'Task::Weaken';
 requires 'ZMQ::Constants', '1.00';
 test_requires 'Test::More', '0.98';
@@ -64,6 +63,9 @@ if ($ENV{ZMQ_TRACE}) {
 
 author_tests 'xt';
 clean_files "xs/*.inc xs/typemap";
+repository "git://github.com/lestrrat/p5-ZMQ.git";
+homepage "https://github.com/lestrrat/p5-ZMQ";
+bugtracker "https://github.com/lestrrat/p5-ZMQ/issues";
 
 do 'tools/genfiles.pl';
 WriteAll;

@@ -20,7 +20,10 @@ EOM
     $ENV{PERL_ZMQ_BACKEND} = 'ZMQ::LibZMQ2';
 }
 
-auto_set_repository;
+repository "git://github.com/lestrrat/p5-ZMQ.git";
+homepage "https://github.com/lestrrat/p5-ZMQ";
+bugtracker "https://github.com/lestrrat/p5-ZMQ/issues";
+
 requires $ENV{PERL_ZMQ_BACKEND};
 requires 'ZMQ::Constants';
 

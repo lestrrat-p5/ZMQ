@@ -86,14 +86,12 @@ sub install_libczmq {
 if ( $target eq 'ZMQ-Constants' ) {
     cpanm(qw(
         inc::Module::Install
-        Module::Install::Repository
         Test::Requires
     ));
     test_binding("ZMQ-Constants");
 } elsif ( $target eq 'ZMQ-CZMQ' ) {
     cpanm(qw(
         inc::Module::Install
-        Module::Install::Repository
         Module::Install::XSUtil
         Module::Install::CheckLib
         Test::Requires
@@ -110,7 +108,6 @@ if ( $target eq 'ZMQ-Constants' ) {
 } elsif ( $target eq 'ZMQ-LibCZMQ1' ) {
     cpanm(qw(
         inc::Module::Install
-        Module::Install::Repository
         Module::Install::XSUtil
         Module::Install::CheckLib
         Test::Requires
@@ -130,7 +127,6 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::AuthorTests
         Module::Install::CheckLib
         Module::Install::XSUtil
-        Module::Install::Repository
     ));
     test_binding("ZMQ-LibZMQ2");
     cpanm(qw(AnyEvent Proc::Guard));
@@ -142,7 +138,6 @@ if ( $target eq 'ZMQ-Constants' ) {
         Module::Install::AuthorTests
         Module::Install::CheckLib
         Module::Install::XSUtil
-        Module::Install::Repository
     ));
 
     print STDERR "===\n\nTesting $target w/o optional dependencies...\n\n===\n";
@@ -154,9 +149,6 @@ if ( $target eq 'ZMQ-Constants' ) {
     cpanm(qw(
         inc::Module::Install
         Module::Install::AuthorTests
-        Module::Install::CheckLib
-        Module::Install::XSUtil
-        Module::Install::Repository
     ));
 
     foreach my $zmq_version(qw(2.2.0 3.2.2)) {
