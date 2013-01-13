@@ -149,6 +149,8 @@ if ( $target eq 'ZMQ-Constants' ) {
     cpanm(qw(
         inc::Module::Install
         Module::Install::AuthorTests
+        Module::Install::CheckLib
+        Module::Install::XSUtil
     ));
 
     foreach my $zmq_version(qw(2.2.0 3.2.2)) {
