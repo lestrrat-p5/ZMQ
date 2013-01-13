@@ -23,7 +23,21 @@ cc_include_paths split/\s+/, $ENV{CZMQ_INCLUDES};
 cc_libs "$ENV{CZMQ_LIBS} -lzmq -lczmq";
 cc_include_paths 'src';
 cc_src_paths 'src';
-cc_assert_lib 'zmq', 'czmq';
+# XXX As of Devel::CheckLib 0.93, it seems like LIBS = "-L/path/to/foo"
+# gets ignored (unlike what the docs say). So we manually strip and
+# re-arrange the paths here
+{
+    my @libs = grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{CZMQ_LIBS};
+    foreach my $need_lib (qw(zmq czmq)) {
+        print " + Checking for lib $need_lib\n";
+        assertlibs
+            lib => "$need_lib",
+            header => "$need_lib.h",
+            incpath => [ split /\s+/, $ENV{CZMQ_INCLUDES} ],
+            libpath => \@libs,
+        ;
+    }
+}
 
 sub myguard (&) {
     bless [ $_[0] ], 'myguard';
@@ -58,8 +72,6 @@ my $zmqcheck_dir = "tools/zmqcheck";
     print STDERR "Cleaning up $zmqcheck_dir...\n";
     system "make", "clean";
 }
-
-
 
 if ($ENV{CZMQ_VOID_RETURN_VALUES}) {
     cc_define qq{-DCZMQ_VOID_RETURN_VALUES};
