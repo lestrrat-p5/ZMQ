@@ -1,6 +1,10 @@
 Changes
 =======
 
+1.07 Jan 16 2013
+    - Remove some Module::Install plugins.
+    - Add tests for zmq_msg_send() (https://github.com/lestrrat/p5-ZMQ/pull/24,  @domm)
+
 1.06 Jan 12 2013
     - t/100_basic.t uses POSIX::setlocale() to force $! stringification
       (rt #82613, reported by Konstantin A. Pustovalov)
