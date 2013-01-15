@@ -77,10 +77,12 @@ subtest 'basic inproc communication' => sub {
     my $robj = thaw(zmq_msg_data($msg));
     is_deeply($robj, $obj);
 
-    # test zmq_msg_send
-    my $zmq_msg_send_bytes = zmq_msg_send(zmq_msg_init_data("Talk to me"), $client,);
-    if (! is $zmq_msg_send_bytes, length("Talk to me"), "zmq_msg_send is successful") {
-        diag "zmq_msg_send failed with $!";
+    if (ZMQ::LibZMQ3::HAS_ZMQ_MSG_SEND) {
+        # test zmq_msg_send
+        my $zmq_msg_send_bytes = zmq_msg_send(zmq_msg_init_data("Talk to me"), $client,);
+        if (! is $zmq_msg_send_bytes, length("Talk to me"), "zmq_msg_send is successful") {
+            diag "zmq_msg_send failed with $!";
+        }
     }
 
 };
