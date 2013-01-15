@@ -76,6 +76,13 @@ subtest 'basic inproc communication' => sub {
     is(zmq_msg_data($msg), $frozen, "got back same data");
     my $robj = thaw(zmq_msg_data($msg));
     is_deeply($robj, $obj);
+
+    # test zmq_msg_send
+    my $zmq_msg_send_bytes = zmq_msg_send(zmq_msg_init_data("Talk to me"), $client,);
+    if (! is $zmq_msg_send_bytes, length("Talk to me"), "zmq_msg_send is successful") {
+        diag "zmq_msg_send failed with $!";
+    }
+
 };
 
 
