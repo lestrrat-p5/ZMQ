@@ -51,6 +51,7 @@
 ^MYMETA.yml$
 ^MANIFEST.SKIP$
 
+\.orig
 ^tools/zmqcheck/.*\.c$
 ^xs/.*\.inc$
 ^xs/typemap$
