@@ -1,5 +1,6 @@
 package ZMQ::LibZMQ3;
 use strict;
+use warnings;
 use base qw(Exporter);
 use XSLoader;
 use ZMQ::Constants ();
@@ -48,11 +49,14 @@ our @EXPORT = qw(
     zmq_proxy
 );
 
-if (HAS_ZMQ_CTX_NEW) {
-    *zmq_init = \&zmq_ctx_new;
-}
-if (HAS_ZMQ_CTX_DESTROY) {
-    *zmq_term = \&zmq_ctx_destroy;
+BEGIN {
+    no warnings 'redefine';
+    if (!HAS_ZMQ_INIT && HAS_ZMQ_CTX_NEW) {
+        *zmq_init = \&zmq_ctx_new;
+    }
+    if (!HAS_ZMQ_TERM && HAS_ZMQ_CTX_DESTROY) {
+        *zmq_term = \&zmq_ctx_destroy;
+    }
 }
 
 sub zmq_msg_send {
