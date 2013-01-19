@@ -1,6 +1,11 @@
 Changes
 =======
 
+1.08 Jan 19 2013
+    - Only overwrite zmq_init/zmq_term if zmq_ctx_new/zmq_ctx_destroy are
+      available AND zmq_init/zmq_term are not.
+    - Take caution not to cause warnings while doing so.
+
 1.07 Jan 16 2013
     - Remove some Module::Install plugins.
     - Add tests for zmq_msg_send() (https://github.com/lestrrat/p5-ZMQ/pull/24,  @domm)
