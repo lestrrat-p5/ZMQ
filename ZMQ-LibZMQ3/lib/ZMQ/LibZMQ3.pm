@@ -605,7 +605,7 @@ returns a 3-element list of the version numbers:
 
 =head2 zmq_device($type, $sock1, $sock2)
 
-Creates a new "device". See C<zmq_device> for details. zmq_device() will only return if/when the current context is closed. Therefore, the return value is always -1, and errno is always ETERM
+Creates a new "device". See C<zmq_device> for details. zmq_device() will only return if/when the current context is closed. Therefore, the return value is always -1, and $! is always ETERM
 
 Note: may not be available depending on your libzmq version.
 
