@@ -11,6 +11,9 @@ BEGIN {
 }
 
 our @EXPORT = qw(
+    zmq_errno
+    zmq_strerror
+
     zmq_init
     zmq_term
     zmq_ctx_new

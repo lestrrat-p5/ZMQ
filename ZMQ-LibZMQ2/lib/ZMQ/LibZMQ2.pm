@@ -15,6 +15,9 @@ use constant PERL_LIBZMQ2_RCVMORE_HACK =>
 ;
 
 our @EXPORT = qw(
+    zmq_errno
+    zmq_strerror
+
     zmq_init
     zmq_term
 
