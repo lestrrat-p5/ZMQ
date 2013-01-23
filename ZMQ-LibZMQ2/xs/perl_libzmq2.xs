@@ -880,6 +880,8 @@ PerlLibzmq2_zmq_device( device, insocket, outsocket )
         PerlLibzmq2_Socket *outsocket;
     CODE:
         RETVAL = zmq_device( device, insocket->socket, outsocket->socket );
+        /* zmq_device should never return. always set $! */
+        SET_BANG;
     OUTPUT:
         RETVAL
 
