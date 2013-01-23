@@ -1,6 +1,12 @@
 Changes
 =======
 
+1.09 Jan 24 2013
+    - Add zmq_errno() and zmq_strerror() to @EXPORT, so the following works
+          use ZMQ::LibZMQ qw(zmq_errno);
+      Previously zmq_errno() and zmq_strerror() existed, but could not be
+      imported (https://github.com/lestrrat/p5-ZMQ/issues/26, @emceelam).
+
 1.08 Jan 19 2013
     - Only overwrite zmq_init/zmq_term if zmq_ctx_new/zmq_ctx_destroy are
       available AND zmq_init/zmq_term are not.
