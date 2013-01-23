@@ -124,11 +124,13 @@ ZMQ::Poller is a stateful wrapper around zmq_poll.
 Creates a new poller object.
 
 =head2 $poller->register($socket, ZMQ_POLLOUT|ZMQ_POLLIN)
+
 =head2 $poller->register($fd, ZMQ_POLLOUT|ZMQ_POLLIN)
 
 Register a socket or file descriptor for polling.
 
 =head2 $poller->unregister($socket)
+
 =head2 $poller->unregister($fd)
 
 Remove the socket or file descriptor from the poller. If the same socket or
