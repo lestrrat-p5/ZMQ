@@ -48,7 +48,7 @@
 \.gitignore\b
 
 
-^MYMETA.yml$
+^MYMETA\..*$
 ^MANIFEST.SKIP$
 
 ^xs/mg-xs.inc$
