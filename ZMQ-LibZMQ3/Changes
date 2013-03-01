@@ -1,6 +1,10 @@
 Changes
 =======
 
+1.10 Mar 01 2013
+    - No code change
+    - Remove MYMETA.* from distro (http://weblog.bulknews.net/post/44251476706/stop-shipping-mymeta-to-cpan)
+
 1.09 Jan 24 2013
     - Add zmq_errno() and zmq_strerror() to @EXPORT, so the following works
           use ZMQ::LibZMQ qw(zmq_errno);
