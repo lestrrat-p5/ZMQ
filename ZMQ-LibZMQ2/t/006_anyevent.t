@@ -60,6 +60,8 @@ my $data = join '.', time(), $$, rand, {};
 note "Sending data to server";
 zmq_send( $sock, $data );
 my $msg = zmq_recv( $sock );
-is $data, zmq_msg_data( $msg ), "Got back same data";
+if (ok $msg) {
+    is $data, zmq_msg_data( $msg ), "Got back same data";
+}
 
 done_testing;
