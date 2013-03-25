@@ -27,6 +27,9 @@ foreach my $func (keys %functions) {
 #include "EXTERN.h"
 #include "perl.h"
 #include <zmq.h>
+#ifndef PERL_GCC_PEDANTIC
+#define PERL_GCC_PEDANTIC
+#endif
 
 int main(int argc, char **argv)
 {
