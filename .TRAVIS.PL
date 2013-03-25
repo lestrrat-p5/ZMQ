@@ -28,7 +28,7 @@ sub mysystem(@) {
 sub install_libzmq(@) {
     my ($basename, $opts) = @_;
 
-    mysystem("yum", "install", "uuid-dev", "-y");
+    mysystem("sudo", "apt-get", "install", "uuid-dev");
 
     my $tail = $opts->{tail} || '';
     my $prefix = File::Spec->catdir($EXTDIR, $basename);
