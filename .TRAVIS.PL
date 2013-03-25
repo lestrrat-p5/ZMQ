@@ -28,6 +28,8 @@ sub mysystem(@) {
 sub install_libzmq(@) {
     my ($basename, $opts) = @_;
 
+    mysystem("yum", "install", "uuid-dev", "-y");
+
     my $tail = $opts->{tail} || '';
     my $prefix = File::Spec->catdir($EXTDIR, $basename);
     my $file   = "$basename$tail.tar.gz";
