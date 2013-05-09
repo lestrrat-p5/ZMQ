@@ -801,10 +801,10 @@ P5ZMQ3_zmq_recv(socket, buf_sv, len, flags = 0)
         P5ZMQ3_TRACE(" + zmq_recv returned with rv '%d'", RETVAL);
         if ( RETVAL == -1 ) {
             SET_BANG;
-            Safefree(buf);
         } else {
             sv_setpvn( buf_sv, buf, len );
         }
+        Safefree(buf);
         P5ZMQ3_TRACE( "END zmq_recv" );
     OUTPUT:
         RETVAL
