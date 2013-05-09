@@ -1,6 +1,11 @@
 Changes
 =======
 
+1.11 May 09 2013
+    - Add a define for PERL_GCC_PEDANTIC in zmqcheck
+    - Fix memory leak in zmq_recv(), reported by Ton Nijkes (rt #85153)
+    - Fix silly warning on test
+
 1.10 Mar 01 2013
     - No code change
     - Remove MYMETA.* from distro (http://weblog.bulknews.net/post/44251476706/stop-shipping-mymeta-to-cpan)
