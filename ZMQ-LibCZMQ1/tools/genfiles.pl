@@ -57,7 +57,7 @@ PerlLibCZMQ1_mg_find(pTHX_ SV* const sv, const MGVTBL* const vtbl){
 }
 
 EOM
-    open my $src, '<', "xs/perl_czmq.xs";
+    open my $src, '<', "src/perl_czmq.xs";
     foreach my $perl_type (@perl_types) {
         my $c_type = $perl_type;
         $c_type =~ s/::/_/g;

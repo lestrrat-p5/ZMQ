@@ -46,7 +46,7 @@ sub myguard::DESTROY {
     $_[0]->[0]->();
 }
 
-my @clean = qw(xs/*.inc xs/typemap);
+my @clean = qw(src/*.inc src/typemap);
 
 my $zmqcheck_dir = "tools/zmqcheck";
 {
