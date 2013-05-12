@@ -1,6 +1,9 @@
 Changes
 =======
 
+1.12
+    - Fix memory leak from getsockopt reported by og01
+
 1.11 May 09 2013
     - Add a define for PERL_GCC_PEDANTIC in zmqcheck
     - Fix memory leak in zmq_recv(), reported by Ton Nijkes (rt #85153)
