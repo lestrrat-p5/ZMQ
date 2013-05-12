@@ -21,7 +21,7 @@ P5ZMQ3_zmq_getsockopt_int(P5ZMQ3_Socket *sock, int option) {
     len = sizeof(i32);
     status = zmq_getsockopt(sock->socket, option, &i32, &len);
     if(status == 0) {
-        sv = newSViv(i32);
+        sv_setiv(sv, i32);
     } else {
         SET_BANG;
     }
@@ -39,7 +39,7 @@ P5ZMQ3_zmq_getsockopt_int64(P5ZMQ3_Socket *sock, int option) {
     len = sizeof(i64);
     status = zmq_getsockopt(sock->socket, option, &i64, &len);
     if(status == 0) {
-        sv = newSViv(i64);
+        sv_setiv(sv, i64);
     } else {
         SET_BANG;
     }
@@ -57,7 +57,7 @@ P5ZMQ3_zmq_getsockopt_uint64(P5ZMQ3_Socket *sock, int option) {
     len = sizeof(u64);
     status = zmq_getsockopt(sock->socket, option, &u64, &len);
     if(status == 0) {
-        sv = newSVuv(u64);
+        sv_setuv(sv, u64);
     } else {
         SET_BANG;
     }
@@ -74,7 +74,7 @@ P5ZMQ3_zmq_getsockopt_string(P5ZMQ3_Socket *sock, int option, size_t len) {
     Newxz(string, len, char);
     status = zmq_getsockopt(sock->socket, option, string, &len);
     if(status == 0) {
-        sv = newSVpvn(string, len);
+        sv_setpvn(sv, string, len);
     } else {
         SET_BANG;
     }
