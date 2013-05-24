@@ -24,12 +24,12 @@ my %functions = (
 foreach my $func (keys %functions) {
     open my $fh, '>', "$func.c" or die "Failed to open file $func.c for writing: $!";
     printf $fh <<'EOM', $functions{$func};
-#include "EXTERN.h"
-#include "perl.h"
-#include <zmq.h>
 #ifndef PERL_GCC_PEDANTIC
 #define PERL_GCC_PEDANTIC
 #endif
+#include "EXTERN.h"
+#include "perl.h"
+#include <zmq.h>
 
 int main(int argc, char **argv)
 {
