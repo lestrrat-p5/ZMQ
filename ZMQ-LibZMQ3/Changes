@@ -1,8 +1,10 @@
 Changes
 =======
 
-1.12
+1.12 May 30 2013
     - Fix memory leak from getsockopt reported by og01
+    - Fix Makefile.PL clean_files specification (https://github.com/lestrrat/p5-ZMQ/issues/32)
+    - Fix where we declare PERL_GCC_PEDANTIC
 
 1.11 May 09 2013
     - Add a define for PERL_GCC_PEDANTIC in zmqcheck
