@@ -205,7 +205,7 @@ Note that this is a wrapper for libzmq 3.x. For 2.x, you need to check L<ZMQ::Li
 
 Please make sure you already have ZMQ::Constants module. If you installed ZMQ::LibZMQ3 from CPAN via cpan/cpanm, it should have already been installed for you. All socket types and other flags are declared in this module.
 
-To start using ZMQ::LibZMQ3, you need to create a context object, then as many ZMQ::LibZMQ3::Socket obects as you need:
+To start using ZMQ::LibZMQ3, you need to create a context object, then as many ZMQ::LibZMQ3::Socket objects as you need:
 
     my $ctxt = zmq_init;
     my $socket = zmq_socket( $ctxt, ... options );
@@ -228,7 +228,7 @@ When sending data, you can either pass a ZMQ::LibZMQ3::Message object or a Perl 
     
     zmq_sendmsg( $socket, "a simple message" ); 
 
-In most cases using ZMQ::LibZMQ3::Message is redundunt, so you will most likely use the string version.
+In most cases using ZMQ::LibZMQ3::Message is redundant, so you will most likely use the string version.
 
 To receive, simply call C<zmq_recvmsg()> on the socket
 
@@ -280,20 +280,20 @@ so use that to integrate ZMQ::LibZMQ3 and AnyEvent:
 =head1 NOTES ON MULTI-PROCESS and MULTI-THREADED USAGE
 
 0MQ works on both multi-process and multi-threaded use cases, but you need
-to be careful bout sharing ZMQ::LibZMQ3 objects.
+to be careful about sharing ZMQ::LibZMQ3 objects.
 
 For multi-process environments, you should not be sharing the context object.
 Create separate contexts for each process, and therefore you shouldn't
 be sharing the socket objects either.
 
-For multi-thread environemnts, you can share the same context object. However
+For multi-thread environments, you can share the same context object. However
 you cannot share sockets. Note that while the Perl Socket objects survive
 between threads, their underlying C structures do not, and you will get an 
 error if you try to use them between sockets.
 
 =head1 FUNCTIONS
 
-ZMQ::LibZMQ3 attempts to stick to the libzmq interface as much as possible. Unless there is a structural problem (say, an underlying poitner that the Perl binding expects was missing), no function should throw an exception.
+ZMQ::LibZMQ3 attempts to stick to the libzmq interface as much as possible. Unless there is a structural problem (say, an underlying pointer that the Perl binding expects was missing), no function should throw an exception.
 
 Return values should resemble that of libzmq, except for when new data is allocated and returned to the user - That includes things like C<zmq_init()>, C<zmq_socket()>, C<zmq_msg_data()>, etc.
 
@@ -441,7 +441,7 @@ See C<zmq_getsockopt()> if you have problems with ZMQ::LibZMQ3 not knowing the t
 
 =head2 $bytes = zmq_send($sock, $buffer, $size, $flags)
 
-Queues C<$size> bytes from C<$buffer> to be sent from the socket. Argument C<$flags> may be omitted. If C<$size> is -1, then the size of the buffer calcualted via C<SvPV()> will be used.
+Queues C<$size> bytes from C<$buffer> to be sent from the socket. Argument C<$flags> may be omitted. If C<$size> is -1, then the size of the buffer calculated via C<SvPV()> will be used.
 
 Returns the number of bytes sent on success (which should be exact C<$size>)
 
@@ -494,7 +494,7 @@ every time.
 =head2 $rv = zmq_msg_recv($msg, $sock, $flags)
 
 Receives a new message from C<$sock>, and writes the new content to C<$msg>.
-Argument C<$flags> may be omitted. Returns 0 upon succes, -1 on failure and
+Argument C<$flags> may be omitted. Returns 0 upon success, -1 on failure and
 sets $!.
 
 Other than the fact that libzmq has deprecated C<zmq_recvmsg()>, this
@@ -644,7 +644,7 @@ These functions are provided by ZMQ::LibZMQ3 to make some operations easier in t
 
 =head1 DEBUGGING XS
 
-If you see segmentation faults, and such, you need to figure out where the error is occuring in order for the maintainers to figure out what happened. Here's a very very brief explanation of steps involved.
+If you see segmentation faults, and such, you need to figure out where the error is occurring in order for the maintainers to figure out what happened. Here's a very very brief explanation of steps involved.
 
 First, make sure to compile C<ZMQ::LibZMQ3> with debugging on by specifying -g:
 
@@ -665,7 +665,7 @@ When you see the crash, get a backtrace:
 This is an early release. Proceed with caution, please report
 (or better yet: fix) bugs you encounter.
 
-This module has been tested againt B<zeromq 3.2.2>. Semantics of this
+This module has been tested against B<zeromq 3.2.2>. Semantics of this
 module rely heavily on the underlying zeromq version. Make sure
 you know which version of zeromq you're working with.
 
