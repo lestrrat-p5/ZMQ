@@ -3,7 +3,7 @@
 # plugins and such, so run a separate script to detect it.
 # Otherwise, do the usual.
 BEGIN {
-    if (-e '.git') {
+    if (-e '../.git') {
         do 'tools/check_mi_mods.pl';
     } else {
         unshift @INC, 'inc';
