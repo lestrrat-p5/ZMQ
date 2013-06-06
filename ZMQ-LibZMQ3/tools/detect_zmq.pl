@@ -72,9 +72,9 @@ sub probe_alienzmq {
         return;
     }
     print "Probing libzmq via Alien::ZMQ\n";
-    $ENV{ZMQ_H} = File::Spec->catfile(&Alien::ZMQ::inc_dir, "zmq.h");
-    $ENV{ZMQ_INCLUDES} = &Alien::ZMQ::inc_dir;
-    $ENV{ZMQ_LIBS} = join(" ", &Alien::ZMQ::libs);
+    $ENV{ZMQ_H} ||= File::Spec->catfile(&Alien::ZMQ::inc_dir, "zmq.h");
+    $ENV{ZMQ_INCLUDES} ||= &Alien::ZMQ::inc_dir;
+    $ENV{ZMQ_LIBS} ||= join(" ", &Alien::ZMQ::libs);
 }
 
 # Note: At this point probe_envvars should have taken care merging
