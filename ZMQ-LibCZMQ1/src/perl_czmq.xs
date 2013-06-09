@@ -232,7 +232,7 @@ _zsocket_connect( socket, address )
     OUTPUT:
         RETVAL
 
-Bool
+bool
 zsocket_poll( socket, msecs)
         PerlLibCZMQ1_zsocket_raw *socket;
         int msecs;
@@ -591,7 +591,7 @@ char *
 zframe_strdup(frame)
         PerlLibCZMQ1_zframe *frame;
 
-Bool
+bool
 zframe_streq(frame, string)
         PerlLibCZMQ1_zframe *frame;
         char *string;
@@ -600,7 +600,7 @@ int
 zframe_more(frame)
         PerlLibCZMQ1_zframe *frame;
 
-Bool
+bool
 zframe_eq(self, other)
         PerlLibCZMQ1_zframe *self;
         PerlLibCZMQ1_zframe *other;
