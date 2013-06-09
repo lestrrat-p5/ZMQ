@@ -6,7 +6,6 @@ my @modules = qw(
     Module::Install::AuthorTests
     Module::Install::CheckLib
     Module::Install::XSUtil
-    Module::Install::Repository
 );
 
 my @missing;
