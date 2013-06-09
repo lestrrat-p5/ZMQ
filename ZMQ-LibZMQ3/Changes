@@ -1,6 +1,10 @@
 Changes
 =======
 
+1.13
+    - Merge change to work with Alien::ZMQ (Robin Lee)
+    - Remove Module::Install::Repository from check_mi_mods.pl (only affects people working from git repo)
+
 1.12 May 30 2013
     - Fix memory leak from getsockopt reported by og01
     - Fix Makefile.PL clean_files specification (https://github.com/lestrrat/p5-ZMQ/issues/32)
