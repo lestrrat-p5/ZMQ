@@ -3,7 +3,7 @@
 # plugins and such, so run a separate script to detect it.
 # Otherwise, do the usual.
 BEGIN {
-    if (-e '.git') {
+    if (-e '../.git') {
         do 'tools/check_mi_mods.pl';
     } else {
         unshift @INC, 'inc';
@@ -59,6 +59,7 @@ EOM
 # re-arrange the paths here
 {
     my @libs = grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS};
+    local $ENV{LD_LIBRARY_PATH} = join(":", $ENV{LD_LIBRARY_PATH}, @libs);
     assertlibs
         lib => 'zmq',
         header => 'zmq.h',
