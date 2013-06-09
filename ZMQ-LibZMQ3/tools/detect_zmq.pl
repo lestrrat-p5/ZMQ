@@ -5,6 +5,7 @@ use File::Spec;
 # probe env vars first, as you may have wanted to override
 # any auto-discoverable values
 probe_envvars();
+probe_alienzmq();
 probe_pkgconfig();
 
 sub probe_envvars {
@@ -60,6 +61,20 @@ sub probe_envvars {
             $ENV{ZMQ_LIBS} = join ' ', @libs;
         }
     }
+}
+
+sub probe_alienzmq {
+    eval {
+        require Alien::ZMQ;
+    };
+    if ($@) {
+        print "Alien::ZMQ not found\n";
+        return;
+    }
+    print "Probing libzmq via Alien::ZMQ\n";
+    $ENV{ZMQ_H} ||= File::Spec->catfile(&Alien::ZMQ::inc_dir, "zmq.h");
+    $ENV{ZMQ_INCLUDES} ||= &Alien::ZMQ::inc_dir;
+    $ENV{ZMQ_LIBS} ||= join(" ", &Alien::ZMQ::libs);
 }
 
 # Note: At this point probe_envvars should have taken care merging
