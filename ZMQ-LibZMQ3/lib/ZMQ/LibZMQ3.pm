@@ -37,6 +37,7 @@ our @EXPORT = qw(
     zmq_unbind
     zmq_close
     zmq_connect
+    zmq_disconnect
     zmq_getsockopt
     zmq_recv
     zmq_recvmsg
