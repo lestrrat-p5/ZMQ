@@ -758,7 +758,7 @@ P5ZMQ3_zmq_disconnect(socket, addr)
     CODE:
 #ifdef HAS_ZMQ_DISCONNECT
         RETVAL = zmq_disconnect(socket, addr);
-        if (RETVAL == -1) {
+        if (RETVAL != 0) {
             SET_BANG;
         }
 #else
