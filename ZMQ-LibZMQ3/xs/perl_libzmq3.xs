@@ -754,16 +754,18 @@ P5ZMQ3_zmq_connect(socket, addr)
 int
 P5ZMQ3_zmq_disconnect(socket, addr)
         P5ZMQ3_Socket *socket;
-        char *addr;
+        const char *addr;
     CODE:
-        P5ZMQ3_TRACE( "START zmq_disconnect" );
-        P5ZMQ3_TRACE( " + socket %p", socket );
-        RETVAL = zmq_disconnect( socket->socket, addr );
-        P5ZMQ3_TRACE(" + zmq_disconnect returned with rv '%d'", RETVAL);
-        if (RETVAL != 0) {
+#ifdef HAS_ZMQ_DISCONNECT
+        RETVAL = zmq_disconnect(socket, addr);
+        if (RETVAL == -1) {
             SET_BANG;
         }
-        P5ZMQ3_TRACE( "END zmq_disconnect" );
+#else
+        PERL_UNUSED_VAR(socket);
+        PERL_UNUSED_VAR(addr);
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_disconnect");
+#endif
     OUTPUT:
         RETVAL
 
