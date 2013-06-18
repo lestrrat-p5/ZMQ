@@ -752,6 +752,22 @@ P5ZMQ3_zmq_connect(socket, addr)
         RETVAL
 
 int
+P5ZMQ3_zmq_disconnect(socket, addr)
+        P5ZMQ3_Socket *socket;
+        char *addr;
+    CODE:
+        P5ZMQ3_TRACE( "START zmq_disconnect" );
+        P5ZMQ3_TRACE( " + socket %p", socket );
+        RETVAL = zmq_disconnect( socket->socket, addr );
+        P5ZMQ3_TRACE(" + zmq_disconnect returned with rv '%d'", RETVAL);
+        if (RETVAL != 0) {
+            SET_BANG;
+        }
+        P5ZMQ3_TRACE( "END zmq_disconnect" );
+    OUTPUT:
+        RETVAL
+
+int
 P5ZMQ3_zmq_bind(socket, addr)
         P5ZMQ3_Socket *socket;
         char *addr;
