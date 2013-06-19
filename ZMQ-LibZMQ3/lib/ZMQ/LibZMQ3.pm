@@ -37,6 +37,7 @@ our @EXPORT = qw(
     zmq_unbind
     zmq_close
     zmq_connect
+    zmq_disconnect
     zmq_getsockopt
     zmq_recv
     zmq_recvmsg
@@ -388,9 +389,17 @@ Note: may not be available depending on your libzmq version.
 
 =head2 $rv = zmq_connect( $sock, $address )
 
-Connects the socket to specified C<$address>.
+Connects the socket to the specified C<$address>.
 
 Returns a non-zero status upon failure, and sets $!
+
+=head2 $rv = zmq_disconnect( $sock, $address )
+
+Disconnects the socket from the specified C<$address>.
+
+Returns a non-zero status upon failure, and sets $!
+
+Note: may not be available depending on your libzmq version.
 
 =head2 $rv = zmq_close( $sock )
 

@@ -752,6 +752,24 @@ P5ZMQ3_zmq_connect(socket, addr)
         RETVAL
 
 int
+P5ZMQ3_zmq_disconnect(socket, addr)
+        P5ZMQ3_Socket *socket;
+        const char *addr;
+    CODE:
+#ifdef HAS_ZMQ_DISCONNECT
+        RETVAL = zmq_disconnect(socket, addr);
+        if (RETVAL != 0) {
+            SET_BANG;
+        }
+#else
+        PERL_UNUSED_VAR(socket);
+        PERL_UNUSED_VAR(addr);
+        P5ZMQ3_FUNCTION_UNAVAILABLE("zmq_disconnect");
+#endif
+    OUTPUT:
+        RETVAL
+
+int
 P5ZMQ3_zmq_bind(socket, addr)
         P5ZMQ3_Socket *socket;
         char *addr;
