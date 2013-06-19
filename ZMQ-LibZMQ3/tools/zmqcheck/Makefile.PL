@@ -18,6 +18,7 @@ my %functions = (
     zmq_sendmsg     => 'zmq_sendmsg(NULL, NULL, 0);',
     zmq_term        => 'zmq_term(NULL);',
     zmq_unbind      => 'zmq_unbind(NULL, NULL);',
+    zmq_disconnect  => 'zmq_disconnect(NULL, NULL);',
 );
 
 # Create files
