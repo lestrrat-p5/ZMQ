@@ -10,15 +10,22 @@ use ZMQ::LibZMQ3;
 use ZMQ::Constants ':v3.1.1', ':all';
 use Storable qw/nfreeze thaw/;
 
-subtest 'connect before server socket is bound (should fail)' => sub {
-    my $cxt = zmq_init;
-    my $sock = zmq_socket($cxt, ZMQ_PAIR); # Receiver
+my ($major, $minor, $micro) = ZMQ::LibZMQ3::zmq_version();
 
-    # too early, server socket not created:
-    my $client = zmq_socket($cxt, ZMQ_PAIR);
-    my $status = zmq_connect($client, "inproc://myPrivateSocket");
-    if (is $status, -1, "Error connecting to invalid socket") {
-        like $!, qr/Connection refused/, "Error is Connection refused";
+subtest 'connect before server socket is bound (should fail)' => sub {
+    if ( $major >= 4 ) {
+        plan skip_all => 'connect before server socket is bound works in v4 and up.';
+    }
+    else {
+        my $cxt = zmq_init;
+        my $sock = zmq_socket($cxt, ZMQ_PAIR); # Receiver
+
+        # too early, server socket not created:
+        my $client = zmq_socket($cxt, ZMQ_PAIR);
+        my $status = zmq_connect($client, "inproc://myPrivateSocket");
+        if (is $status, -1, "Error connecting to invalid socket") {
+            like $!, qr/Connection refused/, "Error is Connection refused";
+        }
     }
 };
 
@@ -45,7 +52,6 @@ subtest 'basic inproc communication' => sub {
 
     # These tests are potentially dangerous when upgrades happen....
     # I thought of plain removing, but I'll leave it for now
-    my ($major, $minor, $micro) = ZMQ::LibZMQ3::zmq_version();
     SKIP: {
         skip( "Need to be exactly zeromq 2.1.0", 3 )
             if ($major != 2 || $minor != 1 || $micro != 0);
