@@ -198,7 +198,7 @@ WriteAll;
 if ($^O eq 'darwin' && -f "Makefile") {
     my $version = `sw_vers -productVersion`;
     chomp $version;
-    $version =~ s/\.\d+$//;
+    $version =~ s/^(\d+\.\d+).\d+$/$1/;
 
     local @ARGV = qw(Makefile);
     local $^I = '';
