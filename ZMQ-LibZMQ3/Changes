@@ -1,6 +1,9 @@
 Changes
 =======
 
+1.14 Nov 26 2013
+    - Fix Makefile.PL for OS X (reported by cdybedahl, #43)
+
 1.13 Jun 10 2013
     - Add zmq_disconnect (https://github.com/lestrrat/p5-ZMQ/pull/40)
     - Merge change to work with Alien::ZMQ (Robin Lee)
