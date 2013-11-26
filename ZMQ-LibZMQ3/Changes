@@ -1,6 +1,12 @@
 Changes
 =======
 
+1.15 Nov 26 2013
+    - Skip tests when linking against libzmq4 (cdybedahl pr #45)
+      (Note: if/when libzmq4 API diverges from libzmq3, you should be
+       using ZMQ::LibZMQ4 -- which hasn't been written yet -- instead of
+       ZMQ::LibZMQ4)
+
 1.14 Nov 26 2013
     - Fix Makefile.PL for OS X (reported by cdybedahl, #43)
 
