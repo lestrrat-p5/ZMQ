@@ -200,7 +200,7 @@ our %EXPORT_TAGS = (
 );
 $EXPORT_TAGS{all} = [ @EXPORT_OK ];
 
-our $VERSION = '1.03';
+our $VERSION = '1.04';
 
 our %SOCKOPT_MAP;
 sub set_sockopt_type {
