@@ -1095,9 +1095,12 @@ P5ZMQ3_zmq_poll( list, timeout = 0 )
 
         if (rv != -1 ) {
             for ( i = 0; i < list_len; i++ ) {
-                P5ZMQ3_TRACE( " + checking events for %d (callbacks)", i );
+                P5ZMQ3_TRACE( " + checking events for %d", i );
                 eventfired = 
                     (pollitems[i].revents & pollitems[i].events) ? 1 : 0;
+                if (GIMME_V == G_ARRAY) {
+                    mXPUSHi(eventfired);
+                }
 
                 if (eventfired) {
                     dSP;
@@ -1114,21 +1117,10 @@ P5ZMQ3_zmq_poll( list, timeout = 0 )
                     LEAVE;
                 }
             }
-
-            if (GIMME_V == G_ARRAY) {
-                for ( i = 0; i < list_len; i++ ) {
-                    P5ZMQ3_TRACE( " + checking events for %d (to return list)", i );
-                    eventfired = 
-                        (pollitems[i].revents & pollitems[i].events) ? 1 : 0;
-                    mXPUSHi(eventfired);
-                }
-                XSRETURN(list_len);
-            }
         }
 
         if (GIMME_V == G_SCALAR) {
             mXPUSHi(rv);
-            XSRETURN(1);
         }
         Safefree(pollitems);
         Safefree(callbacks);
