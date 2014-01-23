@@ -74,6 +74,7 @@ P5ZMQ3_zmq_getsockopt_string(P5ZMQ3_Socket *sock, int option, size_t len) {
     Newxz(string, len, char);
     status = zmq_getsockopt(sock->socket, option, string, &len);
     if(status == 0) {
+        if (option == ZMQ_LAST_ENDPOINT && len > 0 && string[len] == 0) --len;
         sv_setpvn(sv, string, len);
     } else {
         SET_BANG;
