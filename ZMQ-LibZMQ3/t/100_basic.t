@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use POSIX ();
 BEGIN {
-    POSIX::setlocale(&POSIX::LC_MESSAGES, "en_GB.UTF-8");
+    POSIX::setlocale(&POSIX::LC_MESSAGES, "C");
 }
 
 use Test::More;
