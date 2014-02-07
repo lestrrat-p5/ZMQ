@@ -39,6 +39,7 @@ assertlibs
 
 requires 'Task::Weaken';
 requires 'ZMQ::Constants', '1.00';
+requires 'ExtUtils::ParseXS', '3.22'; # should be build_requires
 test_requires 'Test::More', '0.98';
 test_requires 'Test::TCP' => '1.08';
 test_requires 'Test::Requires';

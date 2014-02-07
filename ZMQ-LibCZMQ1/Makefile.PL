@@ -4,6 +4,7 @@ do "tools/detect_zmq.pl";
 do "tools/detect_czmq.pl";
 
 name 'ZMQ-LibCZMQ1';
+requires 'ExtUtils::ParseXS', '3.22'; # should be build_requires
 all_from 'lib/ZMQ/LibCZMQ1.pm';
 
 use_xshelper '-clean';
