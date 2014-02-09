@@ -51,6 +51,7 @@ sub install_libzmq(@) {
 
 sub cpanm (@) {
     eval {
+        mysystem("env | sort");
         mysystem("cpanm", "--verbose", "--notest", @_);
     };
     if (my $e = $@) {
