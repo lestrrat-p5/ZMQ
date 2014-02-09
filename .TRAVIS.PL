@@ -2,6 +2,7 @@
 use strict;
 use Cwd ();
 use File::Spec;
+use Config;
 
 my $ROOT   = Cwd::abs_path( Cwd::cwd() );
 my $EXTDIR = File::Spec->catdir($ROOT, "ext");
@@ -68,7 +69,7 @@ sub test_binding {
     my $cwd = Cwd::abs_path();
     my $guard = myguard { chdir $cwd };
     chdir File::Spec->catdir($ROOT, $subdir);
-    mysystem("perl", "-V");
+    $ENV{PERL5OPT} = "-Mlib=$Config{installsitelib}";
     cpanm("--installdeps", ".");
     mysystem("perl", "Makefile.PL");
     mysystem("make", "test");
