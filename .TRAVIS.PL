@@ -51,7 +51,6 @@ sub install_libzmq(@) {
 
 sub cpanm (@) {
     eval {
-        mysystem("env | sort");
         mysystem("cpanm", "--verbose", "--notest", @_);
     };
     if (my $e = $@) {
@@ -70,6 +69,7 @@ sub test_binding {
     my $guard = myguard { chdir $cwd };
     chdir File::Spec->catdir($ROOT, $subdir);
     cpanm("--installdeps", ".");
+    mysystem("perl", "-V");
     mysystem("perl", "Makefile.PL");
     mysystem("make", "test");
 }
