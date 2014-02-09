@@ -51,7 +51,7 @@ sub install_libzmq(@) {
 
 sub cpanm (@) {
     eval {
-        mysystem("cpanm", "--notest", @_);
+        mysystem("cpanm", "--verbose", "--notest", @_);
     };
     if (my $e = $@) {
         my $cpanm_log = "/home/travis/.cpanm/build.log";
