@@ -68,8 +68,8 @@ sub test_binding {
     my $cwd = Cwd::abs_path();
     my $guard = myguard { chdir $cwd };
     chdir File::Spec->catdir($ROOT, $subdir);
-    cpanm("--installdeps", ".");
     mysystem("perl", "-V");
+    cpanm("--installdeps", ".");
     mysystem("perl", "Makefile.PL");
     mysystem("make", "test");
 }
