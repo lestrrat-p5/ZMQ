@@ -101,7 +101,7 @@ if ( $target eq 'ZMQ-Constants' ) {
         Test::Requires
         Test::TCP
     ));
-    foreach my $zmq_version( qw(2.2.0 3.2.2) ) {
+    foreach my $zmq_version( qw(3.2.2) ) {
         $ENV{CZMQ_HOME} = install_libczmq($zmq_version);
         cpanm(File::Spec->catdir($ROOT, "ZMQ-LibCZMQ1"));
         test_binding("ZMQ-CZMQ");
