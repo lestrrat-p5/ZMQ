@@ -1,6 +1,10 @@
 Changes
 =======
 
+1.16 May 03 2014
+	- Fix locale dependent tests (J. Gomez)
+	- Fix ZMQ_LAST_ENDPOINT (Michael Gray)
+
 1.15 Nov 26 2013
     - Skip tests when linking against libzmq4 (cdybedahl pr #45)
       (Note: if/when libzmq4 API diverges from libzmq3, you should be

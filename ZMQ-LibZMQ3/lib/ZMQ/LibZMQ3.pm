@@ -6,7 +6,7 @@ use XSLoader;
 use ZMQ::Constants ();
 
 BEGIN {
-    our $VERSION = '1.15';
+    our $VERSION = '1.16';
     XSLoader::load(__PACKAGE__, $VERSION);
 }
 
