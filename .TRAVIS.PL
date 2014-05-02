@@ -93,6 +93,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     test_binding("ZMQ-Constants");
 } elsif ( $target eq 'ZMQ-CZMQ' ) {
     cpanm(qw(
+        ExtUtils::ParseXS
         inc::Module::Install
         Module::Install::XSUtil
         Module::Install::CheckLib
@@ -149,6 +150,7 @@ if ( $target eq 'ZMQ-Constants' ) {
     test_binding("ZMQ-LibZMQ3");
 } elsif ( $target eq 'ZMQ' ) {
     cpanm(qw(
+        ExtUtils::ParseXS
         inc::Module::Install
         Module::Install::AuthorTests
         Module::Install::CheckLib
