@@ -503,8 +503,11 @@ every time.
 =head2 $rv = zmq_msg_recv($msg, $sock, $flags)
 
 Receives a new message from C<$sock>, and writes the new content to C<$msg>.
-Argument C<$flags> may be omitted. Returns 0 upon success, -1 on failure and
-sets $!.
+Argument C<$flags> may be omitted.
+
+Returns the number of bytes in the message if successful.
+
+Returns -1 upon failure, and sets $!.
 
 Other than the fact that libzmq has deprecated C<zmq_recvmsg()>, this
 construct is useful if you don't want to allocate a message struct for
