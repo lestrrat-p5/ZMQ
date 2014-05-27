@@ -1,6 +1,9 @@
 Changes
 =======
 
+1.08 - May 28 2014
+        - Fix locale dependent tests (J. Gomez)
+
 1.07 - Mar 01 2013
     - No code change
     - Remove MYMETA.* from distro (http://weblog.bulknews.net/post/44251476706/stop-shipping-mymeta-to-cpan)
