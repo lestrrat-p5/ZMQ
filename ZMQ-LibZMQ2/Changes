@@ -1,8 +1,11 @@
 Changes
 =======
 
+1.09 - Jun 04 2014
+    - Fix return value upon errors (rurban)
+
 1.08 - May 28 2014
-        - Fix locale dependent tests (J. Gomez)
+    - Fix locale dependent tests (J. Gomez)
 
 1.07 - Mar 01 2013
     - No code change
