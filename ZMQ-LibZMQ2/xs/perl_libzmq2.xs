@@ -35,6 +35,7 @@ PerlLibzmq2_zmq_getsockopt_int(PerlLibzmq2_Socket *sock, int option) {
     if(status == 0) {
         sv = newSViv(i32);
     } else {
+        sv = &PL_sv_undef;
         SET_BANG;
     }
     return sv;
@@ -53,6 +54,7 @@ PerlLibzmq2_zmq_getsockopt_int64(PerlLibzmq2_Socket *sock, int option) {
     if(status == 0) {
         sv = newSViv(i64);
     } else {
+        sv = &PL_sv_undef;
         SET_BANG;
     }
     return sv;
@@ -71,6 +73,7 @@ PerlLibzmq2_zmq_getsockopt_uint64(PerlLibzmq2_Socket *sock, int option) {
     if(status == 0) {
         sv = newSVuv(u64);
     } else {
+        sv = &PL_sv_undef;
         SET_BANG;
     }
     return sv;
@@ -88,6 +91,7 @@ PerlLibzmq2_zmq_getsockopt_string(PerlLibzmq2_Socket *sock, int option, size_t l
     if(status == 0) {
         sv = newSVpvn(string, len);
     } else {
+        sv = &PL_sv_undef;
         SET_BANG;
     }
     Safefree(string);
