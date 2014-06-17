@@ -45,3 +45,4 @@ EOM
     exit 0;
 }
 Module::Install->import;
+Devel::CheckLib->import;
