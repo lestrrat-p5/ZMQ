@@ -9,8 +9,6 @@ BEGIN {
         unshift @INC, 'inc';
         require inc::Module::Install;
         Module::Install->import;
-        require inc::Devel::CheckLib;
-        Devel::CheckLib->import;
     }
 }
 
@@ -111,6 +109,9 @@ my @constants;
 my @clean = qw(xs/*.inc xs/typemap);
 
 {
+    # cannot be called before the first call to one of Module::Install::CheckLib extension methods
+    Devel::CheckLib->import('check_lib');
+
     my $found = 0;
     my %functions = (
         zmq_init        => 'zmq_init(0);',
