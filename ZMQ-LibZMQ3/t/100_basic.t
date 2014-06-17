@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use POSIX ();
 BEGIN {
-    POSIX::setlocale(&POSIX::LC_MESSAGES, "C");
+    POSIX::setlocale(&POSIX::LC_MESSAGES, "C") unless $^O eq 'MSWin32';
 }
 
 use Test::More;
