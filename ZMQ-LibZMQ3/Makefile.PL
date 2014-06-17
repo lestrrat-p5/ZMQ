@@ -89,8 +89,8 @@ cc_include_paths 'xs';
 cc_src_paths 'xs';
 cc_assert_lib 'zmq';
 
-my @libs = split /\s+/, $ENV{ZMQ_LIBS};
 {
+    my @libs = split /\s+/, $ENV{ZMQ_LIBS};
     if ($^O eq 'cygwin') {
         push @libs, '-lzmq', '-luuid'; # uuid for cygwin, but can't hurt
     } else {
