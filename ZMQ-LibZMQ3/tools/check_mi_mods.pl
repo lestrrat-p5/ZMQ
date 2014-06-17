@@ -3,7 +3,6 @@
 # to install. So do the check here
 my @modules = qw(
     inc::Module::Install
-    inc::Devel::CheckLib
     Module::Install::AuthorTests
     Module::Install::CheckLib
     Module::Install::XSUtil
@@ -46,4 +45,3 @@ EOM
     exit 0;
 }
 Module::Install->import;
-Devel::CheckLib->import;
