@@ -9,18 +9,20 @@ BEGIN {
 }
 
 my $path = File::Temp->new(UNLINK => 0);
+my $endpoint = $^O eq 'MSWin32' ? 'tcp://127.0.0.1:63'.int(rand(2000)) : "ipc://$path";
+
 my $pid = Test::SharedFork->fork();
 if ($pid == 0) {
     sleep 1; # hmmm, not a good way to do this...
     my $ctxt = zmq_init();
     my $child = zmq_socket($ctxt, ZMQ_REQ );
-    zmq_connect( $child, "ipc://$path" );
+    zmq_connect( $child, $endpoint );
     zmq_sendmsg( $child, zmq_msg_init_data( "Hello from $$" ) );
     exit 0;
 } elsif ($pid) {
     my $ctxt = zmq_init();
     my $parent_sock = zmq_socket( $ctxt, ZMQ_REP);
-    zmq_bind( $parent_sock, "ipc://$path" );
+    zmq_bind( $parent_sock, $endpoint );
     my $msg = zmq_recvmsg( $parent_sock );
     my $data = zmq_msg_data($msg);
     if (! is $data, "Hello from $pid", "message is the expected message") {
