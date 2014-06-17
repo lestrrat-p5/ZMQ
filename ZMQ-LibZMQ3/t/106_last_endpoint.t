@@ -11,7 +11,7 @@ my $path = File::Temp->new(UNLINK => 0);
 
 my $ctxt = zmq_init();
 my $sock = zmq_socket($ctxt, ZMQ_REQ );
-my $set_endpoint = "ipc://$path";
+my $set_endpoint = $^O eq 'MSWin32' ? 'inproc://test' : "ipc://$path";
 zmq_connect( $sock, $set_endpoint );
 
 my $read_endpoint = zmq_getsockopt($sock, ZMQ_LAST_ENDPOINT);
