@@ -57,16 +57,22 @@ EOM
 # XXX As of Devel::CheckLib 0.93, it seems like LIBS = "-L/path/to/foo"
 # gets ignored (unlike what the docs say). So we manually strip and
 # re-arrange the paths here
+sub run_check
 {
+    my $check_sub = shift;
     my @libs = grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS};
     local $ENV{LD_LIBRARY_PATH} = join(":", $ENV{LD_LIBRARY_PATH}, @libs);
-    assertlibs
+    return &$check_sub(
         lib => 'zmq',
         header => 'zmq.h',
         incpath => [ split /\s+/, $ENV{ZMQ_INCLUDES} ],
         libpath => \@libs,
-    ;
+        debug => 1,
+	@_
+    );
 }
+
+run_check \&assertlibs;
 
 requires 'Task::Weaken';
 requires 'ZMQ::Constants';
@@ -109,9 +115,6 @@ my @constants;
 my @clean = qw(xs/*.inc xs/typemap);
 
 {
-    # cannot be called before the first call to one of Module::Install::CheckLib extension methods
-    Devel::CheckLib->import('check_lib');
-
     my $found = 0;
     my %functions = (
         zmq_init        => 'zmq_init(0);',
@@ -133,14 +136,10 @@ my @clean = qw(xs/*.inc xs/typemap);
 
     while (my ($name, $expr) = each %functions)
     {
+        print STDERR "CHECK: Does your zmq have $name...\n";
+        my $ok = run_check \&{Devel::CheckLib::check_lib}, function => "$expr; return 0;";
+
         print STDERR "CHECK: Does your zmq have $name...";
-        my $ok = check_lib(
-            lib => 'zmq',
-            header => 'zmq.h',
-            function => "$expr; return 0;",
-            incpath => [ split /\s+/, $ENV{ZMQ_INCLUDES} ],
-            libpath => \@libs
-        );
         print STDERR " @{[$ok ? 'YES' : 'NO']}\n";
         my $constname = sprintf "HAS_%s", uc $name;
         if ($ok) {
