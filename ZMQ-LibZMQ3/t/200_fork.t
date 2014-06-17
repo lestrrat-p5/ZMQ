@@ -35,6 +35,9 @@ subtest 'parent creates context, socket, and forks, child does nothing' => sub {
 };
 
 subtest 'parent creates context, socket, and forks, child calls zmq_close()' => sub {
+
+    plan skip_all => 'perl panics on Windows' if $^O eq 'MSWin32';
+
     my $ctx = zmq_init(1);
     my $sock = zmq_socket($ctx, ZMQ_REQ);
     my $pid = fork();
