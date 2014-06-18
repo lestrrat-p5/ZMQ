@@ -57,16 +57,22 @@ EOM
 # XXX As of Devel::CheckLib 0.93, it seems like LIBS = "-L/path/to/foo"
 # gets ignored (unlike what the docs say). So we manually strip and
 # re-arrange the paths here
+sub run_check
 {
+    my $check_sub = shift;
     my @libs = grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS};
     local $ENV{LD_LIBRARY_PATH} = join(":", $ENV{LD_LIBRARY_PATH}, @libs);
-    assertlibs
+    return &$check_sub(
         lib => 'zmq',
         header => 'zmq.h',
         incpath => [ split /\s+/, $ENV{ZMQ_INCLUDES} ],
         libpath => \@libs,
-    ;
+        debug => 1,
+	@_
+    );
 }
+
+run_check \&assertlibs;
 
 requires 'Task::Weaken';
 requires 'ZMQ::Constants';
@@ -107,23 +113,33 @@ sub myguard::DESTROY {
 
 my @constants;
 my @clean = qw(xs/*.inc xs/typemap);
-my $zmqcheck_dir = "tools/zmqcheck";
+
 {
-    my $pwd = Cwd::abs_path();
-    my $guard = myguard { chdir $pwd };
-    chdir $zmqcheck_dir;
-    if (system($^X, "Makefile.PL") != 0) {
-        die "Failed to execute $zmqcheck_dir/Makefile.PL";
-    }
-
     my $found = 0;
-    foreach my $file (glob("*.c")) {
-        my $name = $file;
-        $name =~ s/\.c$//;
-        push @clean, "$zmqcheck_dir/$name";
-        print STDERR "CHECK: Does your zmq have $name...";
+    my %functions = (
+        zmq_init        => 'zmq_init(0);',
+        zmq_ctx_destroy => 'zmq_ctx_destroy(NULL);',
+        zmq_ctx_get     => 'zmq_ctx_get(NULL, 0);',
+        zmq_ctx_new     => 'zmq_ctx_new();',
+        zmq_ctx_set     => 'zmq_ctx_set(NULL, 0, 0);',
+        zmq_device      => 'if (0) zmq_device(0, NULL, NULL);', # cannot be executed without initialization on Windows
+        zmq_msg_recv    => 'zmq_msg_recv(NULL, NULL, 0);',
+        zmq_msg_send    => 'zmq_msg_send(NULL, NULL, 0);',
+        zmq_proxy       => 'zmq_proxy(NULL, NULL, NULL);',
+        zmq_recvmsg     => 'zmq_recvmsg(NULL, NULL, 0);',
+        zmq_socket_monitor => 'zmq_socket_monitor(NULL, NULL, 0);',
+        zmq_sendmsg     => 'zmq_sendmsg(NULL, NULL, 0);',
+        zmq_term        => 'zmq_term(NULL);',
+        zmq_unbind      => 'zmq_unbind(NULL, NULL);',
+        zmq_disconnect  => 'zmq_disconnect(NULL, NULL);',
+    );
 
-        my $ok = (system("make", $name) == 0);
+    while (my ($name, $expr) = each %functions)
+    {
+        print STDERR "CHECK: Does your zmq have $name...\n";
+        my $ok = run_check \&{Devel::CheckLib::check_lib}, function => "$expr; return 0;";
+
+        print STDERR "CHECK: Does your zmq have $name...";
         print STDERR " @{[$ok ? 'YES' : 'NO']}\n";
         my $constname = sprintf "HAS_%s", uc $name;
         if ($ok) {
@@ -143,24 +159,8 @@ It is very likely that there's some sort of problem in the compilation
 options, and it is very likely that even if you are able to compile
 this module, you will not be able to make any use of it.
 
-Here's the output from the compilation:
-
 EOM
-        if (! open my $fh, '<', 'zmqcheck.out') {
-            print STDERR <<EOM;
-
-WHOA! No logs generated! You have some SERIOUS problem!
-
-EOM
-        } else {
-            print STDERR "=== START zmqcheck.out ===\n";
-            while (<$fh>) { print STDERR $_ }
-            print STDERR "=== END zmqcheck.out ===\n";
-        }
     }
-
-    print STDERR "Cleaning up $zmqcheck_dir...\n";
-    system "make", "clean";
 }
 
 { # Create constants-xs.inc
