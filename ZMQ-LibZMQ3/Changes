@@ -1,9 +1,16 @@
 Changes
 =======
 
+1.17 Jun 18 2014
+    - Fix docs on zmq_msg_recv() (Giacomo Montagner)
+    - Do away with tools/zmqcheck, and use Devel::CheckLib (nponeccop)
+    - Fix breakage on windows for t/100_basic.t (nponeccop)
+    - Fix breakage on windows for t/104_ipc.t and t/106_last_endpoint.t (noponeccop)
+    - Skip t/200_fork.t on windows (noponeccop)
+
 1.16 May 03 2014
-	- Fix locale dependent tests (J. Gomez)
-	- Fix ZMQ_LAST_ENDPOINT (Michael Gray)
+    - Fix locale dependent tests (J. Gomez)
+    - Fix ZMQ_LAST_ENDPOINT (Michael Gray)
 
 1.15 Nov 26 2013
     - Skip tests when linking against libzmq4 (cdybedahl pr #45)
