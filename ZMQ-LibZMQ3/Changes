@@ -1,6 +1,9 @@
 Changes
 =======
 
+1.18 Jul 08 2014
+    - Fix broken zmq_disconnect/zmq_unbind/zmq_socket_monitor (https://github.com/lestrrat/p5-ZMQ/issues/59)
+
 1.17 Jun 18 2014
     - Fix docs on zmq_msg_recv() (Giacomo Montagner)
     - Do away with tools/zmqcheck, and use Devel::CheckLib (nponeccop)
