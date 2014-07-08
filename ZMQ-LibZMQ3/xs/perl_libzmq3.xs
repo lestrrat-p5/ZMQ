@@ -758,7 +758,7 @@ P5ZMQ3_zmq_disconnect(socket, addr)
         const char *addr;
     CODE:
 #ifdef HAS_ZMQ_DISCONNECT
-        RETVAL = zmq_disconnect(socket, addr);
+        RETVAL = zmq_disconnect(socket->socket, addr);
         if (RETVAL != 0) {
             SET_BANG;
         }
@@ -792,7 +792,7 @@ P5ZMQ3_zmq_unbind(socket, addr)
         const char *addr;
     CODE:
 #ifdef HAS_ZMQ_UNBIND
-        RETVAL = zmq_unbind(socket, addr);
+        RETVAL = zmq_unbind(socket->socket, addr);
         if (RETVAL == -1) {
             SET_BANG;
         }
@@ -1175,7 +1175,7 @@ P5ZMQ3_zmq_socket_monitor(socket, addr, events)
         int events;
     CODE:
 #ifdef HAS_ZMQ_SOCKET_MONITOR
-        RETVAL = zmq_socket_monitor(socket, addr, events);
+        RETVAL = zmq_socket_monitor(socket->socket, addr, events);
         if (RETVAL != 0) {
             SET_BANG;
         }
