@@ -66,10 +66,10 @@ BEGIN {
         $methods{recv} = sub {
             my $self = shift;
             my $msg  = ZMQ::call( "zmq_recv", $self->{_socket}, @_ );
-            if ( $msg ) {
+            if ( ref $msg && eval { $msg->isa('ZMQ::LibZMQ2::Message') } ) {
                 return ZMQ::Message->_wrap( $msg );
             }
-            return $msg;
+            return;
         };
         $methods{send} = sub {
             my $self = shift;
