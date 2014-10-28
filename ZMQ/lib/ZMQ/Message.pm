@@ -1,5 +1,6 @@
 package ZMQ::Message;
 use strict;
+use Sub::Name ();
 
 sub new {
     my $class = shift;
@@ -16,24 +17,24 @@ sub _wrap {
 }
 
 BEGIN {
+    my %methods;
     foreach my $funcname ( qw(data size close) ) {
-        eval sprintf <<'EOM', $funcname, $funcname;
-            sub %s {
-                my ($self) = @_;
-                ZMQ::call( "zmq_msg_%s", $self->{_msg} );
-            }
-EOM
-        die if $@;
+        $methods{$funcname} = sub {
+            my ($self) = @_;
+            ZMQ::call( "zmq_msg_$funcname", $self->{_msg} );
+        };
     }
 
     foreach my $funcname ( qw(copy move) ) {
-        eval sprintf <<'EOM', $funcname, $funcname;
-            sub %s {
-                my ($dst, $src) = @_;
-                ZMQ::call( "zmq_msg_%s", $dst->{_msg}, $src->{_msg} );
-            }
-EOM
-        die if $@;
+        $methods{$funcname} = sub {
+            my ($dst, $src) = @_;
+            ZMQ::call( "zmq_msg_$funcname", $dst->{_msg}, $src->{_msg} );
+        };
+    }
+
+    foreach my $name (keys %methods) {
+        no strict 'refs';
+        *{$name} = Sub::Name::subname($name, $methods{$name});
     }
 }
 

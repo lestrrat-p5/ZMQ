@@ -26,5 +26,6 @@ bugtracker "https://github.com/lestrrat/p5-ZMQ/issues";
 
 requires $ENV{PERL_ZMQ_BACKEND};
 requires 'ZMQ::Constants';
+requires 'Sub::Name';
 
 WriteAll;

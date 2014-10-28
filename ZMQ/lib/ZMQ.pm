@@ -31,8 +31,9 @@ use ZMQ::Poller;
 
 sub call {
     my $funcname = shift;
+    my $func = "${BACKEND}::$funcname";
     no strict 'refs';
-    goto &{"${BACKEND}::$funcname"};
+    goto &{$func};
 }
 
 1;

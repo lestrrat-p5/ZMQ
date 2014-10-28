@@ -2,6 +2,7 @@ package ZMQ::Socket;
 use strict;
 use ZMQ;
 use ZMQ::Constants qw/ZMQ_SNDMORE ZMQ_RCVMORE/;
+use Sub::Name ();
 
 sub CLONE_SKIP { 1 }
 
@@ -52,84 +53,80 @@ sub close {
 }
 
 BEGIN {
+    my %methods;
+
     foreach my $funcname ( qw( connect bind setsockopt getsockopt ) ) {
-        eval sprintf <<'EOM', $funcname, $funcname;
-            sub %s {
-                my $self = shift;
-                ZMQ::call( "zmq_%s", $self->{_socket}, @_ );
-            }
-EOM
-        die if $@;
+        $methods{$funcname} = sub {
+            my $self = shift;
+            ZMQ::call( "zmq_$funcname", $self->{_socket}, @_ );
+        };
     }
 
     if ($ZMQ::BACKEND eq 'ZMQ::LibZMQ2') {
-        eval <<'EOM';
-            sub recv {
-                my $self = shift;
-                my $msg  = ZMQ::call( "zmq_recv", $self->{_socket}, @_ );
-                if ( $msg ) {
-                    return ZMQ::Message->_wrap( $msg );
-                }
-                return $msg;
+        $methods{recv} = sub {
+            my $self = shift;
+            my $msg  = ZMQ::call( "zmq_recv", $self->{_socket}, @_ );
+            if ( $msg ) {
+                return ZMQ::Message->_wrap( $msg );
             }
+            return $msg;
+        };
+        $methods{send} = sub {
+            my $self = shift;
+            my $msg  = shift;
 
-            sub send {
-                my $self = shift;
-                my $msg  = shift;
-
-                if ( ref $msg && eval { $msg->isa( 'ZMQ::Message' ) } ) {
-                    $msg = $msg->{_msg};
-                }
-                ZMQ::call( "zmq_send", $self->{_socket}, $msg, @_ );
+            if ( ref $msg && eval { $msg->isa( 'ZMQ::Message' ) } ) {
+                $msg = $msg->{_msg};
             }
-            sub sendmsg {
-                Carp::croak( "ZMQ::Socket->sendmsg is not implemented in this version ($ZMQ::BACKEND)" );
-            }
-            sub recvmsg {
-                Carp::croak( "ZMQ::Socket->recvmsg is not implemented in this version ($ZMQ::BACKEND)" );
-            }
-EOM
-        die if $@;
+            ZMQ::call( "zmq_send", $self->{_socket}, $msg, @_ );
+        };
+        $methods{sendmsg} = sub {
+            Carp::croak( "ZMQ::Socket->sendmsg is not implemented in this version ($ZMQ::BACKEND)" );
+        };
+        $methods{recvmsg} = sub {
+            Carp::croak( "ZMQ::Socket->recvmsg is not implemented in this version ($ZMQ::BACKEND)" );
+        }
     } else {
-        eval <<'EOM';
-            sub recvmsg {
-                my $self = shift;
-                my $msg  = ZMQ::call( "zmq_recvmsg", $self->{_socket}, @_ );
-                if ( $msg ) {
-                    return ZMQ::Message->_wrap( $msg );
-                }
-                return $msg;
+        $methods{"recvmsg"} = sub {
+            my $self = shift;
+            my $msg  = ZMQ::call( "zmq_recvmsg", $self->{_socket}, @_ );
+            if ( ref $msg && eval { $msg->isa('ZMQ::LibZMQ3::Message') } ) {
+                return ZMQ::Message->_wrap( $msg );
             }
+            return;
+        };
+        $methods{sendmsg} = sub {
+            my $self = shift;
+            my $msg  = shift;
 
-            sub sendmsg {
-                my $self = shift;
-                my $msg  = shift;
-
-                if ( ref $msg && eval { $msg->isa( 'ZMQ::Message' ) } ) {
-                    $msg = $msg->{_msg};
-                }
-                ZMQ::call( "zmq_sendmsg", $self->{_socket}, $msg, @_ );
+            if ( ref $msg && eval { $msg->isa( 'ZMQ::Message' ) } ) {
+                $msg = $msg->{_msg};
             }
-
-            sub recv {
-                my $self = shift;
-                my $msg  = shift;
-                if ( ref $msg && eval { $msg->isa( 'ZMQ::Message' ) } ) {
-                    $msg = $msg->{_msg};
-                }
-                ZMQ::call( "zmq_recv", $msg, @_ );
+            ZMQ::call( "zmq_sendmsg", $self->{_socket}, $msg, @_ );
+        };
+        $methods{recv} = sub {
+            my $self = shift;
+            my $msg  = shift;
+            if ( ref $msg && eval { $msg->isa( 'ZMQ::Message' ) } ) {
+                $msg = $msg->{_msg};
             }
-            sub send {
-                my $self = shift;
-                my $msg  = shift;
-                if ( ref $msg && eval { $msg->isa( 'ZMQ::Message' ) } ) {
-                    $msg = $msg->{_msg};
-                }
-                ZMQ::call( "zmq_send", $msg, @_ );
+            ZMQ::call( "zmq_recv", $msg, @_ );
+        };
+        $methods{send} = sub {
+            my $self = shift;
+            my $msg  = shift;
+            if ( ref $msg && eval { $msg->isa( 'ZMQ::Message' ) } ) {
+                $msg = $msg->{_msg};
             }
-EOM
-        die if $@;
+            ZMQ::call( "zmq_send", $msg, @_ );
+        };
     }
+
+    foreach my $name (keys %methods) {
+        no strict 'refs';
+        *{$name} = Sub::Name::subname($name, $methods{$name});
+    }
+
 
     if ($ZMQ::BACKEND eq 'ZMQ::LibZMQ2') {
         *_send_message = \&send;
