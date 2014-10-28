@@ -1,6 +1,10 @@
 Changes
 =======
 
+1.19 Oct 28 2014
+    - Fix return value of recvmsg() to actually return an undef value
+      when the underlying call to the raw recvmsg() fails (https://github.com/lestrrat/p5-ZMQ/issues/28)
+
 1.18 Jul 08 2014
     - Fix broken zmq_disconnect/zmq_unbind/zmq_socket_monitor (https://github.com/lestrrat/p5-ZMQ/issues/59)
 
