@@ -128,7 +128,7 @@ static MGVTBL klass##_vtbl = { /* for identity */ \
         MAGIC *mg; \
         var = NULL; \
         if (! sv_isobject(arg)) { \
-            croak("Argument is not an object"); \
+            croak("Argument is not an object (" #klass ")"); \
         } \
     \
         /* if it got here, it's a blessed reference. better be an HV */ \

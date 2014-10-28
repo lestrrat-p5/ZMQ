@@ -866,7 +866,12 @@ P5ZMQ3_zmq_recvmsg(socket, flags = 0)
         if (rv != 0) {
             SET_BANG;
             P5ZMQ3_TRACE("zmq_msg_init failed (%d)", rv);
-            XSRETURN_EMPTY;
+            Safefree(RETVAL);
+            RETVAL = NULL;
+            if (GIMME_V == G_ARRAY) {
+                XSRETURN_EMPTY;
+            }
+            XSRETURN_UNDEF;
         }
         rv = zmq_recvmsg(socket->socket, RETVAL, flags);
         P5ZMQ3_TRACE(" + zmq_recvmsg with flags %d", flags);
@@ -876,7 +881,11 @@ P5ZMQ3_zmq_recvmsg(socket, flags = 0)
             P5ZMQ3_TRACE(" + zmq_recvmsg got bad status, closing temporary message");
             zmq_msg_close(RETVAL);
             Safefree(RETVAL);
-            XSRETURN_EMPTY;
+            RETVAL = NULL;
+            if (GIMME_V == G_ARRAY) {
+                XSRETURN_EMPTY;
+            }
+            XSRETURN_UNDEF;
         }
         P5ZMQ3_TRACE( "END zmq_recvmsg" );
 #endif /* HAS_ZMQ_RCVMSG */
