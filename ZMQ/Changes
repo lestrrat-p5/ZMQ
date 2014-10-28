@@ -1,5 +1,9 @@
 Changelog for Perl module ZMQ.
 
+1.06 - Oct 28 2014
+    - Use Sub::Name to give better diagnostics for dynamically generated methods
+    - Check for return value of recvmsg() and recv()
+
 1.05 - Jan 05 2013
     - Add send_multipart() and recv_multipart()
       (by @pstuifzand, https://github.com/lestrrat/p5-ZMQ/pull/21)
