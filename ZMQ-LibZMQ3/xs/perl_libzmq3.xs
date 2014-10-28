@@ -1092,7 +1092,7 @@ P5ZMQ3_zmq_poll( list, timeout = 0 )
         /* now call zmq_poll */
         rv = zmq_poll( pollitems, list_len, timeout );
         SET_BANG;
-        P5ZMQ3_TRACE( " + zmq_poll returned with rv '%d'", RETVAL );
+        P5ZMQ3_TRACE( " + zmq_poll returned with rv '%d'", rv );
 
         if (rv != -1 ) {
             for ( i = 0; i < list_len; i++ ) {
