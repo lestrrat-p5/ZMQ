@@ -1067,6 +1067,8 @@ P5ZMQ3_zmq_poll( list, timeout = 0 )
                     croak("Invalid 'socket' given for index %d", i);
                 }
                 mg = P5ZMQ3_Socket_mg_find( aTHX_ SvRV(*svr), &P5ZMQ3_Socket_vtbl );
+                if (mg->mg_ptr == NULL)
+                    continue;
                 pollitems[i].socket = ((P5ZMQ3_Socket *) mg->mg_ptr)->socket;
                 P5ZMQ3_TRACE( " + via pollitem[%d].socket = %p", i, pollitems[i].socket );
             } else {
