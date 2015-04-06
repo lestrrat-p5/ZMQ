@@ -79,6 +79,7 @@ requires 'ZMQ::Constants';
 test_requires 'Test::More', '0.98';
 test_requires 'Test::TCP' => '1.08';
 test_requires 'Test::Requires';
+test_requires 'Test::SharedFork';
 test_requires 'Test::Fatal';
 use_xshelper '-clean';
 
