@@ -1,0 +1,67 @@
+# Avoid archives of this distribution
+\bZMQ-LibZMQ4-\d+\.\d+(?:_\d+)?
+\bZMQ-LibZMQ4-\d+\.\d+(?:_\d+)?\.tar\.gz$
+
+# Avoid version control files.
+\bRCS\b
+\bCVS\b
+,v$
+\B\.svn\b
+\B\.cvsignore$
+
+# Avoid Makemaker generated and utility files.
+\bMakefile$
+\bblib
+\bMakeMaker-\d
+\bpm_to_blib$
+\bblibdirs$
+
+# Avoid Module::Build generated and utility files.
+\bBuild$
+\bBuild.bat$
+\b_build
+
+# Avoid Devel::Cover generated files
+\bcover_db
+
+# Avoid temp and backup files.
+~$
+\.tmp$
+\.o$
+\.old$
+\.bak$
+\#$
+\.#
+\.rej$
+\.swp$
+\.swo$
+\.bs$
+
+# Avoid OS-specific files/dirs
+#   Mac OSX metadata
+\B\.DS_Store
+#   Mac OSX SMB mount metadata files
+\B\._
+
+\bbuildtmp\b
+\.git\b
+\.gitignore\b
+
+
+^MYMETA\..*$
+^MANIFEST.SKIP$
+
+\.orig
+^tools/zmqcheck/.*\.c$
+^xs/.*\.inc$
+^xs/typemap$
+^xs/perl_libzmq4.c$
+^xshelper.h$
+^build.sh$
+^ppport.h$
+^build\b
+^build.pl$
+^install\b
+^extlib\b
+^autobuild
+
