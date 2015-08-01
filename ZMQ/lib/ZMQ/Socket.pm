@@ -1,4 +1,5 @@
 package ZMQ::Socket;
+use warnings;
 use strict;
 use ZMQ;
 use ZMQ::Constants qw/ZMQ_SNDMORE ZMQ_RCVMORE/;

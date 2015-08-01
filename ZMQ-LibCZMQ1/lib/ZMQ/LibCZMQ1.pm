@@ -1,4 +1,5 @@
 package ZMQ::LibCZMQ1;
+use warnings;
 use strict;
 use Exporter 'import';
 use XSLoader;

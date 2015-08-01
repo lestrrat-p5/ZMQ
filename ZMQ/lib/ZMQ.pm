@@ -1,4 +1,5 @@
 package ZMQ;
+use warnings;
 use strict;
 our $VERSION = '1.06';
 our $BACKEND;

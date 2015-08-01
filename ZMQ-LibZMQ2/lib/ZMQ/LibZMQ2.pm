@@ -1,4 +1,5 @@
 package ZMQ::LibZMQ2;
+use warnings;
 use strict;
 use base qw(Exporter);
 use XSLoader;

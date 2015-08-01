@@ -1,4 +1,5 @@
 package ZMQ::Poller;
+use warnings;
 use strict;
 
 use ZMQ;

@@ -1,4 +1,5 @@
 package ZMQ::LibZMQ3;
+use warnings;
 use strict;
 use warnings;
 use base qw(Exporter);

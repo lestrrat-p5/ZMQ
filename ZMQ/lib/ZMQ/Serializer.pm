@@ -1,4 +1,5 @@
 package ZMQ::Serializer;
+use warnings;
 use strict;
 use ZMQ;
 use ZMQ::Socket;

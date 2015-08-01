@@ -1,4 +1,5 @@
 package ZMQ::CZMQ::Zmsg;
+use warnings;
 use strict;
 use ZMQ::CZMQ;
 
