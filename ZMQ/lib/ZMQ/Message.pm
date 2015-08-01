@@ -1,4 +1,5 @@
 package ZMQ::Message;
+use warnings;
 use strict;
 use Sub::Name ();
 

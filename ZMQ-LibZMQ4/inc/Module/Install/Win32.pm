@@ -1,4 +1,5 @@
 #line 1
+use warnings;
 package Module::Install::Win32;
 
 use strict;

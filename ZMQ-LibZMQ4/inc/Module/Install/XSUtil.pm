@@ -1,4 +1,5 @@
 #line 1
+use warnings;
 package Module::Install::XSUtil;
 
 use 5.005_03;

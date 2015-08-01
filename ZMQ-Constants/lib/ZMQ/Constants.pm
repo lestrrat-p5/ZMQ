@@ -1,4 +1,5 @@
 package ZMQ::Constants;
+use warnings;
 use strict;
 use base qw(Exporter);
 use Carp ();

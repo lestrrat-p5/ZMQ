@@ -1,4 +1,5 @@
 # $Id: CheckLib.pm,v 1.25 2008/10/27 12:16:23 drhyde Exp $
+use warnings;
 
 package #
 Devel::CheckLib;

@@ -1,4 +1,5 @@
 package ZMQ::Context;
+use warnings;
 use strict;
 use ZMQ::Socket;
 
