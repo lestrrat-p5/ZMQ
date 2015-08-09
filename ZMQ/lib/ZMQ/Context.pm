@@ -1,5 +1,6 @@
 package ZMQ::Context;
 use strict;
+use warnings;
 use ZMQ::Socket;
 
 sub new {

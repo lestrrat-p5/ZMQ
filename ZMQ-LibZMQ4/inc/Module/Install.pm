@@ -19,6 +19,7 @@ package Module::Install;
 
 use 5.005;
 use strict 'vars';
+use warnings;
 use Cwd        ();
 use File::Find ();
 use File::Path ();

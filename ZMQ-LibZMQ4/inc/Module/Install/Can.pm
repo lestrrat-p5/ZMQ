@@ -2,6 +2,7 @@
 package Module::Install::Can;
 
 use strict;
+use warnings;
 use Config                ();
 use ExtUtils::MakeMaker   ();
 use Module::Install::Base ();

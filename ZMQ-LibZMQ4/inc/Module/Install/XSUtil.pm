@@ -9,6 +9,7 @@ use Module::Install::Base;
 @ISA     = qw(Module::Install::Base);
 
 use strict;
+use warnings;
 
 use Config;
 

@@ -1,5 +1,6 @@
 package ZMQ::CZMQ::Zframe;
 use strict;
+use warnings;
 use ZMQ::CZMQ;
 use Scalar::Util ();
 

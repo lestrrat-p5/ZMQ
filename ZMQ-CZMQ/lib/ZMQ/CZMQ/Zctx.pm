@@ -1,5 +1,6 @@
 package ZMQ::CZMQ::Zctx;
 use strict;
+use warnings;
 use ZMQ::CZMQ;
 
 sub new {
