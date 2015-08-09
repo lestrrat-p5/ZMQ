@@ -2,6 +2,7 @@
 package Module::Install::Base;
 
 use strict 'vars';
+use warnings;
 use vars qw{$VERSION};
 BEGIN {
 	$VERSION = '1.06';

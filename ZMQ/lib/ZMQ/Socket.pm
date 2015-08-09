@@ -1,5 +1,6 @@
 package ZMQ::Socket;
 use strict;
+use warnings;
 use ZMQ;
 use ZMQ::Constants qw/ZMQ_SNDMORE ZMQ_RCVMORE/;
 use Sub::Name ();

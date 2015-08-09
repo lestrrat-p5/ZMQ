@@ -3,6 +3,7 @@ package Module::Install::AuthorTests;
 
 use 5.005;
 use strict;
+use warnings;
 use Module::Install::Base;
 use Carp ();
 

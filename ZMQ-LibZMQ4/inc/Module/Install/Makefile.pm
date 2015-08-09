@@ -2,6 +2,7 @@
 package Module::Install::Makefile;
 
 use strict 'vars';
+use warnings;
 use ExtUtils::MakeMaker   ();
 use Module::Install::Base ();
 use Fcntl qw/:flock :seek/;

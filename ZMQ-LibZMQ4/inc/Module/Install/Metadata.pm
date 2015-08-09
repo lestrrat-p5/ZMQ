@@ -2,6 +2,7 @@
 package Module::Install::Metadata;
 
 use strict 'vars';
+use warnings;
 use Module::Install::Base ();
 
 use vars qw{$VERSION @ISA $ISCORE};

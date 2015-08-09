@@ -1,5 +1,6 @@
 package ZMQ::Constants::V3_1_1;
 use strict;
+use warnings;
 use ZMQ::Constants ();
 use Storable ();
 

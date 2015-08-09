@@ -2,6 +2,7 @@
 package Module::Install::Fetch;
 
 use strict;
+use warnings;
 use Module::Install::Base ();
 
 use vars qw{$VERSION @ISA $ISCORE};

@@ -5,6 +5,7 @@ Devel::CheckLib;
 
 use 5.00405; #postfix foreach
 use strict;
+use warnings;
 use vars qw($VERSION @ISA @EXPORT);
 $VERSION = '1.01';
 use Config qw(%Config);
