@@ -1,11 +1,14 @@
 language: perl
 perl:
-  - "5.16"
-  - "5.14"
-  - "5.12"
-  - "5.10"
+  - "5.20"
+  - "5.22"
 install: "perl -e 1" # dummy
 script: "perl ./.TRAVIS.PL"
+sudo: false
+addons:
+  apt:
+    packages:
+      - uuid-dev
 env:
   - PERL_ZMQ_TEST_TARGET=ZMQ-Constants
   - PERL_ZMQ_TEST_TARGET=ZMQ-CZMQ
