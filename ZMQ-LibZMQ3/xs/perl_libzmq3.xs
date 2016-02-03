@@ -1,4 +1,5 @@
 #include "perl_libzmq3.h"
+#include <stdint.h>
 
 STATIC_INLINE
 void
