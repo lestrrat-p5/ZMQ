@@ -6,6 +6,11 @@ perl:
   - "5.10"
 install: "perl -e 1" # dummy
 script: "perl ./.TRAVIS.PL"
+sudo: false
+addons:
+  apt:
+    packages:
+      - uuid-dev
 env:
   - PERL_ZMQ_TEST_TARGET=ZMQ-Constants
   - PERL_ZMQ_TEST_TARGET=ZMQ-CZMQ
