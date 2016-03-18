@@ -25,6 +25,10 @@ BEGIN {
         ZMQ_XPUB                => 9,
         ZMQ_XSUB                => 10,
         ZMQ_STREAM              => 11,
+        ZMQ_SERVER              => 12,
+        ZMQ_CLIENT              => 13,
+        ZMQ_RADIO               => 14,
+        ZMQ_DISH                => 15,
 
         # message
         ZMQ_MSG_MORE            => 1,   # only on v2.x
@@ -40,6 +44,7 @@ BEGIN {
         ZMQ_SOCKET_LIMIT        => 3,
         ZMQ_THREAD_PRIORITY     => 3,
         ZMQ_THREAD_SCHED_POLICY => 4,
+        ZMQ_MAX_MSGSZ           => 5,
         ZMQ_IO_THREADS_DFLT     => 1,
         ZMQ_MAX_SOCKETS_DFLT    => 1023,
         ZMQ_THREAD_PRIORITY_DFLT => -1,
@@ -111,6 +116,24 @@ BEGIN {
         ZMQ_HANDSHAKE_IVL       => 66,
         ZMQ_SOCKS_PROXY         => 68,
         ZMQ_XPUB_NODROP         => 69,
+        ZMQ_BLOCKY              => 70,
+        ZMQ_XPUB_MANUAL         => 71,
+        ZMQ_XPUB_WELCOME_MSG    => 72,
+        ZMQ_STREAM_NOTIFY       => 73,
+        ZMQ_INVERT_MATCHING     => 74,
+        ZMQ_HEARTBEAT_IVL       => 75,
+        ZMQ_HEARTBEAT_TTL       => 76,
+        ZMQ_HEARTBEAT_TIMEOUT   => 77,
+        ZMQ_XPUB_VERBOSER       => 78,
+        ZMQ_CONNECT_TIMEOUT     => 79,
+        ZMQ_TCP_MAXRT           => 80,
+        ZMQ_THREAD_SAFE         => 81,
+        ZMQ_MULTICAST_MAXTPDU   => 84,
+        ZMQ_VMCI_BUFFER_SIZE    => 85,
+        ZMQ_VMCI_BUFFER_MIN_SIZE => 86,
+        ZMQ_VMCI_BUFFER_MAX_SIZE => 87,
+        ZMQ_VMCI_CONNECT_TIMEOUT => 88,
+        ZMQ_USE_FD              => 89,
 
         ZMQ_MORE                => 1,
         ZMQ_SRCFD               => 2,
@@ -118,9 +141,11 @@ BEGIN {
         ZMQ_NOBLOCK             => 1,
         ZMQ_DONTWAIT            => 1,
         ZMQ_SNDMORE             => 2,
+        ZMQ_HAVE_POLLER         => 1,
         ZMQ_POLLIN              => 1,
         ZMQ_POLLOUT             => 2,
         ZMQ_POLLERR             => 4,
+        ZMQ_POLLPRI             => 8,
         ZMQ_POLLITEMS_DFLT      => 16,
         ZMQ_STREAMER            => 1,
         ZMQ_FORWARDER           => 2,
@@ -131,6 +156,9 @@ BEGIN {
         ZMQ_PLAIN               => 1,
         ZMQ_CURVE               => 2,
         ZMQ_GSSAPI              => 3,
+
+        # radio-dish
+        ZMQ_GROUP_MAX_LENGTH    => 15,
 
         ZMQ_HAUSNUMERO          => $zmq_hausnumero,
 
@@ -180,6 +208,10 @@ our %EXPORT_TAGS = (
         ZMQ_XPUB
         ZMQ_XSUB
         ZMQ_STREAM
+        ZMQ_SERVER
+        ZMQ_CLIENT
+        ZMQ_RADIO
+        ZMQ_DISH
         ZMQ_AFFINITY
         ZMQ_IDENTITY
         ZMQ_SUBSCRIBE
@@ -247,6 +279,24 @@ our %EXPORT_TAGS = (
         ZMQ_HWM
         ZMQ_SWAP
         ZMQ_NOBLOCK
+        ZMQ_BLOCKY
+        ZMQ_XPUB_MANUAL
+        ZMQ_XPUB_WELCOME_MSG
+        ZMQ_STREAM_NOTIFY
+        ZMQ_INVERT_MATCHING
+        ZMQ_HEARTBEAT_IVL
+        ZMQ_HEARTBEAT_TTL
+        ZMQ_HEARTBEAT_TIMEOUT
+        ZMQ_XPUB_VERBOSER
+        ZMQ_CONNECT_TIMEOUT
+        ZMQ_TCP_MAXRT
+        ZMQ_THREAD_SAFE
+        ZMQ_MULTICAST_MAXTPDU
+        ZMQ_VMCI_BUFFER_SIZE
+        ZMQ_VMCI_BUFFER_MIN_SIZE
+        ZMQ_VMCI_BUFFER_MAX_SIZE
+        ZMQ_VMCI_CONNECT_TIMEOUT
+        ZMQ_USE_FD
     ),
     # only in v2.x
     qw(
@@ -283,6 +333,7 @@ our %EXPORT_TAGS = (
         ZMQ_SOCKET_LIMIT
         ZMQ_THREAD_PRIORITY
         ZMQ_THREAD_SCHED_POLICY
+        ZMQ_MAX_MSGSZ
         ZMQ_IO_THREADS_DFLT
         ZMQ_MAX_SOCKETS_DFLT
         ZMQ_THREAD_PRIORITY_DFLT
@@ -292,6 +343,7 @@ our %EXPORT_TAGS = (
         ZMQ_POLLIN
         ZMQ_POLLOUT
         ZMQ_POLLERR
+        ZMQ_POLLPRI
         ZMQ_POLLITEMS_DFLT
     ) ],
     device => [ qw(
@@ -393,6 +445,20 @@ set_sockopt_type(
         ZMQ_GSSAPI_PLAINTEXT,
         ZMQ_HANDSHAKE_IVL,
         ZMQ_XPUB_NODROP,
+        ZMQ_BLOCKY,
+        ZMQ_XPUB_MANUAL,
+        ZMQ_STREAM_NOTIFY,
+        ZMQ_INVERT_MATCHING,
+        ZMQ_HEARTBEAT_IVL,
+        ZMQ_HEARTBEAT_TTL,
+        ZMQ_HEARTBEAT_TIMEOUT,
+        ZMQ_XPUB_VERBOSER,
+        ZMQ_CONNECT_TIMEOUT,
+        ZMQ_TCP_MAXRT,
+        ZMQ_THREAD_SAFE,
+        ZMQ_MULTICAST_MAXTPDU,
+        ZMQ_VMCI_CONNECT_TIMEOUT,
+        ZMQ_USE_FD,
     )
 );
 
@@ -400,6 +466,9 @@ set_sockopt_type(
     "uint64" => (
         ZMQ_AFFINITY,
         ZMQ_HWM,
+        ZMQ_VMCI_BUFFER_SIZE,
+        ZMQ_VMCI_BUFFER_MIN_SIZE,
+        ZMQ_VMCI_BUFFER_MAX_SIZE,
     )
 );
 
@@ -430,6 +499,7 @@ set_sockopt_type(
         ZMQ_GSSAPI_PRINCIPAL,
         ZMQ_GSSAPI_SERVICE_PRINCIPAL,
         ZMQ_SOCKS_PROXY,
+        ZMQ_XPUB_WELCOME_MSG,
     )
 );
 
