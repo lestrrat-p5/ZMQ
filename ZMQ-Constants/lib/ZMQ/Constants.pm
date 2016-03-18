@@ -37,8 +37,13 @@ BEGIN {
         # context
         ZMQ_IO_THREADS          => 1,
         ZMQ_MAX_SOCKETS         => 2,
+        ZMQ_SOCKET_LIMIT        => 3,
+        ZMQ_THREAD_PRIORITY     => 3,
+        ZMQ_THREAD_SCHED_POLICY => 4,
         ZMQ_IO_THREADS_DFLT     => 1,
         ZMQ_MAX_SOCKETS_DFLT    => 1023,
+        ZMQ_THREAD_PRIORITY_DFLT => -1,
+        ZMQ_THREAD_SCHED_POLICY_DFLT => -1,
 
         ZMQ_HWM                 => 1, # only on v2.x
         ZMQ_SWAP                => 3, # only on v2.x
@@ -93,8 +98,23 @@ BEGIN {
         ZMQ_REQ_RELAXED         => 53,
         ZMQ_CONFLATE            => 54,
         ZMQ_ZAP_DOMAIN          => 55,
+        ZMQ_ROUTER_HANDOVER     => 56,
+        ZMQ_TOS                 => 57,
+        ZMQ_IPC_FILTER_PID      => 58,
+        ZMQ_IPC_FILTER_UID      => 59,
+        ZMQ_IPC_FILTER_GID      => 60,
+        ZMQ_CONNECT_RID         => 61,
+        ZMQ_GSSAPI_SERVER       => 62,
+        ZMQ_GSSAPI_PRINCIPAL    => 63,
+        ZMQ_GSSAPI_SERVICE_PRINCIPAL => 64,
+        ZMQ_GSSAPI_PLAINTEXT    => 65,
+        ZMQ_HANDSHAKE_IVL       => 66,
+        ZMQ_SOCKS_PROXY         => 68,
+        ZMQ_XPUB_NODROP         => 69,
 
         ZMQ_MORE                => 1,
+        ZMQ_SRCFD               => 2,
+        ZMQ_SHARED              => 3,
         ZMQ_NOBLOCK             => 1,
         ZMQ_DONTWAIT            => 1,
         ZMQ_SNDMORE             => 2,
@@ -110,6 +130,7 @@ BEGIN {
         ZMQ_NULL                => 0,
         ZMQ_PLAIN               => 1,
         ZMQ_CURVE               => 2,
+        ZMQ_GSSAPI              => 3,
 
         ZMQ_HAUSNUMERO          => $zmq_hausnumero,
 
@@ -209,6 +230,18 @@ our %EXPORT_TAGS = (
         ZMQ_REQ_RELAXED
         ZMQ_CONFLATE
         ZMQ_ZAP_DOMAIN
+        ZMQ_TOS
+        ZMQ_IPC_FILTER_PID
+        ZMQ_IPC_FILTER_UID
+        ZMQ_IPC_FILTER_GID
+        ZMQ_CONNECT_RID
+        ZMQ_GSSAPI_SERVER
+        ZMQ_GSSAPI_PRINCIPAL
+        ZMQ_GSSAPI_SERVICE_PRINCIPAL
+        ZMQ_GSSAPI_PLAINTEXT
+        ZMQ_HANDSHAKE_IVL
+        ZMQ_SOCKS_PROXY
+        ZMQ_XPUB_NODROP
         ZMQ_DONTWAIT
         ZMQ_SNDMORE
         ZMQ_HWM
@@ -226,6 +259,8 @@ our %EXPORT_TAGS = (
     ) ],
     message => [ qw(
         ZMQ_MORE
+        ZMQ_SRCFD
+        ZMQ_SHARED
         ZMQ_MSG_MORE
         ZMQ_MAX_VSM_SIZE
         ZMQ_DELIMITER
@@ -245,8 +280,13 @@ our %EXPORT_TAGS = (
     context => [ qw(
         ZMQ_IO_THREADS
         ZMQ_MAX_SOCKETS
+        ZMQ_SOCKET_LIMIT
+        ZMQ_THREAD_PRIORITY
+        ZMQ_THREAD_SCHED_POLICY
         ZMQ_IO_THREADS_DFLT
         ZMQ_MAX_SOCKETS_DFLT
+        ZMQ_THREAD_PRIORITY_DFLT
+        ZMQ_THREAD_SCHED_POLICY_DFLT
     ) ],
     poller => [ qw(
         ZMQ_POLLIN
@@ -263,6 +303,7 @@ our %EXPORT_TAGS = (
         ZMQ_NULL
         ZMQ_PLAIN
         ZMQ_CURVE
+        ZMQ_GSSAPI
     ) ],
     errors => [ qw(
         ZMQ_HAUSNUMERO
@@ -347,6 +388,11 @@ set_sockopt_type(
         ZMQ_HWM,
         ZMQ_SWAP,
         ZMQ_NOBLOCK,
+        ZMQ_TOS,
+        ZMQ_GSSAPI_SERVER,
+        ZMQ_GSSAPI_PLAINTEXT,
+        ZMQ_HANDSHAKE_IVL,
+        ZMQ_XPUB_NODROP,
     )
 );
 
@@ -377,6 +423,13 @@ set_sockopt_type(
         ZMQ_CURVE_SECRETKEY,
         ZMQ_CURVE_SERVERKEY,
         ZMQ_ZAP_DOMAIN,
+        ZMQ_IPC_FILTER_PID,
+        ZMQ_IPC_FILTER_UID,
+        ZMQ_IPC_FILTER_GID,
+        ZMQ_CONNECT_RID,
+        ZMQ_GSSAPI_PRINCIPAL,
+        ZMQ_GSSAPI_SERVICE_PRINCIPAL,
+        ZMQ_SOCKS_PROXY,
     )
 );
 

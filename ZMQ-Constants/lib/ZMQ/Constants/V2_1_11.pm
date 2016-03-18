@@ -40,6 +40,19 @@ my %not_in_v2 = (
     ZMQ_REQ_RELAXED         => 53,
     ZMQ_CONFLATE            => 54,
     ZMQ_ZAP_DOMAIN          => 55,
+    ZMQ_ROUTER_HANDOVER     => 56,
+    ZMQ_TOS                 => 57,
+    ZMQ_IPC_FILTER_PID      => 58,
+    ZMQ_IPC_FILTER_UID      => 59,
+    ZMQ_IPC_FILTER_GID      => 60,
+    ZMQ_CONNECT_RID         => 61,
+    ZMQ_GSSAPI_SERVER       => 62,
+    ZMQ_GSSAPI_PRINCIPAL    => 63,
+    ZMQ_GSSAPI_SERVICE_PRINCIPAL => 64,
+    ZMQ_GSSAPI_PLAINTEXT    => 65,
+    ZMQ_HANDSHAKE_IVL       => 66,
+    ZMQ_SOCKS_PROXY         => 68,
+    ZMQ_XPUB_NODROP         => 69,
 );
 
 my $export_tags = Storable::dclone( \%ZMQ::Constants::EXPORT_TAGS );
