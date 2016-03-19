@@ -24,6 +24,7 @@ BEGIN {
         ZMQ_DOWNSTREAM          => 8, # only on v2.x
         ZMQ_XPUB                => 9,
         ZMQ_XSUB                => 10,
+        ZMQ_STREAM              => 11,
 
         # message
         ZMQ_MSG_MORE            => 1,   # only on v2.x
@@ -33,6 +34,16 @@ BEGIN {
         ZMQ_MSG_SHARED          => 128, # only on v2.x
         ZMQ_MSG_MASK            => 129, # only on v2.x
 
+        # context
+        ZMQ_IO_THREADS          => 1,
+        ZMQ_MAX_SOCKETS         => 2,
+        ZMQ_SOCKET_LIMIT        => 3,
+        ZMQ_THREAD_PRIORITY     => 3,
+        ZMQ_THREAD_SCHED_POLICY => 4,
+        ZMQ_IO_THREADS_DFLT     => 1,
+        ZMQ_MAX_SOCKETS_DFLT    => 1023,
+        ZMQ_THREAD_PRIORITY_DFLT => -1,
+        ZMQ_THREAD_SCHED_POLICY_DFLT => -1,
 
         ZMQ_HWM                 => 1, # only on v2.x
         ZMQ_SWAP                => 3, # only on v2.x
@@ -63,17 +74,63 @@ BEGIN {
         ZMQ_IPV4ONLY            => 31,
         ZMQ_LAST_ENDPOINT       => 32,
         ZMQ_FAIL_UNROUTABLE     => 33,
+        ZMQ_ROUTER_BEHAVIOR     => 33,
+        ZMQ_ROUTER_MANDATORY    => 33,
+        ZMQ_TCP_KEEPALIVE       => 34,
+        ZMQ_TCP_KEEPALIVE_CNT   => 35,
+        ZMQ_TCP_KEEPALIVE_IDLE  => 36,
+        ZMQ_TCP_KEEPALIVE_INTVL => 37,
+        ZMQ_DELAY_ATTACH_ON_CONNECT => 39,
+        ZMQ_IMMEDIATE           => 39,
+        ZMQ_XPUB_VERBOSE        => 40,
+        ZMQ_ROUTER_RAW          => 41,
+        ZMQ_IPV6                => 42,
+        ZMQ_MECHANISM           => 43,
+        ZMQ_PLAIN_SERVER        => 44,
+        ZMQ_PLAIN_USERNAME      => 45,
+        ZMQ_PLAIN_PASSWORD      => 46,
+        ZMQ_CURVE_SERVER        => 47,
+        ZMQ_CURVE_PUBLICKEY     => 48,
+        ZMQ_CURVE_SECRETKEY     => 49,
+        ZMQ_CURVE_SERVERKEY     => 50,
+        ZMQ_PROBE_ROUTER        => 51,
+        ZMQ_REQ_CORRELATE       => 52,
+        ZMQ_REQ_RELAXED         => 53,
+        ZMQ_CONFLATE            => 54,
+        ZMQ_ZAP_DOMAIN          => 55,
+        ZMQ_ROUTER_HANDOVER     => 56,
+        ZMQ_TOS                 => 57,
+        ZMQ_IPC_FILTER_PID      => 58,
+        ZMQ_IPC_FILTER_UID      => 59,
+        ZMQ_IPC_FILTER_GID      => 60,
+        ZMQ_CONNECT_RID         => 61,
+        ZMQ_GSSAPI_SERVER       => 62,
+        ZMQ_GSSAPI_PRINCIPAL    => 63,
+        ZMQ_GSSAPI_SERVICE_PRINCIPAL => 64,
+        ZMQ_GSSAPI_PLAINTEXT    => 65,
+        ZMQ_HANDSHAKE_IVL       => 66,
+        ZMQ_SOCKS_PROXY         => 68,
+        ZMQ_XPUB_NODROP         => 69,
 
         ZMQ_MORE                => 1,
+        ZMQ_SRCFD               => 2,
+        ZMQ_SHARED              => 3,
         ZMQ_NOBLOCK             => 1,
         ZMQ_DONTWAIT            => 1,
         ZMQ_SNDMORE             => 2,
         ZMQ_POLLIN              => 1,
         ZMQ_POLLOUT             => 2,
         ZMQ_POLLERR             => 4,
+        ZMQ_POLLITEMS_DFLT      => 16,
         ZMQ_STREAMER            => 1,
         ZMQ_FORWARDER           => 2,
         ZMQ_QUEUE               => 3,
+
+        # auth
+        ZMQ_NULL                => 0,
+        ZMQ_PLAIN               => 1,
+        ZMQ_CURVE               => 2,
+        ZMQ_GSSAPI              => 3,
 
         ZMQ_HAUSNUMERO          => $zmq_hausnumero,
 
@@ -88,6 +145,15 @@ BEGIN {
         ECONNREFUSED            => $zmq_hausnumero + 7,
         EINPROGRESS             => $zmq_hausnumero + 8,
         ENOTSOCK                => $zmq_hausnumero + 9,
+        EMSGSIZE                => $zmq_hausnumero + 10,
+        EAFNOSUPPORT            => $zmq_hausnumero + 11,
+        ENETUNREACH             => $zmq_hausnumero + 12,
+        ECONNABORTED            => $zmq_hausnumero + 13,
+        ECONNRESET              => $zmq_hausnumero + 14,
+        ENOTCONN                => $zmq_hausnumero + 15,
+        ETIMEDOUT               => $zmq_hausnumero + 16,
+        EHOSTUNREACH            => $zmq_hausnumero + 17,
+        ENETRESET               => $zmq_hausnumero + 18,
 
         # "Native 0MQ error codes." as defined in zmq.h
         EFSM                    => $zmq_hausnumero + 51,
@@ -113,6 +179,7 @@ our %EXPORT_TAGS = (
         ZMQ_PUSH
         ZMQ_XPUB
         ZMQ_XSUB
+        ZMQ_STREAM
         ZMQ_AFFINITY
         ZMQ_IDENTITY
         ZMQ_SUBSCRIBE
@@ -139,6 +206,42 @@ our %EXPORT_TAGS = (
         ZMQ_IPV4ONLY
         ZMQ_LAST_ENDPOINT
         ZMQ_FAIL_UNROUTABLE
+        ZMQ_ROUTER_BEHAVIOR
+        ZMQ_ROUTER_MANDATORY
+        ZMQ_TCP_KEEPALIVE
+        ZMQ_TCP_KEEPALIVE_CNT
+        ZMQ_TCP_KEEPALIVE_IDLE
+        ZMQ_TCP_KEEPALIVE_INTVL
+        ZMQ_DELAY_ATTACH_ON_CONNECT
+        ZMQ_IMMEDIATE
+        ZMQ_XPUB_VERBOSE
+        ZMQ_ROUTER_RAW
+        ZMQ_IPV6
+        ZMQ_MECHANISM
+        ZMQ_PLAIN_SERVER
+        ZMQ_PLAIN_USERNAME
+        ZMQ_PLAIN_PASSWORD
+        ZMQ_CURVE_SERVER
+        ZMQ_CURVE_PUBLICKEY
+        ZMQ_CURVE_SECRETKEY
+        ZMQ_CURVE_SERVERKEY
+        ZMQ_PROBE_ROUTER
+        ZMQ_REQ_CORRELATE
+        ZMQ_REQ_RELAXED
+        ZMQ_CONFLATE
+        ZMQ_ZAP_DOMAIN
+        ZMQ_TOS
+        ZMQ_IPC_FILTER_PID
+        ZMQ_IPC_FILTER_UID
+        ZMQ_IPC_FILTER_GID
+        ZMQ_CONNECT_RID
+        ZMQ_GSSAPI_SERVER
+        ZMQ_GSSAPI_PRINCIPAL
+        ZMQ_GSSAPI_SERVICE_PRINCIPAL
+        ZMQ_GSSAPI_PLAINTEXT
+        ZMQ_HANDSHAKE_IVL
+        ZMQ_SOCKS_PROXY
+        ZMQ_XPUB_NODROP
         ZMQ_DONTWAIT
         ZMQ_SNDMORE
         ZMQ_HWM
@@ -156,6 +259,8 @@ our %EXPORT_TAGS = (
     ) ],
     message => [ qw(
         ZMQ_MORE
+        ZMQ_SRCFD
+        ZMQ_SHARED
         ZMQ_MSG_MORE
         ZMQ_MAX_VSM_SIZE
         ZMQ_DELIMITER
@@ -172,15 +277,33 @@ our %EXPORT_TAGS = (
         ZMQ_MSG_SHARED
         ZMQ_MSG_MASK
     ) ],
+    context => [ qw(
+        ZMQ_IO_THREADS
+        ZMQ_MAX_SOCKETS
+        ZMQ_SOCKET_LIMIT
+        ZMQ_THREAD_PRIORITY
+        ZMQ_THREAD_SCHED_POLICY
+        ZMQ_IO_THREADS_DFLT
+        ZMQ_MAX_SOCKETS_DFLT
+        ZMQ_THREAD_PRIORITY_DFLT
+        ZMQ_THREAD_SCHED_POLICY_DFLT
+    ) ],
     poller => [ qw(
         ZMQ_POLLIN
         ZMQ_POLLOUT
         ZMQ_POLLERR
+        ZMQ_POLLITEMS_DFLT
     ) ],
     device => [ qw(
         ZMQ_STREAMER
         ZMQ_FORWARDER
         ZMQ_QUEUE
+    ) ],
+    auth => [ qw(
+        ZMQ_NULL
+        ZMQ_PLAIN
+        ZMQ_CURVE
+        ZMQ_GSSAPI
     ) ],
     errors => [ qw(
         ZMQ_HAUSNUMERO
@@ -193,6 +316,15 @@ our %EXPORT_TAGS = (
         ECONNREFUSED
         EINPROGRESS
         ENOTSOCK
+        EMSGSIZE
+        EAFNOSUPPORT
+        ENETUNREACH
+        ECONNABORTED
+        ECONNRESET
+        ENOTCONN
+        ETIMEDOUT
+        EHOSTUNREACH
+        ENETRESET
         EFSM
         ENOCOMPATPROTO
         ETERM
@@ -232,6 +364,35 @@ set_sockopt_type(
         ZMQ_FD, # SOCKET on Windows... yikes, how do we handle this?
         ZMQ_EVENTS,
         ZMQ_BACKLOG,
+        ZMQ_FAIL_UNROUTABLE,
+        ZMQ_ROUTER_BEHAVIOR,
+        ZMQ_ROUTER_MANDATORY,
+        ZMQ_TCP_KEEPALIVE,
+        ZMQ_TCP_KEEPALIVE_CNT,
+        ZMQ_TCP_KEEPALIVE_IDLE,
+        ZMQ_TCP_KEEPALIVE_INTVL,
+        ZMQ_DELAY_ATTACH_ON_CONNECT,
+        ZMQ_IMMEDIATE,
+        ZMQ_XPUB_VERBOSE,
+        ZMQ_ROUTER_RAW,
+        ZMQ_IPV6,
+        ZMQ_MECHANISM,
+        ZMQ_PLAIN_SERVER,
+        ZMQ_CURVE_SERVER,
+        ZMQ_PROBE_ROUTER,
+        ZMQ_REQ_CORRELATE,
+        ZMQ_REQ_RELAXED,
+        ZMQ_CONFLATE,
+        ZMQ_DONTWAIT,
+        ZMQ_SNDMORE,
+        ZMQ_HWM,
+        ZMQ_SWAP,
+        ZMQ_NOBLOCK,
+        ZMQ_TOS,
+        ZMQ_GSSAPI_SERVER,
+        ZMQ_GSSAPI_PLAINTEXT,
+        ZMQ_HANDSHAKE_IVL,
+        ZMQ_XPUB_NODROP,
     )
 );
 
@@ -256,6 +417,19 @@ set_sockopt_type(
         ZMQ_UNSUBSCRIBE,
         ZMQ_LAST_ENDPOINT,
         ZMQ_IDENTITY,
+        ZMQ_PLAIN_USERNAME,
+        ZMQ_PLAIN_PASSWORD,
+        ZMQ_CURVE_PUBLICKEY,
+        ZMQ_CURVE_SECRETKEY,
+        ZMQ_CURVE_SERVERKEY,
+        ZMQ_ZAP_DOMAIN,
+        ZMQ_IPC_FILTER_PID,
+        ZMQ_IPC_FILTER_UID,
+        ZMQ_IPC_FILTER_GID,
+        ZMQ_CONNECT_RID,
+        ZMQ_GSSAPI_PRINCIPAL,
+        ZMQ_GSSAPI_SERVICE_PRINCIPAL,
+        ZMQ_SOCKS_PROXY,
     )
 );
 
