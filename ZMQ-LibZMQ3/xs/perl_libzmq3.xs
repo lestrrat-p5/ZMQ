@@ -1140,6 +1140,12 @@ P5ZMQ3_zmq_poll( list, timeout = 0 )
         Safefree(pollitems);
         Safefree(callbacks);
         P5ZMQ3_TRACE( "END zmq_poll" );
+        if (GIMME_V == G_SCALAR) {
+            XSRETURN(1);
+        } else {
+            XSRETURN(list_len);
+        }
+
 
 int
 P5ZMQ3_zmq_device( device, insocket, outsocket )
