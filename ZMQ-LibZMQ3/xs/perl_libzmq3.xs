@@ -1142,7 +1142,7 @@ P5ZMQ3_zmq_poll( list, timeout = 0 )
         P5ZMQ3_TRACE( "END zmq_poll" );
         if (GIMME_V == G_SCALAR) {
             XSRETURN(1);
-        } elsif (GIMME_V == G_ARRAY) {
+        } else if (GIMME_V == G_ARRAY) {
             XSRETURN(list_len);
         }
 
