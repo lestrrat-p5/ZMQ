@@ -2,6 +2,7 @@ language: perl
 perl:
   - "5.20"
   - "5.22"
+  - "5.24"
 install: "perl -e 1" # dummy
 script: "perl ./.TRAVIS.PL"
 sudo: false
