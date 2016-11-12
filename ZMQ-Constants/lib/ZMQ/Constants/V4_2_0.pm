@@ -1,4 +1,4 @@
-package ZMQ::Constants::V4_1_5;
+package ZMQ::Constants::V4_2_0;
 use strict;
 use warnings;
 use ZMQ::Constants ();
@@ -18,24 +18,6 @@ my %not_in_v4 = map { ( $_ => 1 ) } qw(
   ZMQ_SWAP
   ZMQ_UPSTREAM
   ZMQ_VSM
-  ZMQ_BLOCKY
-  ZMQ_XPUB_MANUAL
-  ZMQ_XPUB_WELCOME_MSG
-  ZMQ_STREAM_NOTIFY
-  ZMQ_INVERT_MATCHING
-  ZMQ_HEARTBEAT_IVL
-  ZMQ_HEARTBEAT_TTL
-  ZMQ_HEARTBEAT_TIMEOUT
-  ZMQ_XPUB_VERBOSER
-  ZMQ_CONNECT_TIMEOUT
-  ZMQ_TCP_MAXRT
-  ZMQ_THREAD_SAFE
-  ZMQ_MULTICAST_MAXTPDU
-  ZMQ_VMCI_BUFFER_SIZE
-  ZMQ_VMCI_BUFFER_MIN_SIZE
-  ZMQ_VMCI_BUFFER_MAX_SIZE
-  ZMQ_VMCI_CONNECT_TIMEOUT
-  ZMQ_USE_FD
 
 );
 
@@ -46,6 +28,6 @@ $export_tags->{socket} = [
 $export_tags->{message} =
   [ grep { !$not_in_v4{$_} } @{ $export_tags->{message} } ];
 
-ZMQ::Constants::register_set( '4.1.5' => ( tags => $export_tags, ) );
+ZMQ::Constants::register_set( '4.2.0' => ( tags => $export_tags, ) );
 
 1;
