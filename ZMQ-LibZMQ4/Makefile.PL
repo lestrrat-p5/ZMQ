@@ -202,11 +202,13 @@ if ($^O eq 'darwin' && -f "Makefile") {
 
     local @ARGV = qw(Makefile);
     local $^I = '';
+    my @lib_paths = grep { -d $_ } map { s/^-L//; $_ } split /\s+/, $ENV{ZMQ_LIBS};
+    my $lib_rpaths = join ",", @lib_paths;
     while (<>) {
         if ($^O eq 'darwin') {
             s/MACOSX_DEPLOYMENT_TARGET=(\d+\.\d+)/$1 < 10.5 ? "MACOSX_DEPLOYMENT_TARGET=$version" : "MACOSX_DEPLOYMENT_TARGET=$1"/e;
         }
-        s/OTHERLDFLAGS =\s*$/OTHERLDFLAGS = -Wl,-rpath $ENV{ZMQ_LIBS}\n/;
+        s/OTHERLDFLAGS =\s*$/OTHERLDFLAGS = -Wl,-rpath,$lib_rpaths\n/;
         print;
     }
 }
