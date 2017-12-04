@@ -32,7 +32,13 @@ sub install_libzmq(@) {
     my $prefix = File::Spec->catdir($EXTDIR, $basename);
     my $file   = "$basename$tail.tar.gz";
     if (! -e $file) {
-        mysystem("curl", "-LO", "http://download.zeromq.org/$file");
+        if( exists $opts->{github} ) {
+            my ($basename_version) = $basename =~ /^zeromq-(.*)$/;
+            my $version = "$basename_version$tail";
+            mysystem("curl", "-LO", "https://github.com/zeromq/libzmq/releases/download/v$version/$file");
+        } else {
+            mysystem("curl", "-LO", "http://download.zeromq.org/$file");
+        }
     }
     if (! -e $basename) {
         mysystem("tar", "xzf", $file);
@@ -146,6 +152,22 @@ if ( $target eq 'ZMQ-Constants' ) {
     print STDERR "===\n\nTesting $target with optional dependencies...\n\n===\n";
     cpanm(qw(AnyEvent Test::TCP Proc::Guard));
     test_binding("ZMQ-LibZMQ3");
+} elsif ( $target eq 'ZMQ-LibZMQ4' ) {
+    $ENV{ZMQ_HOME} = install_libzmq("zeromq-4.2.2", {
+            github => 1,
+    });
+    cpanm(qw(
+        inc::Module::Install
+        Module::Install::AuthorTests
+        Module::Install::CheckLib
+        Module::Install::XSUtil
+    ));
+
+    print STDERR "===\n\nTesting $target w/o optional dependencies...\n\n===\n";
+    test_binding("ZMQ-LibZMQ4");
+    print STDERR "===\n\nTesting $target with optional dependencies...\n\n===\n";
+    cpanm(qw(AnyEvent Test::TCP Proc::Guard));
+    test_binding("ZMQ-LibZMQ4");
 } elsif ( $target eq 'ZMQ' ) {
     cpanm(qw(
         ExtUtils::ParseXS
