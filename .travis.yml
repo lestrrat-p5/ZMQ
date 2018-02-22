@@ -1,4 +1,16 @@
 language: perl
+matrix:
+  include:
+    - { perl: "system", os: "osx", env: "PERL_ZMQ_TEST_TARGET=ZMQ-Constants" }
+    - { perl: "system", os: "osx", env: "PERL_ZMQ_TEST_TARGET=ZMQ-CZMQ" }
+    - { perl: "system", os: "osx", env: "PERL_ZMQ_TEST_TARGET=ZMQ-LibCZMQ1" }
+
+    # The `xt/102_eg_threaded.t` test hangs under this configuration.
+    #- { perl: "system", os: "osx", env: "PERL_ZMQ_TEST_TARGET=ZMQ-LibZMQ2" }
+
+    - { perl: "system", os: "osx", env: "PERL_ZMQ_TEST_TARGET=ZMQ-LibZMQ3" }
+    - { perl: "system", os: "osx", env: "PERL_ZMQ_TEST_TARGET=ZMQ-LibZMQ4" }
+    - { perl: "system", os: "osx", env: "PERL_ZMQ_TEST_TARGET=ZMQ" }
 perl:
   - "5.20"
   - "5.22"

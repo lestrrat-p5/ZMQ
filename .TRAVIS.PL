@@ -53,6 +53,13 @@ sub install_libzmq(@) {
     return $prefix;
 }
 
+sub setup_cpanm_local_lib {
+    cpanm(qw(--local-lib=~/perl5 local::lib));
+    push @INC, "$ENV{HOME}/perl5/lib/perl5";
+    require local::lib;
+    local::lib->setup_env_hash_for("$ENV{HOME}/perl5");
+}
+
 sub cpanm (@) {
     eval {
         mysystem("cpanm", "--notest", @_);
@@ -87,6 +94,14 @@ sub install_libczmq {
             sprintf('--with-libzmq=%s', File::Spec->catdir($EXTDIR, "zeromq-$zmq_version")),
         ]
     });
+}
+
+if( $^O eq 'darwin' ) {
+    mysystem(qw(brew install cpanm));
+    setup_cpanm_local_lib;
+
+    # set ARCHFLAGS so that `-arch i386` is not tried
+    $ENV{ARCHFLAGS} = '-arch x86_64';
 }
 
 if ( $target eq 'ZMQ-Constants' ) {
