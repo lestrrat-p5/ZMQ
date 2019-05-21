@@ -4,7 +4,7 @@
 # Otherwise, do the usual.
 BEGIN {
     if (-e '../.git') {
-        do 'tools/check_mi_mods.pl';
+        do './tools/check_mi_mods.pl';
     } else {
         unshift @INC, 'inc';
         require inc::Module::Install;
@@ -17,7 +17,7 @@ name 'ZMQ-LibZMQ3';
 all_from 'lib/ZMQ/LibZMQ3.pm';
 
 # Detect libzmq, and display it for sanity
-do 'tools/detect_zmq.pl';
+do './tools/detect_zmq.pl';
 print "Detected the following ZMQ settings:\n";
 foreach my $env (qw(ZMQ_HOME ZMQ_H ZMQ_INCLUDES ZMQ_LIBS ZMQ_TRACE)) {
     printf " + %s = %s\n", $env, exists $ENV{$env} ? $ENV{$env} : "(null)";
@@ -193,7 +193,7 @@ repository "git://github.com/lestrrat/p5-ZMQ.git";
 homepage "https://github.com/lestrrat/p5-ZMQ";
 bugtracker "https://github.com/lestrrat/p5-ZMQ/issues";
 
-do 'tools/genfiles.pl';
+do './tools/genfiles.pl';
 WriteAll;
 
 if ($^O eq 'darwin' && -f "Makefile") {
